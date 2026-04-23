@@ -131,7 +131,7 @@ textarea.fi { resize: none; }
     <span class="sync-indicator" id="syncMsg"></span>
   </div>
   <div class="header-right">
-    <span style="font-size:10px;opacity:0.55;margin-right:2px">v2.1</span>
+    <span style="font-size:10px;opacity:0.55;margin-right:2px">v2.2</span>
     <span id="headerUser" style="font-size:12px;opacity:0.9;background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;display:none"></span>
     <span class="header-count" id="totalCount">0건</span>
     <button class="icon-btn" onclick="openSettings()">⚙️</button>
@@ -167,7 +167,7 @@ textarea.fi { resize: none; }
       <h2 id="modalTitle">새 상품 추가</h2>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <form onsubmit="saveProduct(event)">
+    <form>
       <input type="hidden" id="fId">
       <div class="fg"><label class="fl">부스 위치 *</label><input class="fi" id="fBooth" placeholder="예: 11.1 A01" required></div>
       <div class="fg"><label class="fl">제품명 *</label><input class="fi" id="fName" placeholder="제품명을 입력하세요" required></div>
@@ -196,7 +196,7 @@ textarea.fi { resize: none; }
         <div class="photo-grid" id="photoGrid"></div>
         <div class="photo-empty" id="photoHint">사진 없음</div>
       </div>
-      <button type="submit" class="btn-save" id="saveBtn">저장하기</button>
+      <button type="button" class="btn-save" id="saveBtn" onclick="saveProduct()">저장하기</button>
     </form>
   </div>
 </div>
@@ -488,17 +488,20 @@ function updateOemLabel() {
 }
 
 // ─── CRUD ────────────────────────────────────────────────
-async function saveProduct(e) {
-  e.preventDefault();
+async function saveProduct() {
   if (!userName() || !userPin()) { checkName(); return; }
+  const booth = document.getElementById('fBooth').value.trim();
+  const name  = document.getElementById('fName').value.trim();
+  if (!booth) { alert('부스 위치를 입력해주세요.'); document.getElementById('fBooth').focus(); return; }
+  if (!name)  { alert('제품명을 입력해주세요.');   document.getElementById('fName').focus();  return; }
   const btn = document.getElementById('saveBtn');
   btn.disabled = true;
   btn.textContent = '저장 중...';
   try {
     const now = new Date().toISOString();
     const p = {
-      booth: document.getElementById('fBooth').value.trim(),
-      name:  document.getElementById('fName').value.trim(),
+      booth,
+      name,
       boxQty: document.getElementById('fBoxQty').value||null,
       cbm:    document.getElementById('fCbm').value||null,
       moq:    document.getElementById('fMoq').value||null,
