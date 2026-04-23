@@ -327,13 +327,15 @@ async function confirmName() {
   await ghPull();
 }
 
-function changeName() {
-  closeSettings();
-  if (!confirm('이름을 바꾸면 이 기기의 현재 데이터는 지워지고\n새 이름의 데이터를 불러옵니다.\n계속하시겠습니까?')) return;
+async function changeName() {
+  if (!confirm('이름을 바꾸면 이 기기의 데이터는 지워지고\n새 이름으로 다시 시작합니다.')) return;
   localStorage.removeItem('cf_user');
   localStorage.removeItem('cf_pin');
   ghSha = null;
-  dbClear().then(() => { render(); checkName(); });
+  await dbClear();
+  closeSettings();
+  await render();
+  checkName();
 }
 
 // ─── 사진 ────────────────────────────────────────────────
