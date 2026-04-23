@@ -131,7 +131,8 @@ textarea.fi { resize: none; }
     <span class="sync-indicator" id="syncMsg"></span>
   </div>
   <div class="header-right">
-    <span style="font-size:10px;opacity:0.55;margin-right:2px">v2.0</span>
+    <span style="font-size:10px;opacity:0.55;margin-right:2px">v2.1</span>
+    <span id="headerUser" style="font-size:12px;opacity:0.9;background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;display:none"></span>
     <span class="header-count" id="totalCount">0건</span>
     <button class="icon-btn" onclick="openSettings()">⚙️</button>
   </div>
@@ -213,8 +214,22 @@ textarea.fi { resize: none; }
       <button class="settings-btn" onclick="changeName()">변경</button>
     </div>
     <div class="settings-row">
+      <div>
+        <div class="settings-label">GitHub 동기화 토큰</div>
+        <div class="settings-value" id="tokenLabel">미설정</div>
+      </div>
+      <button class="settings-btn" onclick="openTokenInput()">설정</button>
+    </div>
+    <div id="tokenInputArea" style="display:none;padding:10px 0">
+      <input id="tokenInput" class="fi" placeholder="github_pat_... 붙여넣기" style="margin-bottom:8px;font-size:13px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="btn" style="background:#f5f5f5;color:#555" onclick="clearToken()">토큰 삭제</button>
+        <button class="btn btn-excel" onclick="saveToken()">저장</button>
+      </div>
+    </div>
+    <div class="settings-row">
       <div class="settings-label">동기화 상태</div>
-      <div class="settings-value" id="syncStatusLabel">확인 중...</div>
+      <div class="settings-value" id="syncStatusLabel">-</div>
     </div>
     <div class="settings-section-title">내보내기</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:8px">
@@ -244,11 +259,11 @@ if (!localStorage.getItem('cf_user') || !localStorage.getItem('cf_pin')) {
 }
 
 // ─── GitHub 설정 ─────────────────────────────────────────
-const GH_TOKEN = atob('Z2l0aHViX3BhdF8xMUNBWFZMUFEwMnRnb0gwRUhMNnFnX09neGVhdnFwbWhlS0d5aHBwNTlDTmFJWmpJVnJtSWVaaVJ3TU1sMk1wMm9ZWkFaT1Q2M2ZTVU5FUlZJ');
 const GH_OWNER = 'harich1';
 const GH_REPO  = 'canton-fair-data';
 
-function ghFile() { return `data/${userKey()}.json`; }
+function ghToken()  { return localStorage.getItem('cf_gh_token') || ''; }
+function ghFile()   { return `data/${userKey()}.json`; }
 function userName() { return localStorage.getItem('cf_user') || ''; }
 function userPin()  { return localStorage.getItem('cf_pin')  || ''; }
 function userKey()  { return userName() ? `${userName()}_${userPin()}` : ''; }
@@ -276,9 +291,10 @@ const dbClear= () => new Promise((res,rej) => { const r=st('readwrite').clear();
 let ghSha = null;
 
 async function ghGet() {
+  if (!ghToken()) return null;
   try {
     const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ghFile()}`, {
-      headers: { Authorization: `Bearer ${GH_TOKEN}`, Accept: 'application/vnd.github.v3+json' }
+      headers: { Authorization: `Bearer ${ghToken()}`, Accept: 'application/vnd.github.v3+json' }
     });
     if (res.status === 404) return { data: [], sha: null };
     if (!res.ok) return null;
@@ -288,15 +304,15 @@ async function ghGet() {
 }
 
 async function ghPush(products) {
-  if (!userName()) return;
+  if (!userName() || !ghToken()) return;
   try {
-    setSync('⏫ 저장 중...');
+    setSync('⏫ 동기화 중...');
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(products))));
     const body = { message: `sync ${new Date().toISOString().slice(0,16)}`, content };
     if (ghSha) body.sha = ghSha;
     const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ghFile()}`, {
       method: 'PUT',
-      headers: { Authorization: `Bearer ${GH_TOKEN}`, 'Content-Type': 'application/json' },
+      headers: { Authorization: `Bearer ${ghToken()}`, 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
     if (res.ok) {
@@ -311,7 +327,7 @@ async function ghPush(products) {
 }
 
 async function ghPull() {
-  if (!userName()) return;
+  if (!userName() || !ghToken()) return;
   setSync('🔄 불러오는 중...');
   const result = await ghGet();
   if (!result) { setSync('⚠️ 연결 실패'); setTimeout(()=>setSync(''),3000); return; }
@@ -327,6 +343,34 @@ async function ghPull() {
 
 function setSync(msg) { document.getElementById('syncMsg').textContent = msg; }
 
+function updateHeaderUser() {
+  const el = document.getElementById('headerUser');
+  const name = userName();
+  if (name) { el.textContent = name; el.style.display = ''; }
+  else { el.style.display = 'none'; }
+}
+
+function openTokenInput() {
+  const area = document.getElementById('tokenInputArea');
+  area.style.display = area.style.display === 'none' ? 'block' : 'none';
+  document.getElementById('tokenInput').value = ghToken();
+}
+function saveToken() {
+  const t = document.getElementById('tokenInput').value.trim();
+  if (!t) { alert('토큰을 입력해주세요.'); return; }
+  localStorage.setItem('cf_gh_token', t);
+  document.getElementById('tokenInputArea').style.display = 'none';
+  showToast('✅ 토큰 저장됨');
+  ghSha = null;
+  ghPull();
+}
+function clearToken() {
+  if (!confirm('토큰을 삭제하면 동기화가 중단됩니다.')) return;
+  localStorage.removeItem('cf_gh_token');
+  document.getElementById('tokenInputArea').style.display = 'none';
+  showToast('토큰 삭제됨');
+}
+
 let toastTimer;
 function showToast(msg) {
   const el = document.getElementById('toast');
@@ -341,7 +385,7 @@ function checkName() {
   if (!userName() || !userPin()) document.getElementById('nameOverlay').classList.add('open');
 }
 
-async function confirmName() {
+function confirmName() {
   const name = document.getElementById('nameInput').value.trim();
   const pin  = document.getElementById('pinInput').value.trim();
   if (!name) { alert('이름을 입력해주세요.'); return; }
@@ -349,8 +393,9 @@ async function confirmName() {
   localStorage.setItem('cf_user', name);
   localStorage.setItem('cf_pin', pin);
   document.getElementById('nameOverlay').classList.remove('open');
+  updateHeaderUser();
   ghSha = null;
-  await ghPull();
+  ghPull();
 }
 
 async function changeName() {
@@ -361,6 +406,7 @@ async function changeName() {
   document.getElementById('nameInput').value = '';
   document.getElementById('pinInput').value = '';
   closeSettings();
+  updateHeaderUser();
   checkName();
   await dbClear();
   await render();
@@ -502,7 +548,9 @@ async function render() {
 // ─── 설정 ────────────────────────────────────────────────
 function openSettings() {
   document.getElementById('currentUserLabel').textContent = userName() ? `${userName()} (●●●●)` : '(없음)';
-  document.getElementById('syncStatusLabel').textContent = document.getElementById('syncMsg').textContent || '대기 중';
+  document.getElementById('tokenLabel').textContent = ghToken() ? '설정됨 ✓' : '미설정';
+  document.getElementById('syncStatusLabel').textContent = document.getElementById('syncMsg').textContent || (ghToken() ? '대기 중' : '토큰 없음');
+  document.getElementById('tokenInputArea').style.display = 'none';
   document.getElementById('settingsOverlay').classList.add('open');
 }
 function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); }
@@ -575,6 +623,7 @@ function dl(blob,name){const a=document.createElement('a');a.href=URL.createObje
     document.getElementById('list').innerHTML =
       `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">저장소 초기화 실패</div><div class="empty-hint">${e.message||'새로고침해주세요'}</div></div>`;
   } finally {
+    updateHeaderUser();
     checkName();
     if (userName()) ghPull();
   }
