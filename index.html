@@ -347,10 +347,10 @@ async function changeName() {
   localStorage.removeItem('cf_user');
   localStorage.removeItem('cf_pin');
   ghSha = null;
-  await dbClear();
   closeSettings();
-  await render();
   checkName();
+  await dbClear();
+  await render();
 }
 
 // ─── 사진 ────────────────────────────────────────────────
@@ -431,6 +431,7 @@ function updateOemLabel() {
 // ─── CRUD ────────────────────────────────────────────────
 async function saveProduct(e) {
   e.preventDefault();
+  if (!userName() || !userPin()) { checkName(); return; }
   const btn = document.getElementById('saveBtn');
   btn.disabled = true;
   btn.textContent = '저장 중...';
