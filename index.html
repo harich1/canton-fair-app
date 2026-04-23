@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>캔톤페어 바잉 기록</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a1a; }
+
+.header {
+  background: #c62828; color: white;
+  padding: 14px 16px; position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.header-left { display: flex; flex-direction: column; }
+.header-sub { font-size: 11px; opacity: 0.75; margin-bottom: 2px; }
+.header-title { font-size: 18px; font-weight: 700; }
+.header-count { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+
+.toolbar {
+  background: white; padding: 10px 12px;
+  display: flex; gap: 8px; flex-wrap: wrap;
+  border-bottom: 1px solid #e0e0e0;
+}
+.search-box {
+  flex: 1; min-width: 130px;
+  padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px;
+  font-size: 14px; background: #fafafa;
+}
+.search-box:focus { outline: none; border-color: #c62828; background: white; }
+.btn { padding: 9px 13px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.btn-excel { background: #1a73e8; color: white; }
+.btn-backup { background: #f0f4ff; color: #1a73e8; }
+.btn-restore { background: #f5f5f5; color: #555; }
+
+.list { padding: 12px; padding-bottom: 90px; }
+
+.card {
+  background: white; border-radius: 14px; margin-bottom: 12px;
+  overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+}
+.card-body { display: flex; gap: 12px; padding: 12px; }
+.card-thumb {
+  width: 80px; height: 80px; border-radius: 10px;
+  object-fit: cover; flex-shrink: 0; cursor: pointer;
+}
+.card-thumb-placeholder {
+  width: 80px; height: 80px; border-radius: 10px;
+  background: #f5f5f5; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px; color: #ccc;
+}
+.card-info { flex: 1; min-width: 0; }
+.card-booth { font-size: 11px; color: #c62828; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.card-name { font-size: 15px; font-weight: 700; margin: 3px 0 6px; line-height: 1.3; }
+.card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.tag {
+  background: #f5f5f5; color: #555;
+  padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 500;
+}
+.tag-oem { background: #e8f5e9; color: #2e7d32; }
+.tag-photo { background: #fff3e0; color: #e65100; }
+.card-notes { font-size: 12px; color: #888; margin-top: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.card-footer { display: flex; border-top: 1px solid #f0f0f0; }
+.card-btn { flex: 1; padding: 11px; border: none; background: none; cursor: pointer; font-size: 13px; color: #666; font-weight: 500; }
+.card-btn:first-child { border-right: 1px solid #f0f0f0; }
+.card-btn-del { color: #c62828; }
+
+.fab {
+  position: fixed; bottom: 24px; right: 20px;
+  width: 58px; height: 58px; background: #c62828; color: white;
+  border: none; border-radius: 50%; font-size: 30px; font-weight: 300;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(198,40,40,0.5);
+  z-index: 200; display: flex; align-items: center; justify-content: center;
+}
+
+.empty { text-align: center; padding: 70px 20px; }
+.empty-icon { font-size: 52px; margin-bottom: 12px; }
+.empty-text { color: #999; font-size: 15px; }
+.empty-hint { color: #bbb; font-size: 13px; margin-top: 6px; }
+
+/* Modal */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+  z-index: 300; display: none; align-items: flex-end;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: white; border-radius: 22px 22px 0 0;
+  width: 100%; max-height: 94vh; overflow-y: auto;
+  padding: 20px 16px 44px;
+}
+.modal-handle { width: 36px; height: 4px; background: #ddd; border-radius: 2px; margin: 0 auto 16px; }
+.modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.modal-head h2 { font-size: 18px; font-weight: 700; }
+.modal-close { width: 32px; height: 32px; border-radius: 50%; background: #f0f0f0; border: none; font-size: 16px; cursor: pointer; }
+
+.fg { margin-bottom: 15px; }
+.fl { display: block; font-size: 12px; color: #888; font-weight: 600; margin-bottom: 6px; letter-spacing: 0.3px; text-transform: uppercase; }
+.fi {
+  width: 100%; padding: 11px 13px;
+  border: 1.5px solid #e0e0e0; border-radius: 10px;
+  font-size: 15px; background: white; transition: border-color 0.2s;
+}
+.fi:focus { outline: none; border-color: #c62828; }
+textarea.fi { resize: none; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.oem-row { display: flex; align-items: center; gap: 12px; }
+.switch { position: relative; width: 50px; height: 28px; }
+.switch input { display: none; }
+.slider {
+  position: absolute; inset: 0; background: #ccc; border-radius: 28px; cursor: pointer; transition: 0.25s;
+}
+.slider::before {
+  content: ''; position: absolute;
+  width: 22px; height: 22px; left: 3px; top: 3px;
+  background: white; border-radius: 50%; transition: 0.25s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.switch input:checked + .slider { background: #2e7d32; }
+.switch input:checked + .slider::before { transform: translateX(22px); }
+.oem-label { font-size: 15px; font-weight: 600; }
+
+.photo-drop {
+  border: 2px dashed #ddd; border-radius: 12px;
+  padding: 18px; text-align: center; cursor: pointer;
+  background: #fafafa; position: relative; transition: border-color 0.2s;
+}
+.photo-drop:hover { border-color: #c62828; }
+.photo-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+.photo-drop-text { color: #999; font-size: 14px; }
+.photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+.photo-item { position: relative; aspect-ratio: 1; }
+.photo-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; display: block; }
+.photo-remove {
+  position: absolute; top: -7px; right: -7px;
+  width: 24px; height: 24px; background: #c62828; color: white;
+  border: 2px solid white; border-radius: 50%; font-size: 11px;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+}
+
+.btn-save {
+  width: 100%; padding: 15px; background: #c62828; color: white;
+  border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
+  cursor: pointer; margin-top: 10px;
+}
+
+/* Photo viewer */
+.viewer {
+  position: fixed; inset: 0; background: black;
+  z-index: 500; display: none; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.viewer.open { display: flex; }
+.viewer img { max-width: 100%; max-height: 90vh; object-fit: contain; }
+.viewer-nav {
+  position: absolute; bottom: 20px; display: flex; gap: 12px; align-items: center;
+}
+.viewer-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
+.viewer-dot.active { background: white; }
+.viewer-close {
+  position: absolute; top: 16px; right: 16px;
+  background: rgba(255,255,255,0.15); color: white;
+  border: none; width: 42px; height: 42px; border-radius: 50%; font-size: 20px; cursor: pointer;
+}
+.viewer-prev, .viewer-next {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.15); color: white;
+  border: none; width: 42px; height: 42px; border-radius: 50%; font-size: 20px; cursor: pointer;
+}
+.viewer-prev { left: 12px; }
+.viewer-next { right: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <span class="header-sub">광저우 캔톤페어 2026</span>
+    <span class="header-title">바잉 기록</span>
+  </div>
+  <span class="header-count" id="totalCount">0건</span>
+</div>
+
+<div class="toolbar">
+  <input class="search-box" id="searchInput" placeholder="제품명, 부스 검색..." oninput="render()">
+  <button class="btn btn-excel" onclick="exportCSV()">📊 엑셀</button>
+  <button class="btn btn-backup" onclick="backup()">💾 백업</button>
+  <label class="btn btn-restore">📂 불러오기<input type="file" accept=".json" onchange="restore(this)" style="display:none"></label>
+</div>
+
+<div class="list" id="list"></div>
+<button class="fab" onclick="openAdd()">+</button>
+
+<!-- Add/Edit Modal -->
+<div class="overlay" id="overlay" onclick="onOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head">
+      <h2 id="modalTitle">새 상품 추가</h2>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <form onsubmit="save(event)">
+      <input type="hidden" id="fId">
+
+      <div class="fg">
+        <label class="fl">부스 위치 *</label>
+        <input class="fi" id="fBooth" placeholder="예: 11.1 A01" required>
+      </div>
+
+      <div class="fg">
+        <label class="fl">제품명 *</label>
+        <input class="fi" id="fName" placeholder="제품명을 입력하세요" required>
+      </div>
+
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">박스 입수</label>
+          <input class="fi" id="fBoxQty" type="number" min="0" placeholder="개">
+        </div>
+        <div class="fg">
+          <label class="fl">CBM (m³)</label>
+          <input class="fi" id="fCbm" type="number" step="0.0001" min="0" placeholder="0.000">
+        </div>
+      </div>
+
+      <div class="frow">
+        <div class="fg">
+          <label class="fl">MOQ</label>
+          <input class="fi" id="fMoq" type="number" min="0" placeholder="최소수량">
+        </div>
+        <div class="fg">
+          <label class="fl">생산기간 (Lead Time)</label>
+          <input class="fi" id="fLeadTime" placeholder="예: 30일">
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">OEM 가능 여부</label>
+        <div class="oem-row">
+          <label class="switch">
+            <input type="checkbox" id="fOem" onchange="updateOemLabel()">
+            <span class="slider"></span>
+          </label>
+          <span class="oem-label" id="oemLabel">불가</span>
+        </div>
+      </div>
+
+      <div class="fg">
+        <label class="fl">비고</label>
+        <textarea class="fi" id="fNotes" rows="2" placeholder="가격, 특이사항, 담당자 연락처 등"></textarea>
+      </div>
+
+      <div class="fg">
+        <label class="fl">상품 사진</label>
+        <div class="photo-drop" id="photoDrop">
+          <input type="file" accept="image/*" multiple onchange="addPhotos(this)">
+          <div class="photo-drop-text" id="photoHint">📷 사진을 탭하여 추가 (여러 장 가능)</div>
+          <div class="photo-grid" id="photoGrid"></div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-save" id="saveBtn">저장하기</button>
+    </form>
+  </div>
+</div>
+
+<!-- Photo Viewer -->
+<div class="viewer" id="viewer">
+  <button class="viewer-close" onclick="closeViewer()">✕</button>
+  <button class="viewer-prev" id="viewerPrev" onclick="viewerNav(-1)">‹</button>
+  <img id="viewerImg" src="">
+  <button class="viewer-next" id="viewerNext" onclick="viewerNav(1)">›</button>
+  <div class="viewer-nav" id="viewerDots"></div>
+</div>
+
+<script>
+// ─── IndexedDB ───────────────────────────────────────────
+const DB = 'canton2026', VER = 1, ST = 'products';
+let db;
+
+function openDB() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open(DB, VER);
+    r.onupgradeneeded = e => {
+      const d = e.target.result;
+      if (!d.objectStoreNames.contains(ST))
+        d.createObjectStore(ST, { keyPath: 'id', autoIncrement: true });
+    };
+    r.onsuccess = e => res(e.target.result);
+    r.onerror = e => rej(e.target.error);
+  });
+}
+const tx = (mode='readonly') => db.transaction(ST, mode).objectStore(ST);
+const getAll = () => new Promise((res, rej) => { const r = tx().getAll(); r.onsuccess = e => res(e.target.result); r.onerror = e => rej(e.target.error); });
+const put    = p  => new Promise((res, rej) => { const r = tx('readwrite').put(p); r.onsuccess = e => res(e.target.result); r.onerror = e => rej(e.target.error); });
+const del    = id => new Promise((res, rej) => { const r = tx('readwrite').delete(id); r.onsuccess = () => res(); r.onerror = e => rej(e.target.error); });
+
+// ─── State ───────────────────────────────────────────────
+let cache = {};        // id → product
+let currentPhotos = [];
+let editId = null;
+
+// ─── Photos ──────────────────────────────────────────────
+function compress(file) {
+  return new Promise(res => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX = 1400, Q = 0.78;
+        let w = img.width, h = img.height;
+        if (w > MAX || h > MAX) {
+          if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+          else { w = Math.round(w * MAX / h); h = MAX; }
+        }
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        res(c.toDataURL('image/jpeg', Q));
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+async function addPhotos(input) {
+  const files = Array.from(input.files);
+  for (const f of files) currentPhotos.push(await compress(f));
+  renderPhotos();
+  input.value = '';
+}
+
+function removePhoto(i) { currentPhotos.splice(i, 1); renderPhotos(); }
+
+function renderPhotos() {
+  const hint = document.getElementById('photoHint');
+  const grid = document.getElementById('photoGrid');
+  hint.style.display = currentPhotos.length ? 'none' : 'block';
+  grid.innerHTML = currentPhotos.map((src, i) => `
+    <div class="photo-item">
+      <img src="${src}" onclick="openViewer([${i}], ${currentPhotos.map((s,j)=>`'${j}'`).join(',')})" style="cursor:pointer">
+      <button class="photo-remove" onclick="removePhoto(${i})" type="button">✕</button>
+    </div>`).join('');
+}
+
+// ─── Modal ────────────────────────────────────────────────
+function openAdd() { openModal(null); }
+
+function openModal(p) {
+  editId = p ? p.id : null;
+  document.getElementById('modalTitle').textContent = p ? '상품 수정' : '새 상품 추가';
+  document.getElementById('saveBtn').textContent = p ? '수정 완료' : '저장하기';
+  document.getElementById('fId').value = p ? p.id : '';
+  document.getElementById('fBooth').value = p ? (p.booth||'') : '';
+  document.getElementById('fName').value = p ? (p.name||'') : '';
+  document.getElementById('fBoxQty').value = p ? (p.boxQty||'') : '';
+  document.getElementById('fCbm').value = p ? (p.cbm||'') : '';
+  document.getElementById('fMoq').value = p ? (p.moq||'') : '';
+  document.getElementById('fLeadTime').value = p ? (p.leadTime||'') : '';
+  document.getElementById('fOem').checked = p ? !!p.oem : false;
+  document.getElementById('fNotes').value = p ? (p.notes||'') : '';
+  updateOemLabel();
+  currentPhotos = p ? [...(p.photos||[])] : [];
+  renderPhotos();
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(() => document.getElementById('fBooth').focus(), 150);
+}
+
+function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+function onOverlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+function updateOemLabel() {
+  document.getElementById('oemLabel').textContent = document.getElementById('fOem').checked ? 'OEM 가능' : '불가';
+  document.getElementById('oemLabel').style.color = document.getElementById('fOem').checked ? '#2e7d32' : '#888';
+}
+
+// ─── CRUD ────────────────────────────────────────────────
+async function save(e) {
+  e.preventDefault();
+  const now = new Date().toISOString();
+  const p = {
+    booth: document.getElementById('fBooth').value.trim(),
+    name: document.getElementById('fName').value.trim(),
+    boxQty: document.getElementById('fBoxQty').value || null,
+    cbm: document.getElementById('fCbm').value || null,
+    moq: document.getElementById('fMoq').value || null,
+    leadTime: document.getElementById('fLeadTime').value.trim(),
+    oem: document.getElementById('fOem').checked,
+    notes: document.getElementById('fNotes').value.trim(),
+    photos: [...currentPhotos],
+    updatedAt: now,
+  };
+  if (editId) { p.id = editId; p.createdAt = cache[editId]?.createdAt || now; }
+  else { p.createdAt = now; }
+  await put(p);
+  closeModal();
+  render();
+}
+
+async function deleteProduct(id) {
+  if (!confirm('이 상품을 삭제하시겠습니까?')) return;
+  await del(id);
+  render();
+}
+
+// ─── Render ──────────────────────────────────────────────
+async function render() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  let products = await getAll();
+  products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+  cache = {};
+  products.forEach(p => cache[p.id] = p);
+
+  if (q) products = products.filter(p =>
+    (p.name||'').toLowerCase().includes(q) ||
+    (p.booth||'').toLowerCase().includes(q) ||
+    (p.notes||'').toLowerCase().includes(q)
+  );
+
+  document.getElementById('totalCount').textContent = `${products.length}건`;
+  const list = document.getElementById('list');
+
+  if (!products.length) {
+    list.innerHTML = `<div class="empty">
+      <div class="empty-icon">📦</div>
+      <div class="empty-text">${q ? '검색 결과가 없습니다' : '기록된 상품이 없습니다'}</div>
+      <div class="empty-hint">+ 버튼을 눌러 첫 상품을 추가하세요</div>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = products.map(p => {
+    const thumb = p.photos?.length
+      ? `<img class="card-thumb" src="${p.photos[0]}" onclick="openViewer(${p.id}, 0)">`
+      : `<div class="card-thumb-placeholder">📷</div>`;
+
+    const tags = [
+      p.moq    ? `MOQ ${Number(p.moq).toLocaleString()}` : null,
+      p.cbm    ? `CBM ${p.cbm}` : null,
+      p.boxQty ? `입수 ${p.boxQty}` : null,
+      p.leadTime ? `납기 ${p.leadTime}` : null,
+    ].filter(Boolean).map(t => `<span class="tag">${t}</span>`).join('');
+
+    const oemTag = p.oem ? '<span class="tag tag-oem">OEM가능</span>' : '';
+    const photoTag = p.photos?.length > 1 ? `<span class="tag tag-photo">📷${p.photos.length}</span>` : '';
+
+    return `<div class="card">
+      <div class="card-body">
+        ${thumb}
+        <div class="card-info">
+          <div class="card-booth">${p.booth || '부스미입력'}</div>
+          <div class="card-name">${p.name}</div>
+          <div class="card-tags">${tags}${oemTag}${photoTag}</div>
+          ${p.notes ? `<div class="card-notes">${p.notes}</div>` : ''}
+        </div>
+      </div>
+      <div class="card-footer">
+        <button class="card-btn" onclick="openModal(cache[${p.id}])">✏️ 수정</button>
+        <button class="card-btn card-btn-del" onclick="deleteProduct(${p.id})">🗑️ 삭제</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─── Photo Viewer ────────────────────────────────────────
+let viewerPhotos = [], viewerIdx = 0;
+
+function openViewer(productIdOrArray, startIdx) {
+  if (Array.isArray(productIdOrArray)) {
+    viewerPhotos = [...currentPhotos];
+  } else {
+    viewerPhotos = cache[productIdOrArray]?.photos || [];
+  }
+  viewerIdx = startIdx || 0;
+  showViewerPhoto();
+  document.getElementById('viewer').classList.add('open');
+}
+
+function showViewerPhoto() {
+  document.getElementById('viewerImg').src = viewerPhotos[viewerIdx];
+  document.getElementById('viewerPrev').style.opacity = viewerIdx > 0 ? '1' : '0.3';
+  document.getElementById('viewerNext').style.opacity = viewerIdx < viewerPhotos.length - 1 ? '1' : '0.3';
+  document.getElementById('viewerDots').innerHTML = viewerPhotos.length > 1
+    ? viewerPhotos.map((_, i) => `<div class="viewer-dot ${i===viewerIdx?'active':''}" onclick="viewerGo(${i})"></div>`).join('')
+    : '';
+}
+
+function viewerNav(dir) {
+  const next = viewerIdx + dir;
+  if (next >= 0 && next < viewerPhotos.length) { viewerIdx = next; showViewerPhoto(); }
+}
+function viewerGo(i) { viewerIdx = i; showViewerPhoto(); }
+function closeViewer() { document.getElementById('viewer').classList.remove('open'); }
+
+// ─── Export CSV ──────────────────────────────────────────
+async function exportCSV() {
+  const products = await getAll();
+  if (!products.length) { alert('기록된 상품이 없습니다.'); return; }
+  products.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+  const headers = ['번호','부스위치','제품명','박스입수','CBM','MOQ','생산기간(LeadTime)','OEM가능여부','비고','사진수','등록일시'];
+  const rows = products.map((p, i) => [
+    i+1, p.booth||'', p.name||'',
+    p.boxQty||'', p.cbm||'', p.moq||'',
+    p.leadTime||'', p.oem?'O':'X', p.notes||'',
+    (p.photos||[]).length,
+    p.createdAt ? new Date(p.createdAt).toLocaleString('ko-KR') : ''
+  ]);
+
+  const BOM = '﻿';
+  const csv = BOM + [headers, ...rows]
+    .map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(','))
+    .join('\r\n');
+
+  const d = new Date().toISOString().slice(0,10);
+  download(new Blob([csv], { type: 'text/csv;charset=utf-8;' }), `캔톤페어_바잉기록_${d}.csv`);
+}
+
+// ─── Backup / Restore ────────────────────────────────────
+async function backup() {
+  const products = await getAll();
+  const json = JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), products }, null, 2);
+  const d = new Date().toISOString().slice(0,10);
+  download(new Blob([json], { type: 'application/json' }), `캔톤페어_백업_${d}.json`);
+}
+
+async function restore(input) {
+  const file = input.files[0];
+  if (!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    const products = data.products || data;
+    if (!confirm(`${products.length}개 상품을 불러옵니다.\n기존 데이터는 유지됩니다.`)) return;
+    for (const p of products) { const { id, ...rest } = p; await put(rest); }
+    render();
+    alert(`✅ ${products.length}개 상품을 불러왔습니다.`);
+  } catch { alert('파일 형식이 올바르지 않습니다.'); }
+  input.value = '';
+}
+
+function download(blob, filename) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// ─── Init ────────────────────────────────────────────────
+openDB().then(d => { db = d; render(); });
+</script>
+</body>
+</html>
