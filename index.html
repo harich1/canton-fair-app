@@ -347,6 +347,8 @@ async function changeName() {
   localStorage.removeItem('cf_user');
   localStorage.removeItem('cf_pin');
   ghSha = null;
+  document.getElementById('nameInput').value = '';
+  document.getElementById('pinInput').value = '';
   closeSettings();
   checkName();
   await dbClear();
