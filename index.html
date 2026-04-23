@@ -33,6 +33,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .btn { padding: 9px 13px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; }
 .btn-excel { background: #1a73e8; color: white; }
 .btn-backup { background: #f0f4ff; color: #1a73e8; }
+.btn-zip { background: #f3e5f5; color: #6a1b9a; }
 .btn-restore { background: #f5f5f5; color: #555; }
 
 .list { padding: 12px; padding-bottom: 90px; }
@@ -190,6 +191,7 @@ textarea.fi { resize: none; }
   <input class="search-box" id="searchInput" placeholder="제품명, 부스 검색..." oninput="render()">
   <button class="btn btn-excel" onclick="exportCSV()">📊 엑셀</button>
   <button class="btn btn-backup" onclick="backup()">💾 백업</button>
+  <button class="btn btn-zip" onclick="downloadZip()">📷 사진ZIP</button>
   <label class="btn btn-restore">📂 불러오기<input type="file" accept=".json" onchange="restore(this)" style="display:none"></label>
 </div>
 
@@ -278,6 +280,7 @@ textarea.fi { resize: none; }
   <div class="viewer-nav" id="viewerDots"></div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
 // ─── IndexedDB ───────────────────────────────────────────
 const DB = 'canton2026', VER = 1, ST = 'products';
@@ -550,6 +553,30 @@ function download(blob, filename) {
   a.download = filename;
   a.click();
   URL.revokeObjectURL(a.href);
+}
+
+// ─── ZIP Download (pure JS) ───────────────────────────────
+async function downloadZip() {
+  const products = await getAll();
+  const photos = [];
+  products.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+  for (const p of products) {
+    (p.photos || []).forEach((b64, i) => {
+      const safe = (s) => s.replace(/[\\/:*?"<>|]/g, '_').slice(0, 30);
+      const name = `${safe(p.booth||'미입력')}_${safe(p.name||'제품')}_${i+1}.jpg`;
+      photos.push({ name, b64 });
+    });
+  }
+  if (!photos.length) { alert('저장된 사진이 없습니다.'); return; }
+
+  const zip = new JSZip();
+  for (const { name, b64 } of photos) {
+    const data = b64.split(',')[1];
+    zip.file(name, data, { base64: true });
+  }
+  const blob = await zip.generateAsync({ type: 'blob', compression: 'STORE' });
+  const d = new Date().toISOString().slice(0, 10);
+  download(blob, `캔톤페어_사진_${d}.zip`);
 }
 
 // ─── Init ────────────────────────────────────────────────
