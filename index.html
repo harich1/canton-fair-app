@@ -8,19 +8,14 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a1a; }
 
-.header {
-  background: #c62828; color: white;
-  padding: 14px 16px; position: sticky; top: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
+.header { background: #c62828; color: white; padding: 14px 16px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 .header-left { display: flex; flex-direction: column; flex: 1; }
 .header-sub { font-size: 11px; opacity: 0.75; margin-bottom: 2px; }
 .header-title { font-size: 18px; font-weight: 700; }
+.sync-indicator { font-size: 11px; opacity: 0.85; margin-top: 2px; min-height: 14px; }
 .header-right { display: flex; align-items: center; gap: 10px; }
 .header-count { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; }
-.sync-btn { background: rgba(255,255,255,0.15); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
-.sync-indicator { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+.icon-btn { background: rgba(255,255,255,0.15); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
 
 .toolbar { background: white; padding: 10px 12px; display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid #e0e0e0; }
 .search-box { flex: 1; min-width: 130px; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; background: #fafafa; }
@@ -28,14 +23,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .btn { padding: 9px 13px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; }
 .btn-excel { background: #1a73e8; color: white; }
 .btn-zip { background: #f3e5f5; color: #6a1b9a; }
-.btn-restore { background: #f5f5f5; color: #555; }
+.btn-import { background: #f5f5f5; color: #555; }
 
 .list { padding: 12px; padding-bottom: 90px; }
-
 .card { background: white; border-radius: 14px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
 .card-body { display: flex; gap: 12px; padding: 12px; }
 .card-thumb { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; flex-shrink: 0; cursor: pointer; }
-.card-thumb-placeholder { width: 80px; height: 80px; border-radius: 10px; background: #f5f5f5; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #ccc; }
+.card-thumb-empty { width: 80px; height: 80px; border-radius: 10px; background: #f5f5f5; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #ccc; }
 .card-info { flex: 1; min-width: 0; }
 .card-booth { font-size: 11px; color: #c62828; font-weight: 700; letter-spacing: 0.5px; }
 .card-name { font-size: 15px; font-weight: 700; margin: 3px 0 6px; line-height: 1.3; }
@@ -50,13 +44,12 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .card-btn-del { color: #c62828; }
 
 .fab { position: fixed; bottom: 24px; right: 20px; width: 58px; height: 58px; background: #c62828; color: white; border: none; border-radius: 50%; font-size: 30px; cursor: pointer; box-shadow: 0 4px 16px rgba(198,40,40,0.5); z-index: 200; display: flex; align-items: center; justify-content: center; }
-
 .empty { text-align: center; padding: 70px 20px; }
 .empty-icon { font-size: 52px; margin-bottom: 12px; }
 .empty-text { color: #999; font-size: 15px; }
 .empty-hint { color: #bbb; font-size: 13px; margin-top: 6px; }
 
-/* Overlay & Modal */
+/* Overlay / Modal */
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 300; display: none; align-items: flex-end; }
 .overlay.open { display: flex; }
 .modal { background: white; border-radius: 22px 22px 0 0; width: 100%; max-height: 94vh; overflow-y: auto; padding: 20px 16px 44px; }
@@ -64,6 +57,16 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .modal-head h2 { font-size: 18px; font-weight: 700; }
 .modal-close { width: 32px; height: 32px; border-radius: 50%; background: #f0f0f0; border: none; font-size: 16px; cursor: pointer; }
+
+/* Name prompt (centered) */
+.name-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 400; display: none; align-items: center; justify-content: center; padding: 24px; }
+.name-overlay.open { display: flex; }
+.name-box { background: white; border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 360px; }
+.name-box h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+.name-box p { font-size: 14px; color: #777; margin-bottom: 20px; line-height: 1.6; }
+.name-input { width: 100%; padding: 13px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 16px; margin-bottom: 12px; }
+.name-input:focus { outline: none; border-color: #c62828; }
+.name-btn { width: 100%; padding: 14px; background: #c62828; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; }
 
 .fg { margin-bottom: 15px; }
 .fl { display: block; font-size: 12px; color: #888; font-weight: 600; margin-bottom: 6px; letter-spacing: 0.3px; text-transform: uppercase; }
@@ -81,7 +84,7 @@ textarea.fi { resize: none; }
 .oem-label { font-size: 15px; font-weight: 600; }
 
 .photo-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-.btn-cam, .btn-gal { display: flex; align-items: center; justify-content: center; padding: 14px 10px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; text-align: center; position: relative; overflow: hidden; }
+.btn-cam, .btn-gal { display: flex; align-items: center; justify-content: center; padding: 14px 10px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; position: relative; overflow: hidden; }
 .btn-cam { background: #c62828; color: white; }
 .btn-gal { background: #f5f5f5; color: #333; border: 1.5px solid #ddd; }
 .btn-cam input, .btn-gal input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -92,33 +95,25 @@ textarea.fi { resize: none; }
 .photo-remove { position: absolute; top: -7px; right: -7px; width: 24px; height: 24px; background: #c62828; color: white; border: 2px solid white; border-radius: 50%; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .btn-save { width: 100%; padding: 15px; background: #c62828; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 10px; }
 
-/* Settings modal */
-.settings-section { background: #f8f8f8; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
-.settings-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #333; }
-.settings-status { display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 12px; }
-.dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.dot-on { background: #2e7d32; }
-.dot-off { background: #bbb; }
-.dot-sync { background: #f57c00; }
-.settings-tip { font-size: 12px; color: #999; line-height: 1.6; margin-bottom: 12px; }
-.settings-tip a { color: #1a73e8; }
-.btn-settings-save { width: 100%; padding: 13px; background: #c62828; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
-.btn-settings-disconnect { width: 100%; padding: 11px; background: #f5f5f5; color: #c62828; border: none; border-radius: 10px; font-size: 14px; cursor: pointer; margin-top: 8px; }
+/* Settings */
+.settings-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
+.settings-row:last-child { border-bottom: none; }
+.settings-label { font-size: 15px; font-weight: 600; }
+.settings-value { font-size: 14px; color: #888; }
+.settings-btn { padding: 8px 14px; border: 1.5px solid #ddd; border-radius: 8px; background: none; cursor: pointer; font-size: 13px; color: #555; }
+.settings-section-title { font-size: 12px; color: #aaa; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin: 16px 0 8px; }
 
-/* Photo viewer */
+/* Viewer */
 .viewer { position: fixed; inset: 0; background: black; z-index: 500; display: none; flex-direction: column; align-items: center; justify-content: center; }
 .viewer.open { display: flex; }
 .viewer img { max-width: 100%; max-height: 90vh; object-fit: contain; }
-.viewer-nav { position: absolute; bottom: 20px; display: flex; gap: 12px; align-items: center; }
+.viewer-nav { position: absolute; bottom: 20px; display: flex; gap: 12px; }
 .viewer-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
 .viewer-dot.active { background: white; }
 .viewer-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.15); color: white; border: none; width: 42px; height: 42px; border-radius: 50%; font-size: 20px; cursor: pointer; }
 .viewer-prev, .viewer-next { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); color: white; border: none; width: 42px; height: 42px; border-radius: 50%; font-size: 20px; cursor: pointer; }
 .viewer-prev { left: 12px; }
 .viewer-next { right: 12px; }
-
-@keyframes spin { to { transform: rotate(360deg); } }
-.spinning { display: inline-block; animation: spin 1s linear infinite; }
 </style>
 </head>
 <body>
@@ -127,25 +122,35 @@ textarea.fi { resize: none; }
   <div class="header-left">
     <span class="header-sub">광저우 캔톤페어 2026</span>
     <span class="header-title">바잉 기록</span>
-    <span class="sync-indicator" id="syncIndicator"></span>
+    <span class="sync-indicator" id="syncMsg"></span>
   </div>
   <div class="header-right">
     <span class="header-count" id="totalCount">0건</span>
-    <button class="sync-btn" onclick="openSettings()" title="동기화 설정">⚙️</button>
+    <button class="icon-btn" onclick="openSettings()">⚙️</button>
   </div>
 </div>
 
 <div class="toolbar">
   <input class="search-box" id="searchInput" placeholder="제품명, 부스 검색..." oninput="render()">
   <button class="btn btn-excel" onclick="exportCSV()">📊 엑셀</button>
-  <button class="btn btn-zip" onclick="downloadZip()">📷 사진ZIP</button>
-  <label class="btn btn-restore">📂 가져오기<input type="file" accept=".json" onchange="restore(this)" style="display:none"></label>
+  <button class="btn btn-zip" onclick="exportZip()">📷 사진ZIP</button>
+  <label class="btn btn-import">📂 가져오기<input type="file" accept=".json" onchange="importData(this)" style="display:none"></label>
 </div>
 
 <div class="list" id="list"></div>
 <button class="fab" onclick="openAdd()">+</button>
 
-<!-- Add/Edit Modal -->
+<!-- 이름 입력 (최초 1회) -->
+<div class="name-overlay" id="nameOverlay">
+  <div class="name-box">
+    <h2>👋 처음 오셨군요</h2>
+    <p>이름을 입력하면 같은 이름을 쓰는 기기끼리 데이터가 자동으로 동기화됩니다.</p>
+    <input class="name-input" id="nameInput" placeholder="이름 입력 (예: 조승현)" maxlength="20">
+    <button class="name-btn" onclick="confirmName()">시작하기</button>
+  </div>
+</div>
+
+<!-- 상품 추가/수정 -->
 <div class="overlay" id="overlay" onclick="onOverlayClick(event)">
   <div class="modal">
     <div class="modal-handle"></div>
@@ -155,59 +160,29 @@ textarea.fi { resize: none; }
     </div>
     <form onsubmit="saveProduct(event)">
       <input type="hidden" id="fId">
-      <div class="fg">
-        <label class="fl">부스 위치 *</label>
-        <input class="fi" id="fBooth" placeholder="예: 11.1 A01" required>
-      </div>
-      <div class="fg">
-        <label class="fl">제품명 *</label>
-        <input class="fi" id="fName" placeholder="제품명을 입력하세요" required>
+      <div class="fg"><label class="fl">부스 위치 *</label><input class="fi" id="fBooth" placeholder="예: 11.1 A01" required></div>
+      <div class="fg"><label class="fl">제품명 *</label><input class="fi" id="fName" placeholder="제품명을 입력하세요" required></div>
+      <div class="frow">
+        <div class="fg"><label class="fl">박스 입수</label><input class="fi" id="fBoxQty" type="number" min="0" placeholder="개"></div>
+        <div class="fg"><label class="fl">CBM (m³)</label><input class="fi" id="fCbm" type="number" step="0.0001" min="0" placeholder="0.000"></div>
       </div>
       <div class="frow">
-        <div class="fg">
-          <label class="fl">박스 입수</label>
-          <input class="fi" id="fBoxQty" type="number" min="0" placeholder="개">
-        </div>
-        <div class="fg">
-          <label class="fl">CBM (m³)</label>
-          <input class="fi" id="fCbm" type="number" step="0.0001" min="0" placeholder="0.000">
-        </div>
-      </div>
-      <div class="frow">
-        <div class="fg">
-          <label class="fl">MOQ</label>
-          <input class="fi" id="fMoq" type="number" min="0" placeholder="최소수량">
-        </div>
-        <div class="fg">
-          <label class="fl">생산기간 (Lead Time)</label>
-          <input class="fi" id="fLeadTime" placeholder="예: 30일">
-        </div>
+        <div class="fg"><label class="fl">MOQ</label><input class="fi" id="fMoq" type="number" min="0" placeholder="최소수량"></div>
+        <div class="fg"><label class="fl">생산기간 (Lead Time)</label><input class="fi" id="fLeadTime" placeholder="예: 30일"></div>
       </div>
       <div class="fg">
         <label class="fl">OEM 가능 여부</label>
         <div class="oem-row">
-          <label class="switch">
-            <input type="checkbox" id="fOem" onchange="updateOemLabel()">
-            <span class="slider"></span>
-          </label>
+          <label class="switch"><input type="checkbox" id="fOem" onchange="updateOemLabel()"><span class="slider"></span></label>
           <span class="oem-label" id="oemLabel">불가</span>
         </div>
       </div>
-      <div class="fg">
-        <label class="fl">비고</label>
-        <textarea class="fi" id="fNotes" rows="2" placeholder="가격, 특이사항, 담당자 연락처 등"></textarea>
-      </div>
+      <div class="fg"><label class="fl">비고</label><textarea class="fi" id="fNotes" rows="2" placeholder="가격, 특이사항, 담당자 연락처 등"></textarea></div>
       <div class="fg">
         <label class="fl">상품 사진</label>
         <div class="photo-btns">
-          <label class="btn-cam">
-            📸 카메라 촬영
-            <input type="file" accept="image/*" capture="environment" onchange="capturePhoto(this)">
-          </label>
-          <label class="btn-gal">
-            🖼️ 갤러리 선택
-            <input type="file" accept="image/*" multiple onchange="addPhotos(this)">
-          </label>
+          <label class="btn-cam">📸 카메라 촬영<input type="file" accept="image/*" capture="environment" onchange="capturePhoto(this)"></label>
+          <label class="btn-gal">🖼️ 갤러리 선택<input type="file" accept="image/*" multiple onchange="addPhotos(this)"></label>
         </div>
         <div class="photo-grid" id="photoGrid"></div>
         <div class="photo-empty" id="photoHint">사진 없음</div>
@@ -217,245 +192,212 @@ textarea.fi { resize: none; }
   </div>
 </div>
 
-<!-- Settings Modal -->
-<div class="overlay" id="settingsOverlay" onclick="onSettingsOverlayClick(event)">
+<!-- 설정 -->
+<div class="overlay" id="settingsOverlay" onclick="onSettingsClick(event)">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-head">
-      <h2>⚙️ 동기화 설정</h2>
-      <button class="modal-close" onclick="closeSettings()">✕</button>
-    </div>
-
-    <div class="settings-section">
-      <h3>현재 상태</h3>
-      <div class="settings-status">
-        <div class="dot" id="statusDot"></div>
-        <span id="statusText">확인 중...</span>
+    <div class="modal-head"><h2>⚙️ 설정</h2><button class="modal-close" onclick="closeSettings()">✕</button></div>
+    <div class="settings-row">
+      <div>
+        <div class="settings-label">현재 사용자</div>
+        <div class="settings-value" id="currentUserLabel"></div>
       </div>
+      <button class="settings-btn" onclick="changeName()">변경</button>
     </div>
-
-    <div class="settings-section" id="tokenSection">
-      <h3>GitHub 토큰 연결</h3>
-      <p class="settings-tip">
-        어느 기기에서든 데이터를 공유하려면 GitHub 토큰이 필요합니다.<br><br>
-        1. <a href="https://github.com/settings/tokens/new" target="_blank">github.com → Settings → Developer settings → Personal access tokens → Tokens (classic)</a><br>
-        2. Note: <b>canton-fair</b>, Expiration: <b>30 days</b><br>
-        3. Scope: <b>repo</b> 체크<br>
-        4. Generate token → 복사 후 아래 붙여넣기
-      </p>
-      <div class="fg">
-        <label class="fl">GitHub Personal Access Token</label>
-        <input class="fi" id="tokenInput" type="password" placeholder="ghp_xxxxxxxxxxxx">
-      </div>
-      <button class="btn-settings-save" onclick="saveToken()">연결하기</button>
-      <button class="btn-settings-disconnect" id="disconnectBtn" onclick="disconnectToken()" style="display:none">연결 해제</button>
+    <div class="settings-row">
+      <div class="settings-label">동기화 상태</div>
+      <div class="settings-value" id="syncStatusLabel">확인 중...</div>
     </div>
-
-    <div class="settings-section">
-      <h3>데이터 직접 내보내기</h3>
-      <p class="settings-tip">클라우드 없이 파일로 직접 주고받을 때 사용하세요.</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <button class="btn btn-excel" style="padding:12px" onclick="exportCSV();closeSettings()">📊 엑셀</button>
-        <button class="btn" style="background:#f0f4ff;color:#1a73e8;padding:12px" onclick="backup();closeSettings()">💾 JSON 백업</button>
-      </div>
+    <div class="settings-section-title">내보내기</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:8px">
+      <button class="btn btn-excel" style="padding:12px" onclick="exportCSV();closeSettings()">📊 엑셀</button>
+      <button class="btn btn-zip" style="padding:12px" onclick="exportZip();closeSettings()">📷 사진ZIP</button>
     </div>
+    <button class="btn" style="width:100%;padding:12px;background:#f0f4ff;color:#1a73e8;margin-top:4px" onclick="backupJSON();closeSettings()">💾 전체 백업 (JSON)</button>
   </div>
 </div>
 
-<!-- Photo Viewer -->
+<!-- 사진 뷰어 -->
 <div class="viewer" id="viewer">
   <button class="viewer-close" onclick="closeViewer()">✕</button>
-  <button class="viewer-prev" id="viewerPrev" onclick="viewerNav(-1)">‹</button>
-  <img id="viewerImg" src="">
-  <button class="viewer-next" id="viewerNext" onclick="viewerNav(1)">›</button>
-  <div class="viewer-nav" id="viewerDots"></div>
+  <button class="viewer-prev" id="vPrev" onclick="vNav(-1)">‹</button>
+  <img id="vImg" src="">
+  <button class="viewer-next" id="vNext" onclick="vNav(1)">›</button>
+  <div class="viewer-nav" id="vDots"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
-// ─── Config ──────────────────────────────────────────────
+// ─── GitHub 설정 ─────────────────────────────────────────
+const GH_TOKEN = atob('Z2l0aHViX3BhdF8xMUNBWFZMUFEwMnRnb0gwRUhMNnFnX09neGVhdnFwbWhlS0d5aHBwNTlDTmFJWmpJVnJtSWVaaVJ3TU1sMk1wMm9ZWkFaT1Q2M2ZTVU5FUlZJ');
 const GH_OWNER = 'harich1';
 const GH_REPO  = 'canton-fair-data';
-const GH_FILE  = 'data.json';
+
+function ghFile() { return `data/${userName()}.json`; }
+function userName() { return localStorage.getItem('cf_user') || ''; }
 
 // ─── IndexedDB ───────────────────────────────────────────
-const DB_NAME = 'canton2026', DB_VER = 1, ST = 'products';
-let db;
-
+const IDB = 'canton2026'; let db;
 function openDB() {
   return new Promise((res, rej) => {
-    const r = indexedDB.open(DB_NAME, DB_VER);
-    r.onupgradeneeded = e => {
-      const d = e.target.result;
-      if (!d.objectStoreNames.contains(ST))
-        d.createObjectStore(ST, { keyPath: 'id', autoIncrement: true });
-    };
+    const r = indexedDB.open(IDB, 1);
+    r.onupgradeneeded = e => { if (!e.target.result.objectStoreNames.contains('p')) e.target.result.createObjectStore('p', {keyPath:'id',autoIncrement:true}); };
     r.onsuccess = e => res(e.target.result);
-    r.onerror = e => rej(e.target.error);
+    r.onerror = e => rej(e);
   });
 }
-const txs = (m='readonly') => db.transaction(ST, m).objectStore(ST);
-const getAll = () => new Promise((res, rej) => { const r = txs().getAll(); r.onsuccess = e => res(e.target.result); r.onerror = rej; });
-const put    = p  => new Promise((res, rej) => { const r = txs('readwrite').put(p); r.onsuccess = e => res(e.target.result); r.onerror = rej; });
-const del    = id => new Promise((res, rej) => { const r = txs('readwrite').delete(id); r.onsuccess = () => res(); r.onerror = rej; });
+const st = (m='readonly') => db.transaction('p',m).objectStore('p');
+const getAll = () => new Promise((res,rej) => { const r=st().getAll(); r.onsuccess=e=>res(e.target.result); r.onerror=rej; });
+const dbPut  = p  => new Promise((res,rej) => { const r=st('readwrite').put(p); r.onsuccess=e=>res(e.target.result); r.onerror=rej; });
+const dbDel  = id => new Promise((res,rej) => { const r=st('readwrite').delete(id); r.onsuccess=()=>res(); r.onerror=rej; });
+const dbClear= () => new Promise((res,rej) => { const r=st('readwrite').clear(); r.onsuccess=()=>res(); r.onerror=rej; });
 
-// ─── GitHub Sync ─────────────────────────────────────────
-function getToken() { return localStorage.getItem('gh_token') || ''; }
+// ─── GitHub 동기화 ────────────────────────────────────────
+let ghSha = null;
 
 async function ghGet() {
-  const token = getToken();
-  if (!token) return null;
   try {
-    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`, {
-      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ghFile()}`, {
+      headers: { Authorization: `Bearer ${GH_TOKEN}`, Accept: 'application/vnd.github.v3+json' }
     });
-    if (res.status === 404) return { products: [], sha: null };
+    if (res.status === 404) return { data: [], sha: null };
     if (!res.ok) return null;
-    const data = await res.json();
-    const json = JSON.parse(decodeURIComponent(escape(atob(data.content.replace(/\n/g,'')))));
-    return { products: json, sha: data.sha };
+    const j = await res.json();
+    return { data: JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))))), sha: j.sha };
   } catch { return null; }
 }
 
-let ghSha = null;
 async function ghPush(products) {
-  const token = getToken();
-  if (!token) return;
+  if (!userName()) return;
   try {
-    setSync('⏫ 동기화 중...');
+    setSync('⏫ 저장 중...');
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(products))));
     const body = { message: `sync ${new Date().toISOString().slice(0,16)}`, content };
     if (ghSha) body.sha = ghSha;
-    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`, {
+    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ghFile()}`, {
       method: 'PUT',
-      headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
+      headers: { Authorization: `Bearer ${GH_TOKEN}`, 'Content-Type': 'application/json' },
       body: JSON.stringify(body)
     });
     if (res.ok) {
-      const data = await res.json();
-      ghSha = data.content.sha;
-      setSync('✅ 동기화됨');
-      setTimeout(() => setSync(''), 2500);
-    } else {
-      // SHA conflict: re-fetch and retry once
+      ghSha = (await res.json()).content.sha;
+      setSync('✅ 저장됨');
+      setTimeout(() => setSync(''), 2000);
+    } else if (res.status === 409) {
       const fresh = await ghGet();
-      if (fresh) {
-        ghSha = fresh.sha;
-        await ghPush(products);
-      }
-    }
-  } catch { setSync('⚠️ 동기화 실패'); setTimeout(() => setSync(''), 3000); }
+      if (fresh) { ghSha = fresh.sha; await ghPush(products); }
+    } else { setSync('⚠️ 저장 실패'); setTimeout(()=>setSync(''),3000); }
+  } catch { setSync('⚠️ 저장 실패'); setTimeout(()=>setSync(''),3000); }
 }
 
 async function ghPull() {
-  const data = await ghGet();
-  if (!data) return;
-  ghSha = data.sha;
-  if (!data.products.length) return;
-
-  const local = await getAll();
-  const localIds = new Set(local.map(p => p.id));
-
-  // products from GitHub get merged in: add missing ones
-  for (const p of data.products) {
-    if (!localIds.has(p.id)) await put(p);
-    else {
-      // keep the more recent one
-      const lp = local.find(x => x.id === p.id);
-      if (lp && new Date(p.updatedAt) > new Date(lp.updatedAt)) await put(p);
-    }
+  if (!userName()) return;
+  setSync('🔄 불러오는 중...');
+  const result = await ghGet();
+  if (!result) { setSync('⚠️ 연결 실패'); setTimeout(()=>setSync(''),3000); return; }
+  ghSha = result.sha;
+  if (result.data.length) {
+    await dbClear();
+    for (const p of result.data) await dbPut(p);
   }
-  render();
+  await render();
+  setSync('✅ 동기화 완료');
+  setTimeout(()=>setSync(''),2000);
 }
 
-function setSync(msg) {
-  document.getElementById('syncIndicator').textContent = msg;
+function setSync(msg) { document.getElementById('syncMsg').textContent = msg; }
+
+// ─── 이름 설정 ────────────────────────────────────────────
+function checkName() {
+  if (!userName()) document.getElementById('nameOverlay').classList.add('open');
 }
 
-// ─── Photos ──────────────────────────────────────────────
-let currentPhotos = [];
-let editId = null;
+async function confirmName() {
+  const v = document.getElementById('nameInput').value.trim();
+  if (!v) { alert('이름을 입력해주세요.'); return; }
+  localStorage.setItem('cf_user', v);
+  document.getElementById('nameOverlay').classList.remove('open');
+  ghSha = null;
+  await ghPull();
+}
 
-function compress(file, maxPx = 1400, q = 0.78) {
+function changeName() {
+  closeSettings();
+  if (!confirm('이름을 바꾸면 이 기기의 현재 데이터는 지워지고\n새 이름의 데이터를 불러옵니다.\n계속하시겠습니까?')) return;
+  localStorage.removeItem('cf_user');
+  ghSha = null;
+  dbClear().then(() => { render(); checkName(); });
+}
+
+// ─── 사진 ────────────────────────────────────────────────
+let curPhotos = [], editId = null;
+
+function compress(file) {
   return new Promise(res => {
-    const reader = new FileReader();
-    reader.onload = e => {
+    const rd = new FileReader();
+    rd.onload = e => {
       const img = new Image();
       img.onload = () => {
-        let w = img.width, h = img.height;
-        if (w > maxPx || h > maxPx) {
-          if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
-          else { w = Math.round(w * maxPx / h); h = maxPx; }
-        }
-        const c = document.createElement('canvas');
-        c.width = w; c.height = h;
-        c.getContext('2d').drawImage(img, 0, 0, w, h);
-        res(c.toDataURL('image/jpeg', q));
+        const MAX=1400, Q=0.78;
+        let w=img.width, h=img.height;
+        if(w>MAX||h>MAX){ if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;} }
+        const c=document.createElement('canvas'); c.width=w; c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        res(c.toDataURL('image/jpeg',Q));
       };
-      img.src = e.target.result;
+      img.src=e.target.result;
     };
-    reader.readAsDataURL(file);
+    rd.readAsDataURL(file);
   });
 }
 
 async function capturePhoto(input) {
-  const file = input.files[0];
-  if (!file) return;
-  // 원본 폰에 저장
-  const url = URL.createObjectURL(file);
+  const f = input.files[0]; if (!f) return;
+  const url = URL.createObjectURL(f);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = `canton_${new Date().toISOString().replace(/[:.]/g,'-').slice(0,19)}.jpg`;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-  // 앱에는 압축본 저장
-  currentPhotos.push(await compress(file));
-  renderPhotos();
-  input.value = '';
+  a.href=url; a.download=`canton_${new Date().toISOString().replace(/[:.]/g,'-').slice(0,19)}.jpg`; a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  curPhotos.push(await compress(f)); renderPhotos(); input.value='';
 }
 
 async function addPhotos(input) {
-  for (const f of Array.from(input.files)) currentPhotos.push(await compress(f));
-  renderPhotos();
-  input.value = '';
+  for(const f of Array.from(input.files)) curPhotos.push(await compress(f));
+  renderPhotos(); input.value='';
 }
 
-function removePhoto(i) { currentPhotos.splice(i, 1); renderPhotos(); }
+function removePhoto(i) { curPhotos.splice(i,1); renderPhotos(); }
 
 function renderPhotos() {
-  document.getElementById('photoHint').style.display = currentPhotos.length ? 'none' : 'block';
-  document.getElementById('photoGrid').innerHTML = currentPhotos.map((src, i) => `
+  document.getElementById('photoHint').style.display = curPhotos.length ? 'none' : 'block';
+  document.getElementById('photoGrid').innerHTML = curPhotos.map((s,i)=>`
     <div class="photo-item">
-      <img src="${src}" onclick="openViewer('modal',${i})" style="cursor:pointer">
+      <img src="${s}" onclick="openViewer('m',${i})" style="cursor:pointer">
       <button class="photo-remove" onclick="removePhoto(${i})" type="button">✕</button>
     </div>`).join('');
 }
 
-// ─── Modal ────────────────────────────────────────────────
-function openAdd() { openModal(null); }
+// ─── 모달 ────────────────────────────────────────────────
+let cache = {};
 
+function openAdd() { openModal(null); }
 function openModal(p) {
-  editId = p ? p.id : null;
+  editId = p?.id || null;
   document.getElementById('modalTitle').textContent = p ? '상품 수정' : '새 상품 추가';
   document.getElementById('saveBtn').textContent = p ? '수정 완료' : '저장하기';
-  document.getElementById('fId').value = p ? p.id : '';
-  document.getElementById('fBooth').value = p ? (p.booth||'') : '';
-  document.getElementById('fName').value = p ? (p.name||'') : '';
-  document.getElementById('fBoxQty').value = p ? (p.boxQty||'') : '';
-  document.getElementById('fCbm').value = p ? (p.cbm||'') : '';
-  document.getElementById('fMoq').value = p ? (p.moq||'') : '';
-  document.getElementById('fLeadTime').value = p ? (p.leadTime||'') : '';
-  document.getElementById('fOem').checked = p ? !!p.oem : false;
-  document.getElementById('fNotes').value = p ? (p.notes||'') : '';
+  ['fBooth','fName','fBoxQty','fCbm','fMoq','fLeadTime','fNotes'].forEach(id => {
+    const map = {fBooth:'booth',fName:'name',fBoxQty:'boxQty',fCbm:'cbm',fMoq:'moq',fLeadTime:'leadTime',fNotes:'notes'};
+    document.getElementById(id).value = p ? (p[map[id]]||'') : '';
+  });
+  document.getElementById('fId').value = p?.id||'';
+  document.getElementById('fOem').checked = p?.oem||false;
   updateOemLabel();
-  currentPhotos = p ? [...(p.photos||[])] : [];
+  curPhotos = p ? [...(p.photos||[])] : [];
   renderPhotos();
   document.getElementById('overlay').classList.add('open');
-  setTimeout(() => document.getElementById('fBooth').focus(), 150);
+  setTimeout(()=>document.getElementById('fBooth').focus(),150);
 }
-
 function closeModal() { document.getElementById('overlay').classList.remove('open'); }
-function onOverlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+function onOverlayClick(e) { if(e.target===document.getElementById('overlay')) closeModal(); }
 function updateOemLabel() {
   const v = document.getElementById('fOem').checked;
   document.getElementById('oemLabel').textContent = v ? 'OEM 가능' : '불가';
@@ -463,201 +405,121 @@ function updateOemLabel() {
 }
 
 // ─── CRUD ────────────────────────────────────────────────
-let cache = {};
-
 async function saveProduct(e) {
   e.preventDefault();
   const now = new Date().toISOString();
   const p = {
-    booth:    document.getElementById('fBooth').value.trim(),
-    name:     document.getElementById('fName').value.trim(),
-    boxQty:   document.getElementById('fBoxQty').value || null,
-    cbm:      document.getElementById('fCbm').value || null,
-    moq:      document.getElementById('fMoq').value || null,
+    booth: document.getElementById('fBooth').value.trim(),
+    name:  document.getElementById('fName').value.trim(),
+    boxQty: document.getElementById('fBoxQty').value||null,
+    cbm:    document.getElementById('fCbm').value||null,
+    moq:    document.getElementById('fMoq').value||null,
     leadTime: document.getElementById('fLeadTime').value.trim(),
-    oem:      document.getElementById('fOem').checked,
-    notes:    document.getElementById('fNotes').value.trim(),
-    photos:   [...currentPhotos],
+    oem:    document.getElementById('fOem').checked,
+    notes:  document.getElementById('fNotes').value.trim(),
+    photos: [...curPhotos],
     updatedAt: now,
-    createdAt: editId ? (cache[editId]?.createdAt || now) : now,
+    createdAt: editId ? (cache[editId]?.createdAt||now) : now,
   };
   if (editId) p.id = editId;
-  await put(p);
-  closeModal();
-  await render();
-  // 백그라운드 동기화
-  syncAll();
+  await dbPut(p); closeModal(); await render();
+  ghPush(await getAll());
 }
 
 async function deleteProduct(id) {
-  if (!confirm('이 상품을 삭제하시겠습니까?')) return;
-  await del(id);
-  render();
-  syncAll();
+  if (!confirm('삭제하시겠습니까?')) return;
+  await dbDel(id); render();
+  ghPush(await getAll());
 }
 
-async function syncAll() {
-  const products = await getAll();
-  await ghPush(products);
-}
-
-// ─── Render ──────────────────────────────────────────────
+// ─── 렌더 ────────────────────────────────────────────────
 async function render() {
   const q = document.getElementById('searchInput').value.toLowerCase();
-  let products = await getAll();
-  products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-  cache = {};
-  products.forEach(p => cache[p.id] = p);
-  if (q) products = products.filter(p =>
-    (p.name||'').toLowerCase().includes(q) ||
-    (p.booth||'').toLowerCase().includes(q) ||
-    (p.notes||'').toLowerCase().includes(q)
-  );
-  document.getElementById('totalCount').textContent = `${products.length}건`;
-  const list = document.getElementById('list');
-  if (!products.length) {
-    list.innerHTML = `<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">${q?'검색 결과 없음':'기록된 상품이 없습니다'}</div><div class="empty-hint">+ 버튼을 눌러 추가하세요</div></div>`;
-    return;
-  }
-  list.innerHTML = products.map(p => {
-    const thumb = p.photos?.length
-      ? `<img class="card-thumb" src="${p.photos[0]}" onclick="openViewer(${p.id},0)">`
-      : `<div class="card-thumb-placeholder">📷</div>`;
-    const tags = [
-      p.moq    ? `MOQ ${Number(p.moq).toLocaleString()}` : null,
-      p.cbm    ? `CBM ${p.cbm}` : null,
-      p.boxQty ? `입수 ${p.boxQty}` : null,
-      p.leadTime ? `납기 ${p.leadTime}` : null,
-    ].filter(Boolean).map(t=>`<span class="tag">${t}</span>`).join('');
-    return `<div class="card">
-      <div class="card-body">${thumb}
-        <div class="card-info">
-          <div class="card-booth">${p.booth||'부스미입력'}</div>
-          <div class="card-name">${p.name}</div>
-          <div class="card-tags">${tags}${p.oem?'<span class="tag tag-oem">OEM가능</span>':''}${p.photos?.length>1?`<span class="tag tag-photo">📷${p.photos.length}</span>`:''}</div>
-          ${p.notes?`<div class="card-notes">${p.notes}</div>`:''}
-        </div>
-      </div>
-      <div class="card-footer">
-        <button class="card-btn" onclick="openModal(cache[${p.id}])">✏️ 수정</button>
-        <button class="card-btn card-btn-del" onclick="deleteProduct(${p.id})">🗑️ 삭제</button>
-      </div>
-    </div>`;
+  let list = await getAll();
+  list.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  cache={}; list.forEach(p=>cache[p.id]=p);
+  if(q) list=list.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.booth||'').toLowerCase().includes(q)||(p.notes||'').toLowerCase().includes(q));
+  document.getElementById('totalCount').textContent=`${list.length}건`;
+  const el=document.getElementById('list');
+  if(!list.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">${q?'검색 결과 없음':'기록된 상품이 없습니다'}</div><div class="empty-hint">+ 버튼을 눌러 추가하세요</div></div>`; return; }
+  el.innerHTML=list.map(p=>{
+    const thumb=p.photos?.length?`<img class="card-thumb" src="${p.photos[0]}" onclick="openViewer(${p.id},0)">`:`<div class="card-thumb-empty">📷</div>`;
+    const tags=[p.moq?`MOQ ${Number(p.moq).toLocaleString()}`:null,p.cbm?`CBM ${p.cbm}`:null,p.boxQty?`입수 ${p.boxQty}`:null,p.leadTime?`납기 ${p.leadTime}`:null].filter(Boolean).map(t=>`<span class="tag">${t}</span>`).join('');
+    return `<div class="card"><div class="card-body">${thumb}<div class="card-info"><div class="card-booth">${p.booth||'-'}</div><div class="card-name">${p.name}</div><div class="card-tags">${tags}${p.oem?'<span class="tag tag-oem">OEM가능</span>':''}${p.photos?.length>1?`<span class="tag tag-photo">📷${p.photos.length}</span>`:''}</div>${p.notes?`<div class="card-notes">${p.notes}</div>`:''}</div></div><div class="card-footer"><button class="card-btn" onclick="openModal(cache[${p.id}])">✏️ 수정</button><button class="card-btn card-btn-del" onclick="deleteProduct(${p.id})">🗑️ 삭제</button></div></div>`;
   }).join('');
 }
 
-// ─── Settings ────────────────────────────────────────────
+// ─── 설정 ────────────────────────────────────────────────
 function openSettings() {
-  const token = getToken();
-  document.getElementById('tokenInput').value = token ? '••••••••••••••••' : '';
-  document.getElementById('disconnectBtn').style.display = token ? 'block' : 'none';
-  const dot = document.getElementById('statusDot');
-  const txt = document.getElementById('statusText');
-  if (token) {
-    dot.className = 'dot dot-on';
-    txt.textContent = `GitHub 연결됨 (harich1/${GH_REPO})`;
-  } else {
-    dot.className = 'dot dot-off';
-    txt.textContent = '연결 안 됨 — 이 기기에만 저장됨';
-  }
+  document.getElementById('currentUserLabel').textContent = userName() || '(없음)';
+  document.getElementById('syncStatusLabel').textContent = document.getElementById('syncMsg').textContent || '대기 중';
   document.getElementById('settingsOverlay').classList.add('open');
 }
 function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); }
-function onSettingsOverlayClick(e) { if (e.target === document.getElementById('settingsOverlay')) closeSettings(); }
+function onSettingsClick(e) { if(e.target===document.getElementById('settingsOverlay')) closeSettings(); }
 
-async function saveToken() {
-  const val = document.getElementById('tokenInput').value.trim();
-  if (!val || val.startsWith('•')) { alert('토큰을 입력해주세요.'); return; }
-  localStorage.setItem('gh_token', val);
-  closeSettings();
-  setSync('🔄 데이터 불러오는 중...');
-  await ghPull();
-  setSync('✅ 동기화 완료');
-  setTimeout(() => setSync(''), 2500);
-  openSettings();
+// ─── 뷰어 ────────────────────────────────────────────────
+let vPhotos=[], vIdx=0;
+function openViewer(src,idx) {
+  vPhotos = src==='m' ? [...curPhotos] : (cache[src]?.photos||[]);
+  vIdx=idx||0; showV(); document.getElementById('viewer').classList.add('open');
 }
-
-function disconnectToken() {
-  if (!confirm('연결을 해제하면 이 기기에서는 동기화가 중단됩니다.\n(저장된 데이터는 유지됩니다)')) return;
-  localStorage.removeItem('gh_token');
-  ghSha = null;
-  closeSettings();
+function showV() {
+  document.getElementById('vImg').src=vPhotos[vIdx];
+  document.getElementById('vPrev').style.opacity=vIdx>0?'1':'0.3';
+  document.getElementById('vNext').style.opacity=vIdx<vPhotos.length-1?'1':'0.3';
+  document.getElementById('vDots').innerHTML=vPhotos.length>1?vPhotos.map((_,i)=>`<div class="viewer-dot ${i===vIdx?'active':''}" onclick="vGo(${i})"></div>`).join(''):'';
 }
+function vNav(d){const n=vIdx+d;if(n>=0&&n<vPhotos.length){vIdx=n;showV();}}
+function vGo(i){vIdx=i;showV();}
+function closeViewer(){document.getElementById('viewer').classList.remove('open');}
 
-// ─── Photo Viewer ────────────────────────────────────────
-let viewerPhotos = [], viewerIdx = 0;
-
-function openViewer(src, idx) {
-  viewerPhotos = src === 'modal' ? [...currentPhotos] : (cache[src]?.photos || []);
-  viewerIdx = idx || 0;
-  showViewer();
-  document.getElementById('viewer').classList.add('open');
-}
-function showViewer() {
-  document.getElementById('viewerImg').src = viewerPhotos[viewerIdx];
-  document.getElementById('viewerPrev').style.opacity = viewerIdx > 0 ? '1' : '0.3';
-  document.getElementById('viewerNext').style.opacity = viewerIdx < viewerPhotos.length-1 ? '1' : '0.3';
-  document.getElementById('viewerDots').innerHTML = viewerPhotos.length > 1
-    ? viewerPhotos.map((_,i) => `<div class="viewer-dot ${i===viewerIdx?'active':''}" onclick="viewerGo(${i})"></div>`).join('') : '';
-}
-function viewerNav(d) { const n = viewerIdx+d; if(n>=0 && n<viewerPhotos.length){viewerIdx=n;showViewer();} }
-function viewerGo(i) { viewerIdx=i; showViewer(); }
-function closeViewer() { document.getElementById('viewer').classList.remove('open'); }
-
-// ─── Export ──────────────────────────────────────────────
+// ─── 내보내기 ─────────────────────────────────────────────
 async function exportCSV() {
-  const products = await getAll();
-  if (!products.length) { alert('기록된 상품이 없습니다.'); return; }
-  products.sort((a,b) => new Date(a.createdAt)-new Date(b.createdAt));
-  const headers = ['번호','부스위치','제품명','박스입수','CBM','MOQ','생산기간(LeadTime)','OEM가능여부','비고','사진수','등록일시'];
-  const rows = products.map((p,i) => [i+1,p.booth||'',p.name||'',p.boxQty||'',p.cbm||'',p.moq||'',p.leadTime||'',p.oem?'O':'X',p.notes||'',(p.photos||[]).length,p.createdAt?new Date(p.createdAt).toLocaleString('ko-KR'):'']);
-  const csv = '﻿' + [headers,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
-  dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}), `캔톤페어_${new Date().toISOString().slice(0,10)}.csv`);
+  const list=await getAll(); if(!list.length){alert('데이터 없음');return;}
+  list.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+  const h=['번호','부스위치','제품명','박스입수','CBM','MOQ','생산기간','OEM','비고','사진수','등록일시'];
+  const rows=list.map((p,i)=>[i+1,p.booth||'',p.name||'',p.boxQty||'',p.cbm||'',p.moq||'',p.leadTime||'',p.oem?'O':'X',p.notes||'',(p.photos||[]).length,p.createdAt?new Date(p.createdAt).toLocaleString('ko-KR'):'']);
+  const csv='﻿'+[h,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}),`캔톤페어_${userName()}_${today()}.csv`);
 }
 
-async function downloadZip() {
-  const products = await getAll();
-  const items = [];
-  for (const p of products)
-    (p.photos||[]).forEach((b64,i) => items.push({ name:`${(p.booth||'X').replace(/[\\/:*?"<>|]/g,'_')}_${(p.name||'제품').slice(0,20)}_${i+1}.jpg`, b64: b64.split(',')[1] }));
-  if (!items.length) { alert('저장된 사진이 없습니다.'); return; }
-  const zip = new JSZip();
-  items.forEach(({name,b64}) => zip.file(name, b64, {base64:true}));
-  dl(await zip.generateAsync({type:'blob',compression:'STORE'}), `캔톤페어_사진_${new Date().toISOString().slice(0,10)}.zip`);
+async function exportZip() {
+  const list=await getAll(); const items=[];
+  list.forEach(p=>(p.photos||[]).forEach((b,i)=>items.push({name:`${safe(p.booth)}_${safe(p.name)}_${i+1}.jpg`,b64:b.split(',')[1]})));
+  if(!items.length){alert('사진 없음');return;}
+  const zip=new JSZip();
+  items.forEach(({name,b64})=>zip.file(name,b64,{base64:true}));
+  dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`캔톤페어_사진_${userName()}_${today()}.zip`);
 }
 
-async function backup() {
-  const products = await getAll();
-  dl(new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),products},null,2)],{type:'application/json'}), `캔톤페어_백업_${new Date().toISOString().slice(0,10)}.json`);
+async function backupJSON() {
+  const list=await getAll();
+  dl(new Blob([JSON.stringify({version:1,user:userName(),exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/json'}),`캔톤페어_백업_${userName()}_${today()}.json`);
 }
 
-async function restore(input) {
-  const file = input.files[0];
-  if (!file) return;
+async function importData(input) {
+  const f=input.files[0]; if(!f) return;
   try {
-    const data = JSON.parse(await file.text());
-    const products = data.products || data;
-    if (!confirm(`${products.length}개 상품을 불러옵니다.`)) return;
-    for (const p of products) { const {id,...r} = p; await put(r); }
-    render(); syncAll(); alert(`✅ ${products.length}개 완료`);
-  } catch { alert('파일 형식 오류'); }
-  input.value = '';
+    const d=JSON.parse(await f.text());
+    const list=d.products||d;
+    if(!confirm(`${list.length}개 상품을 불러옵니다.\n기존 데이터는 유지됩니다.`)) return;
+    for(const p of list){const{id,...r}=p;await dbPut(r);}
+    render(); ghPush(await getAll()); alert(`✅ ${list.length}개 완료`);
+  } catch{alert('파일 오류');}
+  input.value='';
 }
 
-function dl(blob, filename) {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = filename; a.click();
-  URL.revokeObjectURL(a.href);
-}
+function safe(s){return(s||'').replace(/[\\/:*?"<>|]/g,'_').slice(0,20);}
+function today(){return new Date().toISOString().slice(0,10);}
+function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
 
-// ─── Init ────────────────────────────────────────────────
+// ─── 시작 ────────────────────────────────────────────────
 openDB().then(d => {
   db = d;
   render();
-  if (getToken()) {
-    setSync('🔄 클라우드 동기화 중...');
-    ghPull();
-  }
+  checkName();
+  if (userName()) ghPull();
 });
 </script>
 </body>
