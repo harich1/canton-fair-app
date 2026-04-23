@@ -131,7 +131,7 @@ textarea.fi { resize: none; }
     <span class="sync-indicator" id="syncMsg"></span>
   </div>
   <div class="header-right">
-    <span style="font-size:10px;opacity:0.55;margin-right:2px">v2.2</span>
+    <span style="font-size:10px;opacity:0.55;margin-right:2px">v2.3</span>
     <span id="headerUser" style="font-size:12px;opacity:0.9;background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;display:none"></span>
     <span class="header-count" id="totalCount">0건</span>
     <button class="icon-btn" onclick="openSettings()">⚙️</button>
@@ -268,15 +268,16 @@ function userName() { return localStorage.getItem('cf_user') || ''; }
 function userPin()  { return localStorage.getItem('cf_pin')  || ''; }
 function userKey()  { return userName() ? `${userName()}_${userPin()}` : ''; }
 
-// ─── IndexedDB ───────────────────────────────────────────
-const IDB = 'cf26'; let db;
-function openDB() {
+// ─── IndexedDB (사용자별 별도 DB) ────────────────────────
+let db;
+function dbName() { return userKey() ? `cf_${userKey()}` : 'cf_guest'; }
+function openDB(name) {
   return new Promise((res, rej) => {
-    const r = indexedDB.open(IDB, 1);
+    const r = indexedDB.open(name || dbName(), 1);
     r.onupgradeneeded = e => e.target.result.createObjectStore('p', {keyPath:'id', autoIncrement:true});
     r.onsuccess = e => res(e.target.result);
     r.onerror = e => rej(e.target.error);
-    r.onblocked = e => rej(new Error('blocked'));
+    r.onblocked = () => rej(new Error('다른 탭을 닫고 새로고침해주세요'));
   });
 }
 function st(m='readonly') {
@@ -385,7 +386,7 @@ function checkName() {
   if (!userName() || !userPin()) document.getElementById('nameOverlay').classList.add('open');
 }
 
-function confirmName() {
+async function confirmName() {
   const name = document.getElementById('nameInput').value.trim();
   const pin  = document.getElementById('pinInput').value.trim();
   if (!name) { alert('이름을 입력해주세요.'); return; }
@@ -394,12 +395,17 @@ function confirmName() {
   localStorage.setItem('cf_pin', pin);
   document.getElementById('nameOverlay').classList.remove('open');
   updateHeaderUser();
+  if (db) { db.close(); db = null; }
+  try {
+    db = await openDB();
+    await render();
+  } catch(e) { alert('DB 오류: ' + e.message); return; }
   ghSha = null;
   ghPull();
 }
 
 async function changeName() {
-  if (!confirm('이름을 바꾸면 이 기기의 데이터는 지워지고\n새 이름으로 다시 시작합니다.')) return;
+  if (!confirm('사용자를 변경하시겠습니까?\n기존 데이터는 이 기기에 보존됩니다.')) return;
   localStorage.removeItem('cf_user');
   localStorage.removeItem('cf_pin');
   ghSha = null;
@@ -407,9 +413,10 @@ async function changeName() {
   document.getElementById('pinInput').value = '';
   closeSettings();
   updateHeaderUser();
-  checkName();
-  await dbClear();
+  if (db) { db.close(); db = null; }
+  db = await openDB();
   await render();
+  checkName();
 }
 
 // ─── 사진 ────────────────────────────────────────────────
