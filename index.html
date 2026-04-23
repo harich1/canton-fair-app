@@ -131,7 +131,7 @@ textarea.fi { resize: none; }
     <span class="sync-indicator" id="syncMsg"></span>
   </div>
   <div class="header-right">
-    <span style="font-size:10px;opacity:0.55;margin-right:2px">v1.9</span>
+    <span style="font-size:10px;opacity:0.55;margin-right:2px">v2.0</span>
     <span class="header-count" id="totalCount">0건</span>
     <button class="icon-btn" onclick="openSettings()">⚙️</button>
   </div>
@@ -145,7 +145,7 @@ textarea.fi { resize: none; }
 </div>
 
 <div class="list" id="list"></div>
-<button class="fab" onclick="openAdd()">+</button>
+<button class="fab" id="fab" onclick="openAdd()" disabled style="opacity:0.4">+</button>
 
 <!-- 이름 입력 (최초 1회) -->
 <div class="name-overlay" id="nameOverlay">
@@ -254,22 +254,17 @@ function userPin()  { return localStorage.getItem('cf_pin')  || ''; }
 function userKey()  { return userName() ? `${userName()}_${userPin()}` : ''; }
 
 // ─── IndexedDB ───────────────────────────────────────────
-const IDB = 'canton2026'; let db;
+const IDB = 'cf26'; let db;
 function openDB() {
   return new Promise((res, rej) => {
-    const r = indexedDB.open(IDB, 2);
-    r.onupgradeneeded = e => {
-      const d = e.target.result;
-      if (!d.objectStoreNames.contains('p'))
-        d.createObjectStore('p', {keyPath:'id', autoIncrement:true});
-    };
+    const r = indexedDB.open(IDB, 1);
+    r.onupgradeneeded = e => e.target.result.createObjectStore('p', {keyPath:'id', autoIncrement:true});
     r.onsuccess = e => res(e.target.result);
     r.onerror = e => rej(e.target.error);
-    r.onblocked = () => rej(new Error('다른 탭에서 앱이 열려 있습니다. 닫고 새로고침해주세요.'));
+    r.onblocked = e => rej(new Error('blocked'));
   });
 }
 function st(m='readonly') {
-  if (!db) throw new Error('DB가 준비되지 않았습니다. 새로고침해주세요.');
   return db.transaction('p', m).objectStore('p');
 }
 const getAll = () => new Promise((res,rej) => { const r=st().getAll(); r.onsuccess=e=>res(e.target.result); r.onerror=rej; });
@@ -572,19 +567,13 @@ function dl(blob,name){const a=document.createElement('a');a.href=URL.createObje
 // ─── 시작 ────────────────────────────────────────────────
 (async () => {
   try {
-    try {
-      db = await openDB();
-    } catch (e) {
-      await new Promise((res, rej) => {
-        const r = indexedDB.deleteDatabase(IDB);
-        r.onsuccess = res; r.onerror = rej;
-      });
-      db = await openDB();
-    }
+    db = await openDB();
+    document.getElementById('fab').disabled = false;
+    document.getElementById('fab').style.opacity = '1';
     await render();
   } catch (e) {
     document.getElementById('list').innerHTML =
-      `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">초기화 실패</div><div class="empty-hint">페이지를 새로고침해주세요</div></div>`;
+      `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">저장소 초기화 실패</div><div class="empty-hint">${e.message||'새로고침해주세요'}</div></div>`;
   } finally {
     checkName();
     if (userName()) ghPull();
