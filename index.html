@@ -144,8 +144,9 @@ textarea.fi { resize: none; }
 <div class="name-overlay" id="nameOverlay">
   <div class="name-box">
     <h2>👋 처음 오셨군요</h2>
-    <p>이름을 입력하면 같은 이름을 쓰는 기기끼리 데이터가 자동으로 동기화됩니다.</p>
-    <input class="name-input" id="nameInput" placeholder="이름 입력 (예: 조승현)" maxlength="20">
+    <p>이름과 비밀번호(숫자 4자리)를 설정하세요.<br>같은 이름+비밀번호를 입력한 기기끼리만 데이터가 공유됩니다.</p>
+    <input class="name-input" id="nameInput" placeholder="이름 (예: 조승현)" maxlength="20">
+    <input class="name-input" id="pinInput" type="password" inputmode="numeric" placeholder="비밀번호 숫자 4자리" maxlength="4" pattern="[0-9]{4}">
     <button class="name-btn" onclick="confirmName()">시작하기</button>
   </div>
 </div>
@@ -233,8 +234,10 @@ const GH_TOKEN = atob('Z2l0aHViX3BhdF8xMUNBWFZMUFEwMnRnb0gwRUhMNnFnX09neGVhdnFwb
 const GH_OWNER = 'harich1';
 const GH_REPO  = 'canton-fair-data';
 
-function ghFile() { return `data/${userName()}.json`; }
+function ghFile() { return `data/${userKey()}.json`; }
 function userName() { return localStorage.getItem('cf_user') || ''; }
+function userPin()  { return localStorage.getItem('cf_pin')  || ''; }
+function userKey()  { return userName() ? `${userName()}_${userPin()}` : ''; }
 
 // ─── IndexedDB ───────────────────────────────────────────
 const IDB = 'canton2026'; let db;
@@ -309,13 +312,16 @@ function setSync(msg) { document.getElementById('syncMsg').textContent = msg; }
 
 // ─── 이름 설정 ────────────────────────────────────────────
 function checkName() {
-  if (!userName()) document.getElementById('nameOverlay').classList.add('open');
+  if (!userName() || !userPin()) document.getElementById('nameOverlay').classList.add('open');
 }
 
 async function confirmName() {
-  const v = document.getElementById('nameInput').value.trim();
-  if (!v) { alert('이름을 입력해주세요.'); return; }
-  localStorage.setItem('cf_user', v);
+  const name = document.getElementById('nameInput').value.trim();
+  const pin  = document.getElementById('pinInput').value.trim();
+  if (!name) { alert('이름을 입력해주세요.'); return; }
+  if (!/^\d{4}$/.test(pin)) { alert('비밀번호는 숫자 4자리로 입력해주세요.'); return; }
+  localStorage.setItem('cf_user', name);
+  localStorage.setItem('cf_pin', pin);
   document.getElementById('nameOverlay').classList.remove('open');
   ghSha = null;
   await ghPull();
@@ -325,6 +331,7 @@ function changeName() {
   closeSettings();
   if (!confirm('이름을 바꾸면 이 기기의 현재 데이터는 지워지고\n새 이름의 데이터를 불러옵니다.\n계속하시겠습니까?')) return;
   localStorage.removeItem('cf_user');
+  localStorage.removeItem('cf_pin');
   ghSha = null;
   dbClear().then(() => { render(); checkName(); });
 }
@@ -451,7 +458,7 @@ async function render() {
 
 // ─── 설정 ────────────────────────────────────────────────
 function openSettings() {
-  document.getElementById('currentUserLabel').textContent = userName() || '(없음)';
+  document.getElementById('currentUserLabel').textContent = userName() ? `${userName()} (●●●●)` : '(없음)';
   document.getElementById('syncStatusLabel').textContent = document.getElementById('syncMsg').textContent || '대기 중';
   document.getElementById('settingsOverlay').classList.add('open');
 }
