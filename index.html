@@ -564,24 +564,23 @@ function dl(blob,name){const a=document.createElement('a');a.href=URL.createObje
 // ─── 시작 ────────────────────────────────────────────────
 (async () => {
   try {
-    db = await openDB();
-  } catch (e) {
-    // DB 열기 실패 시 기존 DB 삭제 후 재시도
     try {
+      db = await openDB();
+    } catch (e) {
       await new Promise((res, rej) => {
         const r = indexedDB.deleteDatabase(IDB);
         r.onsuccess = res; r.onerror = rej;
       });
       db = await openDB();
-    } catch (e2) {
-      document.getElementById('list').innerHTML =
-        `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">앱 초기화 실패</div><div class="empty-hint">페이지를 새로고침해주세요</div></div>`;
-      return;
     }
+    await render();
+  } catch (e) {
+    document.getElementById('list').innerHTML =
+      `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">초기화 실패</div><div class="empty-hint">페이지를 새로고침해주세요</div></div>`;
+  } finally {
+    checkName();
+    if (userName()) ghPull();
   }
-  await render();
-  checkName();
-  if (userName()) ghPull();
 })();
 </script>
 </body>
