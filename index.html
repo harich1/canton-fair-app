@@ -131,7 +131,7 @@ textarea.fi { resize: none; }
     <span class="sync-indicator" id="syncMsg"></span>
   </div>
   <div class="header-right">
-    <span style="font-size:10px;opacity:0.55;margin-right:2px">v1.8</span>
+    <span style="font-size:10px;opacity:0.55;margin-right:2px">v1.9</span>
     <span class="header-count" id="totalCount">0건</span>
     <button class="icon-btn" onclick="openSettings()">⚙️</button>
   </div>
@@ -238,6 +238,11 @@ textarea.fi { resize: none; }
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
+// 로그인 여부를 페이지 로드 즉시 동기적으로 확인
+if (!localStorage.getItem('cf_user') || !localStorage.getItem('cf_pin')) {
+  document.getElementById('nameOverlay').classList.add('open');
+}
+
 // ─── GitHub 설정 ─────────────────────────────────────────
 const GH_TOKEN = atob('Z2l0aHViX3BhdF8xMUNBWFZMUFEwMnRnb0gwRUhMNnFnX09neGVhdnFwbWhlS0d5aHBwNTlDTmFJWmpJVnJtSWVaaVJ3TU1sMk1wMm9ZWkFaT1Q2M2ZTVU5FUlZJ');
 const GH_OWNER = 'harich1';
