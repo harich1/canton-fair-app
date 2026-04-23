@@ -14,86 +14,52 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
   display: flex; align-items: center; justify-content: space-between;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
-.header-left { display: flex; flex-direction: column; }
+.header-left { display: flex; flex-direction: column; flex: 1; }
 .header-sub { font-size: 11px; opacity: 0.75; margin-bottom: 2px; }
 .header-title { font-size: 18px; font-weight: 700; }
+.header-right { display: flex; align-items: center; gap: 10px; }
 .header-count { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+.sync-btn { background: rgba(255,255,255,0.15); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+.sync-indicator { font-size: 12px; opacity: 0.85; margin-top: 2px; }
 
-.toolbar {
-  background: white; padding: 10px 12px;
-  display: flex; gap: 8px; flex-wrap: wrap;
-  border-bottom: 1px solid #e0e0e0;
-}
-.search-box {
-  flex: 1; min-width: 130px;
-  padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px;
-  font-size: 14px; background: #fafafa;
-}
+.toolbar { background: white; padding: 10px 12px; display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid #e0e0e0; }
+.search-box { flex: 1; min-width: 130px; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; background: #fafafa; }
 .search-box:focus { outline: none; border-color: #c62828; background: white; }
 .btn { padding: 9px 13px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; }
 .btn-excel { background: #1a73e8; color: white; }
-.btn-backup { background: #f0f4ff; color: #1a73e8; }
 .btn-zip { background: #f3e5f5; color: #6a1b9a; }
 .btn-restore { background: #f5f5f5; color: #555; }
 
 .list { padding: 12px; padding-bottom: 90px; }
 
-.card {
-  background: white; border-radius: 14px; margin-bottom: 12px;
-  overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07);
-}
+.card { background: white; border-radius: 14px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
 .card-body { display: flex; gap: 12px; padding: 12px; }
-.card-thumb {
-  width: 80px; height: 80px; border-radius: 10px;
-  object-fit: cover; flex-shrink: 0; cursor: pointer;
-}
-.card-thumb-placeholder {
-  width: 80px; height: 80px; border-radius: 10px;
-  background: #f5f5f5; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 30px; color: #ccc;
-}
+.card-thumb { width: 80px; height: 80px; border-radius: 10px; object-fit: cover; flex-shrink: 0; cursor: pointer; }
+.card-thumb-placeholder { width: 80px; height: 80px; border-radius: 10px; background: #f5f5f5; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #ccc; }
 .card-info { flex: 1; min-width: 0; }
-.card-booth { font-size: 11px; color: #c62828; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+.card-booth { font-size: 11px; color: #c62828; font-weight: 700; letter-spacing: 0.5px; }
 .card-name { font-size: 15px; font-weight: 700; margin: 3px 0 6px; line-height: 1.3; }
 .card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
-.tag {
-  background: #f5f5f5; color: #555;
-  padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 500;
-}
+.tag { background: #f5f5f5; color: #555; padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 500; }
 .tag-oem { background: #e8f5e9; color: #2e7d32; }
 .tag-photo { background: #fff3e0; color: #e65100; }
 .card-notes { font-size: 12px; color: #888; margin-top: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
 .card-footer { display: flex; border-top: 1px solid #f0f0f0; }
 .card-btn { flex: 1; padding: 11px; border: none; background: none; cursor: pointer; font-size: 13px; color: #666; font-weight: 500; }
 .card-btn:first-child { border-right: 1px solid #f0f0f0; }
 .card-btn-del { color: #c62828; }
 
-.fab {
-  position: fixed; bottom: 24px; right: 20px;
-  width: 58px; height: 58px; background: #c62828; color: white;
-  border: none; border-radius: 50%; font-size: 30px; font-weight: 300;
-  cursor: pointer; box-shadow: 0 4px 16px rgba(198,40,40,0.5);
-  z-index: 200; display: flex; align-items: center; justify-content: center;
-}
+.fab { position: fixed; bottom: 24px; right: 20px; width: 58px; height: 58px; background: #c62828; color: white; border: none; border-radius: 50%; font-size: 30px; cursor: pointer; box-shadow: 0 4px 16px rgba(198,40,40,0.5); z-index: 200; display: flex; align-items: center; justify-content: center; }
 
 .empty { text-align: center; padding: 70px 20px; }
 .empty-icon { font-size: 52px; margin-bottom: 12px; }
 .empty-text { color: #999; font-size: 15px; }
 .empty-hint { color: #bbb; font-size: 13px; margin-top: 6px; }
 
-/* Modal */
-.overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.55);
-  z-index: 300; display: none; align-items: flex-end;
-}
+/* Overlay & Modal */
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 300; display: none; align-items: flex-end; }
 .overlay.open { display: flex; }
-.modal {
-  background: white; border-radius: 22px 22px 0 0;
-  width: 100%; max-height: 94vh; overflow-y: auto;
-  padding: 20px 16px 44px;
-}
+.modal { background: white; border-radius: 22px 22px 0 0; width: 100%; max-height: 94vh; overflow-y: auto; padding: 20px 16px 44px; }
 .modal-handle { width: 36px; height: 4px; background: #ddd; border-radius: 2px; margin: 0 auto 16px; }
 .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
 .modal-head h2 { font-size: 18px; font-weight: 700; }
@@ -101,38 +67,21 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 
 .fg { margin-bottom: 15px; }
 .fl { display: block; font-size: 12px; color: #888; font-weight: 600; margin-bottom: 6px; letter-spacing: 0.3px; text-transform: uppercase; }
-.fi {
-  width: 100%; padding: 11px 13px;
-  border: 1.5px solid #e0e0e0; border-radius: 10px;
-  font-size: 15px; background: white; transition: border-color 0.2s;
-}
+.fi { width: 100%; padding: 11px 13px; border: 1.5px solid #e0e0e0; border-radius: 10px; font-size: 15px; background: white; transition: border-color 0.2s; }
 .fi:focus { outline: none; border-color: #c62828; }
 textarea.fi { resize: none; }
 .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
 .oem-row { display: flex; align-items: center; gap: 12px; }
 .switch { position: relative; width: 50px; height: 28px; }
 .switch input { display: none; }
-.slider {
-  position: absolute; inset: 0; background: #ccc; border-radius: 28px; cursor: pointer; transition: 0.25s;
-}
-.slider::before {
-  content: ''; position: absolute;
-  width: 22px; height: 22px; left: 3px; top: 3px;
-  background: white; border-radius: 50%; transition: 0.25s;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-}
+.slider { position: absolute; inset: 0; background: #ccc; border-radius: 28px; cursor: pointer; transition: 0.25s; }
+.slider::before { content: ''; position: absolute; width: 22px; height: 22px; left: 3px; top: 3px; background: white; border-radius: 50%; transition: 0.25s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
 .switch input:checked + .slider { background: #2e7d32; }
 .switch input:checked + .slider::before { transform: translateX(22px); }
 .oem-label { font-size: 15px; font-weight: 600; }
 
 .photo-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-.btn-cam, .btn-gal {
-  display: flex; align-items: center; justify-content: center;
-  padding: 14px 10px; border-radius: 12px; cursor: pointer;
-  font-size: 14px; font-weight: 600; text-align: center;
-  position: relative; overflow: hidden;
-}
+.btn-cam, .btn-gal { display: flex; align-items: center; justify-content: center; padding: 14px 10px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; text-align: center; position: relative; overflow: hidden; }
 .btn-cam { background: #c62828; color: white; }
 .btn-gal { background: #f5f5f5; color: #333; border: 1.5px solid #ddd; }
 .btn-cam input, .btn-gal input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -140,44 +89,36 @@ textarea.fi { resize: none; }
 .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .photo-item { position: relative; aspect-ratio: 1; }
 .photo-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; display: block; }
-.photo-remove {
-  position: absolute; top: -7px; right: -7px;
-  width: 24px; height: 24px; background: #c62828; color: white;
-  border: 2px solid white; border-radius: 50%; font-size: 11px;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-}
+.photo-remove { position: absolute; top: -7px; right: -7px; width: 24px; height: 24px; background: #c62828; color: white; border: 2px solid white; border-radius: 50%; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.btn-save { width: 100%; padding: 15px; background: #c62828; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 10px; }
 
-.btn-save {
-  width: 100%; padding: 15px; background: #c62828; color: white;
-  border: none; border-radius: 12px; font-size: 16px; font-weight: 700;
-  cursor: pointer; margin-top: 10px;
-}
+/* Settings modal */
+.settings-section { background: #f8f8f8; border-radius: 12px; padding: 16px; margin-bottom: 16px; }
+.settings-section h3 { font-size: 14px; font-weight: 700; margin-bottom: 10px; color: #333; }
+.settings-status { display: flex; align-items: center; gap: 8px; font-size: 14px; margin-bottom: 12px; }
+.dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.dot-on { background: #2e7d32; }
+.dot-off { background: #bbb; }
+.dot-sync { background: #f57c00; }
+.settings-tip { font-size: 12px; color: #999; line-height: 1.6; margin-bottom: 12px; }
+.settings-tip a { color: #1a73e8; }
+.btn-settings-save { width: 100%; padding: 13px; background: #c62828; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 700; cursor: pointer; }
+.btn-settings-disconnect { width: 100%; padding: 11px; background: #f5f5f5; color: #c62828; border: none; border-radius: 10px; font-size: 14px; cursor: pointer; margin-top: 8px; }
 
 /* Photo viewer */
-.viewer {
-  position: fixed; inset: 0; background: black;
-  z-index: 500; display: none; flex-direction: column;
-  align-items: center; justify-content: center;
-}
+.viewer { position: fixed; inset: 0; background: black; z-index: 500; display: none; flex-direction: column; align-items: center; justify-content: center; }
 .viewer.open { display: flex; }
 .viewer img { max-width: 100%; max-height: 90vh; object-fit: contain; }
-.viewer-nav {
-  position: absolute; bottom: 20px; display: flex; gap: 12px; align-items: center;
-}
+.viewer-nav { position: absolute; bottom: 20px; display: flex; gap: 12px; align-items: center; }
 .viewer-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.4); cursor: pointer; }
 .viewer-dot.active { background: white; }
-.viewer-close {
-  position: absolute; top: 16px; right: 16px;
-  background: rgba(255,255,255,0.15); color: white;
-  border: none; width: 42px; height: 42px; border-radius: 50%; font-size: 20px; cursor: pointer;
-}
-.viewer-prev, .viewer-next {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  background: rgba(255,255,255,0.15); color: white;
-  border: none; width: 42px; height: 42px; border-radius: 50%; font-size: 20px; cursor: pointer;
-}
+.viewer-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.15); color: white; border: none; width: 42px; height: 42px; border-radius: 50%; font-size: 20px; cursor: pointer; }
+.viewer-prev, .viewer-next { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); color: white; border: none; width: 42px; height: 42px; border-radius: 50%; font-size: 20px; cursor: pointer; }
 .viewer-prev { left: 12px; }
 .viewer-next { right: 12px; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinning { display: inline-block; animation: spin 1s linear infinite; }
 </style>
 </head>
 <body>
@@ -186,16 +127,19 @@ textarea.fi { resize: none; }
   <div class="header-left">
     <span class="header-sub">광저우 캔톤페어 2026</span>
     <span class="header-title">바잉 기록</span>
+    <span class="sync-indicator" id="syncIndicator"></span>
   </div>
-  <span class="header-count" id="totalCount">0건</span>
+  <div class="header-right">
+    <span class="header-count" id="totalCount">0건</span>
+    <button class="sync-btn" onclick="openSettings()" title="동기화 설정">⚙️</button>
+  </div>
 </div>
 
 <div class="toolbar">
   <input class="search-box" id="searchInput" placeholder="제품명, 부스 검색..." oninput="render()">
   <button class="btn btn-excel" onclick="exportCSV()">📊 엑셀</button>
-  <button class="btn btn-backup" onclick="backup()">💾 백업</button>
   <button class="btn btn-zip" onclick="downloadZip()">📷 사진ZIP</button>
-  <label class="btn btn-restore">📂 불러오기<input type="file" accept=".json" onchange="restore(this)" style="display:none"></label>
+  <label class="btn btn-restore">📂 가져오기<input type="file" accept=".json" onchange="restore(this)" style="display:none"></label>
 </div>
 
 <div class="list" id="list"></div>
@@ -209,19 +153,16 @@ textarea.fi { resize: none; }
       <h2 id="modalTitle">새 상품 추가</h2>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
-    <form onsubmit="save(event)">
+    <form onsubmit="saveProduct(event)">
       <input type="hidden" id="fId">
-
       <div class="fg">
         <label class="fl">부스 위치 *</label>
         <input class="fi" id="fBooth" placeholder="예: 11.1 A01" required>
       </div>
-
       <div class="fg">
         <label class="fl">제품명 *</label>
         <input class="fi" id="fName" placeholder="제품명을 입력하세요" required>
       </div>
-
       <div class="frow">
         <div class="fg">
           <label class="fl">박스 입수</label>
@@ -232,7 +173,6 @@ textarea.fi { resize: none; }
           <input class="fi" id="fCbm" type="number" step="0.0001" min="0" placeholder="0.000">
         </div>
       </div>
-
       <div class="frow">
         <div class="fg">
           <label class="fl">MOQ</label>
@@ -243,7 +183,6 @@ textarea.fi { resize: none; }
           <input class="fi" id="fLeadTime" placeholder="예: 30일">
         </div>
       </div>
-
       <div class="fg">
         <label class="fl">OEM 가능 여부</label>
         <div class="oem-row">
@@ -254,12 +193,10 @@ textarea.fi { resize: none; }
           <span class="oem-label" id="oemLabel">불가</span>
         </div>
       </div>
-
       <div class="fg">
         <label class="fl">비고</label>
         <textarea class="fi" id="fNotes" rows="2" placeholder="가격, 특이사항, 담당자 연락처 등"></textarea>
       </div>
-
       <div class="fg">
         <label class="fl">상품 사진</label>
         <div class="photo-btns">
@@ -275,9 +212,53 @@ textarea.fi { resize: none; }
         <div class="photo-grid" id="photoGrid"></div>
         <div class="photo-empty" id="photoHint">사진 없음</div>
       </div>
-
       <button type="submit" class="btn-save" id="saveBtn">저장하기</button>
     </form>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="overlay" id="settingsOverlay" onclick="onSettingsOverlayClick(event)">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-head">
+      <h2>⚙️ 동기화 설정</h2>
+      <button class="modal-close" onclick="closeSettings()">✕</button>
+    </div>
+
+    <div class="settings-section">
+      <h3>현재 상태</h3>
+      <div class="settings-status">
+        <div class="dot" id="statusDot"></div>
+        <span id="statusText">확인 중...</span>
+      </div>
+    </div>
+
+    <div class="settings-section" id="tokenSection">
+      <h3>GitHub 토큰 연결</h3>
+      <p class="settings-tip">
+        어느 기기에서든 데이터를 공유하려면 GitHub 토큰이 필요합니다.<br><br>
+        1. <a href="https://github.com/settings/tokens/new" target="_blank">github.com → Settings → Developer settings → Personal access tokens → Tokens (classic)</a><br>
+        2. Note: <b>canton-fair</b>, Expiration: <b>30 days</b><br>
+        3. Scope: <b>repo</b> 체크<br>
+        4. Generate token → 복사 후 아래 붙여넣기
+      </p>
+      <div class="fg">
+        <label class="fl">GitHub Personal Access Token</label>
+        <input class="fi" id="tokenInput" type="password" placeholder="ghp_xxxxxxxxxxxx">
+      </div>
+      <button class="btn-settings-save" onclick="saveToken()">연결하기</button>
+      <button class="btn-settings-disconnect" id="disconnectBtn" onclick="disconnectToken()" style="display:none">연결 해제</button>
+    </div>
+
+    <div class="settings-section">
+      <h3>데이터 직접 내보내기</h3>
+      <p class="settings-tip">클라우드 없이 파일로 직접 주고받을 때 사용하세요.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button class="btn btn-excel" style="padding:12px" onclick="exportCSV();closeSettings()">📊 엑셀</button>
+        <button class="btn" style="background:#f0f4ff;color:#1a73e8;padding:12px" onclick="backup();closeSettings()">💾 JSON 백업</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -292,13 +273,18 @@ textarea.fi { resize: none; }
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
+// ─── Config ──────────────────────────────────────────────
+const GH_OWNER = 'harich1';
+const GH_REPO  = 'canton-fair-data';
+const GH_FILE  = 'data.json';
+
 // ─── IndexedDB ───────────────────────────────────────────
-const DB = 'canton2026', VER = 1, ST = 'products';
+const DB_NAME = 'canton2026', DB_VER = 1, ST = 'products';
 let db;
 
 function openDB() {
   return new Promise((res, rej) => {
-    const r = indexedDB.open(DB, VER);
+    const r = indexedDB.open(DB_NAME, DB_VER);
     r.onupgradeneeded = e => {
       const d = e.target.result;
       if (!d.objectStoreNames.contains(ST))
@@ -308,33 +294,103 @@ function openDB() {
     r.onerror = e => rej(e.target.error);
   });
 }
-const tx = (mode='readonly') => db.transaction(ST, mode).objectStore(ST);
-const getAll = () => new Promise((res, rej) => { const r = tx().getAll(); r.onsuccess = e => res(e.target.result); r.onerror = e => rej(e.target.error); });
-const put    = p  => new Promise((res, rej) => { const r = tx('readwrite').put(p); r.onsuccess = e => res(e.target.result); r.onerror = e => rej(e.target.error); });
-const del    = id => new Promise((res, rej) => { const r = tx('readwrite').delete(id); r.onsuccess = () => res(); r.onerror = e => rej(e.target.error); });
+const txs = (m='readonly') => db.transaction(ST, m).objectStore(ST);
+const getAll = () => new Promise((res, rej) => { const r = txs().getAll(); r.onsuccess = e => res(e.target.result); r.onerror = rej; });
+const put    = p  => new Promise((res, rej) => { const r = txs('readwrite').put(p); r.onsuccess = e => res(e.target.result); r.onerror = rej; });
+const del    = id => new Promise((res, rej) => { const r = txs('readwrite').delete(id); r.onsuccess = () => res(); r.onerror = rej; });
 
-// ─── State ───────────────────────────────────────────────
-let cache = {};        // id → product
+// ─── GitHub Sync ─────────────────────────────────────────
+function getToken() { return localStorage.getItem('gh_token') || ''; }
+
+async function ghGet() {
+  const token = getToken();
+  if (!token) return null;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`, {
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (res.status === 404) return { products: [], sha: null };
+    if (!res.ok) return null;
+    const data = await res.json();
+    const json = JSON.parse(decodeURIComponent(escape(atob(data.content.replace(/\n/g,'')))));
+    return { products: json, sha: data.sha };
+  } catch { return null; }
+}
+
+let ghSha = null;
+async function ghPush(products) {
+  const token = getToken();
+  if (!token) return;
+  try {
+    setSync('⏫ 동기화 중...');
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(products))));
+    const body = { message: `sync ${new Date().toISOString().slice(0,16)}`, content };
+    if (ghSha) body.sha = ghSha;
+    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`, {
+      method: 'PUT',
+      headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (res.ok) {
+      const data = await res.json();
+      ghSha = data.content.sha;
+      setSync('✅ 동기화됨');
+      setTimeout(() => setSync(''), 2500);
+    } else {
+      // SHA conflict: re-fetch and retry once
+      const fresh = await ghGet();
+      if (fresh) {
+        ghSha = fresh.sha;
+        await ghPush(products);
+      }
+    }
+  } catch { setSync('⚠️ 동기화 실패'); setTimeout(() => setSync(''), 3000); }
+}
+
+async function ghPull() {
+  const data = await ghGet();
+  if (!data) return;
+  ghSha = data.sha;
+  if (!data.products.length) return;
+
+  const local = await getAll();
+  const localIds = new Set(local.map(p => p.id));
+
+  // products from GitHub get merged in: add missing ones
+  for (const p of data.products) {
+    if (!localIds.has(p.id)) await put(p);
+    else {
+      // keep the more recent one
+      const lp = local.find(x => x.id === p.id);
+      if (lp && new Date(p.updatedAt) > new Date(lp.updatedAt)) await put(p);
+    }
+  }
+  render();
+}
+
+function setSync(msg) {
+  document.getElementById('syncIndicator').textContent = msg;
+}
+
+// ─── Photos ──────────────────────────────────────────────
 let currentPhotos = [];
 let editId = null;
 
-// ─── Photos ──────────────────────────────────────────────
-function compress(file) {
+function compress(file, maxPx = 1400, q = 0.78) {
   return new Promise(res => {
     const reader = new FileReader();
     reader.onload = e => {
       const img = new Image();
       img.onload = () => {
-        const MAX = 1400, Q = 0.78;
         let w = img.width, h = img.height;
-        if (w > MAX || h > MAX) {
-          if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
-          else { w = Math.round(w * MAX / h); h = MAX; }
+        if (w > maxPx || h > maxPx) {
+          if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; }
+          else { w = Math.round(w * maxPx / h); h = maxPx; }
         }
         const c = document.createElement('canvas');
         c.width = w; c.height = h;
         c.getContext('2d').drawImage(img, 0, 0, w, h);
-        res(c.toDataURL('image/jpeg', Q));
+        res(c.toDataURL('image/jpeg', q));
       };
       img.src = e.target.result;
     };
@@ -345,23 +401,21 @@ function compress(file) {
 async function capturePhoto(input) {
   const file = input.files[0];
   if (!file) return;
-  // 원본을 폰 다운로드 폴더에 저장
-  const origUrl = URL.createObjectURL(file);
+  // 원본 폰에 저장
+  const url = URL.createObjectURL(file);
   const a = document.createElement('a');
-  a.href = origUrl;
-  const ts = new Date().toISOString().replace(/[:.]/g,'-').slice(0,19);
-  a.download = `canton_${ts}.jpg`;
+  a.href = url;
+  a.download = `canton_${new Date().toISOString().replace(/[:.]/g,'-').slice(0,19)}.jpg`;
   a.click();
-  setTimeout(() => URL.revokeObjectURL(origUrl), 1000);
-  // 압축본을 앱에 저장
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  // 앱에는 압축본 저장
   currentPhotos.push(await compress(file));
   renderPhotos();
   input.value = '';
 }
 
 async function addPhotos(input) {
-  const files = Array.from(input.files);
-  for (const f of files) currentPhotos.push(await compress(f));
+  for (const f of Array.from(input.files)) currentPhotos.push(await compress(f));
   renderPhotos();
   input.value = '';
 }
@@ -369,12 +423,10 @@ async function addPhotos(input) {
 function removePhoto(i) { currentPhotos.splice(i, 1); renderPhotos(); }
 
 function renderPhotos() {
-  const hint = document.getElementById('photoHint');
-  const grid = document.getElementById('photoGrid');
-  hint.style.display = currentPhotos.length ? 'none' : 'block';
-  grid.innerHTML = currentPhotos.map((src, i) => `
+  document.getElementById('photoHint').style.display = currentPhotos.length ? 'none' : 'block';
+  document.getElementById('photoGrid').innerHTML = currentPhotos.map((src, i) => `
     <div class="photo-item">
-      <img src="${src}" onclick="openViewer('modal', ${i})" style="cursor:pointer">
+      <img src="${src}" onclick="openViewer('modal',${i})" style="cursor:pointer">
       <button class="photo-remove" onclick="removePhoto(${i})" type="button">✕</button>
     </div>`).join('');
 }
@@ -405,37 +457,48 @@ function openModal(p) {
 function closeModal() { document.getElementById('overlay').classList.remove('open'); }
 function onOverlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
 function updateOemLabel() {
-  document.getElementById('oemLabel').textContent = document.getElementById('fOem').checked ? 'OEM 가능' : '불가';
-  document.getElementById('oemLabel').style.color = document.getElementById('fOem').checked ? '#2e7d32' : '#888';
+  const v = document.getElementById('fOem').checked;
+  document.getElementById('oemLabel').textContent = v ? 'OEM 가능' : '불가';
+  document.getElementById('oemLabel').style.color = v ? '#2e7d32' : '#888';
 }
 
 // ─── CRUD ────────────────────────────────────────────────
-async function save(e) {
+let cache = {};
+
+async function saveProduct(e) {
   e.preventDefault();
   const now = new Date().toISOString();
   const p = {
-    booth: document.getElementById('fBooth').value.trim(),
-    name: document.getElementById('fName').value.trim(),
-    boxQty: document.getElementById('fBoxQty').value || null,
-    cbm: document.getElementById('fCbm').value || null,
-    moq: document.getElementById('fMoq').value || null,
+    booth:    document.getElementById('fBooth').value.trim(),
+    name:     document.getElementById('fName').value.trim(),
+    boxQty:   document.getElementById('fBoxQty').value || null,
+    cbm:      document.getElementById('fCbm').value || null,
+    moq:      document.getElementById('fMoq').value || null,
     leadTime: document.getElementById('fLeadTime').value.trim(),
-    oem: document.getElementById('fOem').checked,
-    notes: document.getElementById('fNotes').value.trim(),
-    photos: [...currentPhotos],
+    oem:      document.getElementById('fOem').checked,
+    notes:    document.getElementById('fNotes').value.trim(),
+    photos:   [...currentPhotos],
     updatedAt: now,
+    createdAt: editId ? (cache[editId]?.createdAt || now) : now,
   };
-  if (editId) { p.id = editId; p.createdAt = cache[editId]?.createdAt || now; }
-  else { p.createdAt = now; }
+  if (editId) p.id = editId;
   await put(p);
   closeModal();
-  render();
+  await render();
+  // 백그라운드 동기화
+  syncAll();
 }
 
 async function deleteProduct(id) {
   if (!confirm('이 상품을 삭제하시겠습니까?')) return;
   await del(id);
   render();
+  syncAll();
+}
+
+async function syncAll() {
+  const products = await getAll();
+  await ghPush(products);
 }
 
 // ─── Render ──────────────────────────────────────────────
@@ -443,51 +506,36 @@ async function render() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   let products = await getAll();
   products.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
   cache = {};
   products.forEach(p => cache[p.id] = p);
-
   if (q) products = products.filter(p =>
     (p.name||'').toLowerCase().includes(q) ||
     (p.booth||'').toLowerCase().includes(q) ||
     (p.notes||'').toLowerCase().includes(q)
   );
-
   document.getElementById('totalCount').textContent = `${products.length}건`;
   const list = document.getElementById('list');
-
   if (!products.length) {
-    list.innerHTML = `<div class="empty">
-      <div class="empty-icon">📦</div>
-      <div class="empty-text">${q ? '검색 결과가 없습니다' : '기록된 상품이 없습니다'}</div>
-      <div class="empty-hint">+ 버튼을 눌러 첫 상품을 추가하세요</div>
-    </div>`;
+    list.innerHTML = `<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">${q?'검색 결과 없음':'기록된 상품이 없습니다'}</div><div class="empty-hint">+ 버튼을 눌러 추가하세요</div></div>`;
     return;
   }
-
   list.innerHTML = products.map(p => {
     const thumb = p.photos?.length
-      ? `<img class="card-thumb" src="${p.photos[0]}" onclick="openViewer(${p.id}, 0)">`
+      ? `<img class="card-thumb" src="${p.photos[0]}" onclick="openViewer(${p.id},0)">`
       : `<div class="card-thumb-placeholder">📷</div>`;
-
     const tags = [
       p.moq    ? `MOQ ${Number(p.moq).toLocaleString()}` : null,
       p.cbm    ? `CBM ${p.cbm}` : null,
       p.boxQty ? `입수 ${p.boxQty}` : null,
       p.leadTime ? `납기 ${p.leadTime}` : null,
-    ].filter(Boolean).map(t => `<span class="tag">${t}</span>`).join('');
-
-    const oemTag = p.oem ? '<span class="tag tag-oem">OEM가능</span>' : '';
-    const photoTag = p.photos?.length > 1 ? `<span class="tag tag-photo">📷${p.photos.length}</span>` : '';
-
+    ].filter(Boolean).map(t=>`<span class="tag">${t}</span>`).join('');
     return `<div class="card">
-      <div class="card-body">
-        ${thumb}
+      <div class="card-body">${thumb}
         <div class="card-info">
-          <div class="card-booth">${p.booth || '부스미입력'}</div>
+          <div class="card-booth">${p.booth||'부스미입력'}</div>
           <div class="card-name">${p.name}</div>
-          <div class="card-tags">${tags}${oemTag}${photoTag}</div>
-          ${p.notes ? `<div class="card-notes">${p.notes}</div>` : ''}
+          <div class="card-tags">${tags}${p.oem?'<span class="tag tag-oem">OEM가능</span>':''}${p.photos?.length>1?`<span class="tag tag-photo">📷${p.photos.length}</span>`:''}</div>
+          ${p.notes?`<div class="card-notes">${p.notes}</div>`:''}
         </div>
       </div>
       <div class="card-footer">
@@ -498,66 +546,89 @@ async function render() {
   }).join('');
 }
 
+// ─── Settings ────────────────────────────────────────────
+function openSettings() {
+  const token = getToken();
+  document.getElementById('tokenInput').value = token ? '••••••••••••••••' : '';
+  document.getElementById('disconnectBtn').style.display = token ? 'block' : 'none';
+  const dot = document.getElementById('statusDot');
+  const txt = document.getElementById('statusText');
+  if (token) {
+    dot.className = 'dot dot-on';
+    txt.textContent = `GitHub 연결됨 (harich1/${GH_REPO})`;
+  } else {
+    dot.className = 'dot dot-off';
+    txt.textContent = '연결 안 됨 — 이 기기에만 저장됨';
+  }
+  document.getElementById('settingsOverlay').classList.add('open');
+}
+function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); }
+function onSettingsOverlayClick(e) { if (e.target === document.getElementById('settingsOverlay')) closeSettings(); }
+
+async function saveToken() {
+  const val = document.getElementById('tokenInput').value.trim();
+  if (!val || val.startsWith('•')) { alert('토큰을 입력해주세요.'); return; }
+  localStorage.setItem('gh_token', val);
+  closeSettings();
+  setSync('🔄 데이터 불러오는 중...');
+  await ghPull();
+  setSync('✅ 동기화 완료');
+  setTimeout(() => setSync(''), 2500);
+  openSettings();
+}
+
+function disconnectToken() {
+  if (!confirm('연결을 해제하면 이 기기에서는 동기화가 중단됩니다.\n(저장된 데이터는 유지됩니다)')) return;
+  localStorage.removeItem('gh_token');
+  ghSha = null;
+  closeSettings();
+}
+
 // ─── Photo Viewer ────────────────────────────────────────
 let viewerPhotos = [], viewerIdx = 0;
 
-function openViewer(productIdOrModal, startIdx) {
-  if (productIdOrModal === 'modal') {
-    viewerPhotos = [...currentPhotos];
-  } else {
-    viewerPhotos = cache[productIdOrModal]?.photos || [];
-  }
-  viewerIdx = startIdx || 0;
-  showViewerPhoto();
+function openViewer(src, idx) {
+  viewerPhotos = src === 'modal' ? [...currentPhotos] : (cache[src]?.photos || []);
+  viewerIdx = idx || 0;
+  showViewer();
   document.getElementById('viewer').classList.add('open');
 }
-
-function showViewerPhoto() {
+function showViewer() {
   document.getElementById('viewerImg').src = viewerPhotos[viewerIdx];
   document.getElementById('viewerPrev').style.opacity = viewerIdx > 0 ? '1' : '0.3';
-  document.getElementById('viewerNext').style.opacity = viewerIdx < viewerPhotos.length - 1 ? '1' : '0.3';
+  document.getElementById('viewerNext').style.opacity = viewerIdx < viewerPhotos.length-1 ? '1' : '0.3';
   document.getElementById('viewerDots').innerHTML = viewerPhotos.length > 1
-    ? viewerPhotos.map((_, i) => `<div class="viewer-dot ${i===viewerIdx?'active':''}" onclick="viewerGo(${i})"></div>`).join('')
-    : '';
+    ? viewerPhotos.map((_,i) => `<div class="viewer-dot ${i===viewerIdx?'active':''}" onclick="viewerGo(${i})"></div>`).join('') : '';
 }
-
-function viewerNav(dir) {
-  const next = viewerIdx + dir;
-  if (next >= 0 && next < viewerPhotos.length) { viewerIdx = next; showViewerPhoto(); }
-}
-function viewerGo(i) { viewerIdx = i; showViewerPhoto(); }
+function viewerNav(d) { const n = viewerIdx+d; if(n>=0 && n<viewerPhotos.length){viewerIdx=n;showViewer();} }
+function viewerGo(i) { viewerIdx=i; showViewer(); }
 function closeViewer() { document.getElementById('viewer').classList.remove('open'); }
 
-// ─── Export CSV ──────────────────────────────────────────
+// ─── Export ──────────────────────────────────────────────
 async function exportCSV() {
   const products = await getAll();
   if (!products.length) { alert('기록된 상품이 없습니다.'); return; }
-  products.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-
+  products.sort((a,b) => new Date(a.createdAt)-new Date(b.createdAt));
   const headers = ['번호','부스위치','제품명','박스입수','CBM','MOQ','생산기간(LeadTime)','OEM가능여부','비고','사진수','등록일시'];
-  const rows = products.map((p, i) => [
-    i+1, p.booth||'', p.name||'',
-    p.boxQty||'', p.cbm||'', p.moq||'',
-    p.leadTime||'', p.oem?'O':'X', p.notes||'',
-    (p.photos||[]).length,
-    p.createdAt ? new Date(p.createdAt).toLocaleString('ko-KR') : ''
-  ]);
-
-  const BOM = '﻿';
-  const csv = BOM + [headers, ...rows]
-    .map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(','))
-    .join('\r\n');
-
-  const d = new Date().toISOString().slice(0,10);
-  download(new Blob([csv], { type: 'text/csv;charset=utf-8;' }), `캔톤페어_바잉기록_${d}.csv`);
+  const rows = products.map((p,i) => [i+1,p.booth||'',p.name||'',p.boxQty||'',p.cbm||'',p.moq||'',p.leadTime||'',p.oem?'O':'X',p.notes||'',(p.photos||[]).length,p.createdAt?new Date(p.createdAt).toLocaleString('ko-KR'):'']);
+  const csv = '﻿' + [headers,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
+  dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}), `캔톤페어_${new Date().toISOString().slice(0,10)}.csv`);
 }
 
-// ─── Backup / Restore ────────────────────────────────────
+async function downloadZip() {
+  const products = await getAll();
+  const items = [];
+  for (const p of products)
+    (p.photos||[]).forEach((b64,i) => items.push({ name:`${(p.booth||'X').replace(/[\\/:*?"<>|]/g,'_')}_${(p.name||'제품').slice(0,20)}_${i+1}.jpg`, b64: b64.split(',')[1] }));
+  if (!items.length) { alert('저장된 사진이 없습니다.'); return; }
+  const zip = new JSZip();
+  items.forEach(({name,b64}) => zip.file(name, b64, {base64:true}));
+  dl(await zip.generateAsync({type:'blob',compression:'STORE'}), `캔톤페어_사진_${new Date().toISOString().slice(0,10)}.zip`);
+}
+
 async function backup() {
   const products = await getAll();
-  const json = JSON.stringify({ version: 1, exportedAt: new Date().toISOString(), products }, null, 2);
-  const d = new Date().toISOString().slice(0,10);
-  download(new Blob([json], { type: 'application/json' }), `캔톤페어_백업_${d}.json`);
+  dl(new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),products},null,2)],{type:'application/json'}), `캔톤페어_백업_${new Date().toISOString().slice(0,10)}.json`);
 }
 
 async function restore(input) {
@@ -566,48 +637,28 @@ async function restore(input) {
   try {
     const data = JSON.parse(await file.text());
     const products = data.products || data;
-    if (!confirm(`${products.length}개 상품을 불러옵니다.\n기존 데이터는 유지됩니다.`)) return;
-    for (const p of products) { const { id, ...rest } = p; await put(rest); }
-    render();
-    alert(`✅ ${products.length}개 상품을 불러왔습니다.`);
-  } catch { alert('파일 형식이 올바르지 않습니다.'); }
+    if (!confirm(`${products.length}개 상품을 불러옵니다.`)) return;
+    for (const p of products) { const {id,...r} = p; await put(r); }
+    render(); syncAll(); alert(`✅ ${products.length}개 완료`);
+  } catch { alert('파일 형식 오류'); }
   input.value = '';
 }
 
-function download(blob, filename) {
+function dl(blob, filename) {
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = filename;
-  a.click();
+  a.href = URL.createObjectURL(blob); a.download = filename; a.click();
   URL.revokeObjectURL(a.href);
 }
 
-// ─── ZIP Download (pure JS) ───────────────────────────────
-async function downloadZip() {
-  const products = await getAll();
-  const photos = [];
-  products.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-  for (const p of products) {
-    (p.photos || []).forEach((b64, i) => {
-      const safe = (s) => s.replace(/[\\/:*?"<>|]/g, '_').slice(0, 30);
-      const name = `${safe(p.booth||'미입력')}_${safe(p.name||'제품')}_${i+1}.jpg`;
-      photos.push({ name, b64 });
-    });
-  }
-  if (!photos.length) { alert('저장된 사진이 없습니다.'); return; }
-
-  const zip = new JSZip();
-  for (const { name, b64 } of photos) {
-    const data = b64.split(',')[1];
-    zip.file(name, data, { base64: true });
-  }
-  const blob = await zip.generateAsync({ type: 'blob', compression: 'STORE' });
-  const d = new Date().toISOString().slice(0, 10);
-  download(blob, `캔톤페어_사진_${d}.zip`);
-}
-
 // ─── Init ────────────────────────────────────────────────
-openDB().then(d => { db = d; render(); });
+openDB().then(d => {
+  db = d;
+  render();
+  if (getToken()) {
+    setSync('🔄 클라우드 동기화 중...');
+    ghPull();
+  }
+});
 </script>
 </body>
 </html>
