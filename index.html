@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
+<meta name="theme-color" content="#c62828">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="바잉기록">
+<link rel="manifest" href="manifest.json">
 <title>캔톤페어 바잉 기록</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -131,7 +137,7 @@ textarea.fi { resize: none; }
     <span class="sync-indicator" id="syncMsg"></span>
   </div>
   <div class="header-right">
-    <span style="font-size:10px;opacity:0.55;margin-right:2px">v2.3</span>
+    <span style="font-size:10px;opacity:0.55;margin-right:2px">v2.4</span>
     <span id="headerUser" style="font-size:12px;opacity:0.9;background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;display:none"></span>
     <span class="header-count" id="totalCount">0건</span>
     <button class="icon-btn" onclick="openSettings()">⚙️</button>
@@ -638,6 +644,14 @@ function dl(blob,name){const a=document.createElement('a');a.href=URL.createObje
     if (userName()) ghPull();
   }
 })();
+
+// ─── 서비스 워커 등록 (오프라인 지원) ────────────────────
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/canton-fair-app/sw.js')
+      .catch(() => {});
+  });
+}
 </script>
 </body>
 </html>
