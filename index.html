@@ -112,7 +112,13 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .name-overlay { position: fixed; inset: 0; z-index: 400; display: none; align-items: center; justify-content: center; padding: 24px; }
 .name-overlay.open { display: flex; animation: overlayBgIn 0.25s ease forwards; background: rgba(0,0,0,0.6); }
 .name-overlay.open .name-box { animation: boxIn 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-.name-box { background: white; border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 360px; will-change: transform, opacity; }
+.name-box { background: white; border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 360px; will-change: transform, opacity; max-height: calc(100vh - 48px); overflow-y: auto; }
+.feature-list { margin: 14px 0 18px; padding: 0; list-style: none; }
+.feature-list li { font-size: 13px; color: #444; padding: 5px 0; display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
+.feature-list li::before { content: '✓'; color: #c62828; font-weight: 800; flex-shrink: 0; }
+.onboard-divider { border: none; border-top: 1px solid #f0f0f0; margin: 16px 0; }
+.onboard-label { display: block; font-size: 12px; font-weight: 700; color: #888; letter-spacing: 0.3px; margin-bottom: 5px; text-transform: uppercase; }
+.pin-warning { font-size: 12px; color: #e65100; background: #fff8f0; border-radius: 8px; padding: 10px 12px; margin-top: 12px; line-height: 1.6; }
 .name-box h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
 .name-box p { font-size: 14px; color: #777; margin-bottom: 20px; line-height: 1.6; white-space: pre-line; }
 .name-input { width: 100%; padding: 13px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 16px; margin-bottom: 12px; transition: border-color 0.2s; }
@@ -256,16 +262,21 @@ textarea.fi { resize: none; }
 <!-- 이름 입력 -->
 <div class="name-overlay" id="nameOverlay">
   <div class="name-box">
-    <div style="text-align:center;margin-bottom:18px">
-      <div style="font-size:26px;font-weight:900;color:#c62828;letter-spacing:-0.5px">FairNote</div>
-      <div id="appDescText" style="font-size:13px;color:#aaa;margin-top:5px;line-height:1.5"></div>
+    <div style="text-align:center;margin-bottom:4px">
+      <div style="font-size:24px;font-weight:900;color:#c62828;letter-spacing:-0.5px">FairNote</div>
+      <div id="appDescText" style="font-size:13px;color:#aaa;margin-top:4px;line-height:1.5"></div>
     </div>
-    <h2 id="nameTitle"></h2>
-    <p id="nameDesc"></p>
-    <input class="name-input" id="nameInput" maxlength="20">
+    <ul class="feature-list" id="featureList"></ul>
+    <hr class="onboard-divider">
+    <h2 id="nameTitle" style="font-size:17px;margin-bottom:6px"></h2>
+    <p id="nameDesc" style="font-size:13px;color:#777;line-height:1.6;margin-bottom:16px;white-space:pre-line"></p>
+    <label class="onboard-label" id="nameInputLabel"></label>
+    <input class="name-input" id="nameInput" maxlength="20" style="margin-bottom:14px">
+    <label class="onboard-label" id="pinInputLabel"></label>
     <input class="name-input" id="pinInput" type="tel" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="off">
-    <button class="name-btn" id="nameStartBtn" onclick="confirmName()"></button>
-    <p id="nameHintText" style="font-size:12px;color:#bbb;text-align:center;margin-top:14px;line-height:1.6"></p>
+    <button class="name-btn" id="nameStartBtn" onclick="confirmName()" style="margin-top:16px"></button>
+    <div class="pin-warning" id="pinWarningText"></div>
+    <p id="nameHintText" style="font-size:12px;color:#bbb;text-align:center;margin-top:12px;line-height:1.6"></p>
   </div>
 </div>
 
@@ -430,9 +441,12 @@ const STRINGS = {
     filterBtn: '필터',
     sortNewest: '최신순', sortOldest: '오래된순', sortBooth: '부스순', sortName: '이름순',
     filterOemOnly: 'OEM만', filterPhotoOnly: '사진있음',
-    firstVisit: '👋 처음 오셨군요',
-    firstVisitDesc: '이름과 비밀번호(숫자 4자리)를 설정하세요.\n같은 이름+비밀번호를 입력한 기기끼리만 데이터가 공유됩니다.',
-    namePlaceholder: '이름', pinPlaceholder: '비밀번호 숫자 4자리', startBtn: '시작하기',
+    firstVisit: '👋 시작하기',
+    firstVisitDesc: '이름과 4자리 PIN을 설정하면 바로 사용할 수 있습니다.\nPIN은 데이터 접근 키로 사용됩니다.',
+    namePlaceholder: '예: 홍길동', pinPlaceholder: '숫자 4자리 입력', startBtn: '시작하기',
+    nameInputLabel: '이름', pinInputLabel: 'PIN (숫자 4자리)',
+    features: ['부스 위치, 가격, MOQ, 납기를 한 곳에 기록', '사진 촬영·저장, 현장에서 즉시 확인', '인터넷 없는 중국 현장에서도 오프라인 동작', '여러 기기 간 자동 동기화 (GitHub 토큰 설정 시)'],
+    pinWarning: '⚠️ PIN을 잊으면 데이터를 복구하기 어렵습니다. 기억하기 쉬운 번호로 설정하고 메모해 두세요.',
     addProduct: '새 상품 추가', editProduct: '상품 수정',
     boothLabel: '부스 위치 *', boothPh: '예: 11.1 A01',
     nameLabel: '제품명 *', namePh: '제품명을 입력하세요',
@@ -507,9 +521,12 @@ const STRINGS = {
     filterBtn: 'Filter',
     sortNewest: 'Newest', sortOldest: 'Oldest', sortBooth: 'Booth', sortName: 'Name',
     filterOemOnly: 'OEM only', filterPhotoOnly: 'Has photo',
-    firstVisit: '👋 Welcome!',
-    firstVisitDesc: 'Set your name and a 4-digit PIN.\nDevices with the same name + PIN will share data.',
-    namePlaceholder: 'Your name', pinPlaceholder: '4-digit PIN', startBtn: 'Get Started',
+    firstVisit: '👋 Get Started',
+    firstVisitDesc: 'Set your name and a 4-digit PIN to begin.\nYour PIN acts as a key to access your data.',
+    namePlaceholder: 'e.g. John', pinPlaceholder: 'Enter 4 digits', startBtn: 'Get Started',
+    nameInputLabel: 'Name', pinInputLabel: 'PIN (4 digits)',
+    features: ['Record booth, price, MOQ & lead time in one place', 'Capture & view product photos on the spot', 'Works offline — no internet needed on the show floor', 'Auto-sync across devices (requires GitHub token)'],
+    pinWarning: '⚠️ If you forget your PIN, data recovery is not possible. Use a number you can remember and write it down.',
     addProduct: 'Add Product', editProduct: 'Edit Product',
     boothLabel: 'Booth *', boothPh: 'e.g. 11.1 A01',
     nameLabel: 'Product Name *', namePh: 'Enter product name',
@@ -600,9 +617,13 @@ function applyLang() {
   document.getElementById('chip-photo').textContent = t('filterPhotoOnly');
   document.getElementById('nameTitle').textContent = t('firstVisit');
   document.getElementById('nameDesc').textContent = t('firstVisitDesc');
+  document.getElementById('nameInputLabel').textContent = t('nameInputLabel');
+  document.getElementById('pinInputLabel').textContent = t('pinInputLabel');
   document.getElementById('nameInput').placeholder = t('namePlaceholder');
   document.getElementById('pinInput').placeholder = t('pinPlaceholder');
   document.getElementById('nameStartBtn').textContent = t('startBtn');
+  document.getElementById('pinWarningText').textContent = t('pinWarning');
+  document.getElementById('featureList').innerHTML = t('features').map(f => `<li>${f}</li>`).join('');
   document.getElementById('lBooth').textContent = t('boothLabel');
   document.getElementById('fBooth').placeholder = t('boothPh');
   document.getElementById('lName').textContent = t('nameLabel');
