@@ -3,15 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
 <meta name="theme-color" content="#c62828">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="바잉기록">
+<meta name="apple-mobile-web-app-title" content="FairNote">
 <link rel="manifest" href="manifest.json">
-<title>캔톤페어 바잉 기록</title>
+<title>FairNote</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a1a; }
@@ -25,13 +23,20 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .header-count { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; }
 .icon-btn { background: rgba(255,255,255,0.15); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; }
 
-.toolbar { background: white; padding: 10px 12px; display: flex; gap: 8px; flex-wrap: wrap; border-bottom: 1px solid #e0e0e0; }
-.search-box { flex: 1; min-width: 130px; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; background: #fafafa; }
+.toolbar { background: white; padding: 10px 12px; display: flex; gap: 8px; border-bottom: 1px solid #e0e0e0; }
+.search-box { flex: 1; padding: 9px 12px; border: 1.5px solid #ddd; border-radius: 8px; font-size: 14px; background: #fafafa; }
 .search-box:focus { outline: none; border-color: #c62828; background: white; }
-.btn { padding: 9px 13px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; }
-.btn-excel { background: #1a73e8; color: white; }
-.btn-zip { background: #f3e5f5; color: #6a1b9a; }
-.btn-import { background: #f5f5f5; color: #555; }
+.filter-toggle-btn { background: #f5f5f5; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 9px 13px; font-size: 13px; font-weight: 600; color: #555; cursor: pointer; white-space: nowrap; position: relative; }
+.filter-toggle-btn.active { background: #fff0f0; border-color: #c62828; color: #c62828; }
+.filter-dot { position: absolute; top: 5px; right: 5px; width: 7px; height: 7px; background: #c62828; border-radius: 50%; display: none; }
+.filter-dot.show { display: block; }
+
+.chip-bar { background: white; border-bottom: 1px solid #e0e0e0; padding: 8px 12px; display: none; gap: 6px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.chip-bar.open { display: flex; }
+.chip-bar::-webkit-scrollbar { display: none; }
+.chip { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1.5px solid #e0e0e0; background: white; color: #666; cursor: pointer; white-space: nowrap; }
+.chip.active { background: #c62828; color: white; border-color: #c62828; }
+.chip-sep { width: 1px; background: #e0e0e0; margin: 4px 2px; flex-shrink: 0; }
 
 .list { padding: 12px; padding-bottom: 90px; }
 .card { background: white; border-radius: 14px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
@@ -40,12 +45,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .card-thumb-empty { width: 80px; height: 80px; border-radius: 10px; background: #f5f5f5; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #ccc; }
 .card-info { flex: 1; min-width: 0; }
 .card-booth { font-size: 11px; color: #c62828; font-weight: 700; letter-spacing: 0.5px; }
-.card-name { font-size: 15px; font-weight: 700; margin: 3px 0 6px; line-height: 1.3; }
+.card-name { font-size: 15px; font-weight: 700; margin: 3px 0 5px; line-height: 1.3; }
+.card-price { font-size: 13px; font-weight: 700; color: #1a73e8; margin-bottom: 5px; }
 .card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
 .tag { background: #f5f5f5; color: #555; padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 500; }
 .tag-oem { background: #e8f5e9; color: #2e7d32; }
 .tag-photo { background: #fff3e0; color: #e65100; }
+.tag-custom { background: #f3f0ff; color: #5c35c1; }
 .card-notes { font-size: 12px; color: #888; margin-top: 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.card-contact { font-size: 11px; color: #aaa; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-footer { display: flex; border-top: 1px solid #f0f0f0; }
 .card-btn { flex: 1; padding: 11px; border: none; background: none; cursor: pointer; font-size: 13px; color: #666; font-weight: 500; }
 .card-btn:first-child { border-right: 1px solid #f0f0f0; }
@@ -57,7 +65,6 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .empty-text { color: #999; font-size: 15px; }
 .empty-hint { color: #bbb; font-size: 13px; margin-top: 6px; }
 
-/* Overlay / Modal */
 .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 300; display: none; align-items: flex-end; }
 .overlay.open { display: flex; }
 .modal { background: white; border-radius: 22px 22px 0 0; width: 100%; max-height: 94vh; overflow-y: auto; padding: 20px 16px 44px; }
@@ -66,7 +73,15 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .modal-head h2 { font-size: 18px; font-weight: 700; }
 .modal-close { width: 32px; height: 32px; border-radius: 50%; background: #f0f0f0; border: none; font-size: 16px; cursor: pointer; }
 
-/* Name prompt (centered) */
+.dialog-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 900; display: none; align-items: center; justify-content: center; padding: 32px; }
+.dialog-bg.open { display: flex; }
+.dialog-box { background: white; border-radius: 20px; padding: 24px 20px 16px; width: 100%; max-width: 320px; }
+.dialog-msg { font-size: 15px; color: #333; line-height: 1.6; margin-bottom: 20px; white-space: pre-line; }
+.dialog-btns { display: flex; gap: 8px; }
+.dialog-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; }
+.dialog-btn-cancel { background: #f0f0f0; color: #555; }
+.dialog-btn-ok { background: #c62828; color: white; }
+
 .name-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 400; display: none; align-items: center; justify-content: center; padding: 24px; }
 .name-overlay.open { display: flex; }
 .name-box { background: white; border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 360px; }
@@ -91,6 +106,13 @@ textarea.fi { resize: none; }
 .switch input:checked + .slider::before { transform: translateX(22px); }
 .oem-label { font-size: 15px; font-weight: 600; }
 
+.cf-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+.cf-row .fi { padding: 9px 11px; font-size: 14px; }
+.cf-label-input { flex: 1; }
+.cf-value-input { flex: 2; }
+.cf-remove { width: 34px; height: 40px; background: #fee2e2; color: #c62828; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; flex-shrink: 0; }
+.btn-add-field { width: 100%; padding: 10px; border: 1.5px dashed #ddd; border-radius: 10px; background: none; color: #aaa; font-size: 13px; font-weight: 600; cursor: pointer; margin-top: 4px; }
+
 .photo-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
 .btn-cam, .btn-gal { display: flex; align-items: center; justify-content: center; padding: 14px 10px; border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 600; position: relative; overflow: hidden; }
 .btn-cam { background: #c62828; color: white; }
@@ -101,21 +123,21 @@ textarea.fi { resize: none; }
 .photo-item { position: relative; aspect-ratio: 1; }
 .photo-item img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; display: block; }
 .photo-remove { position: absolute; top: -7px; right: -7px; width: 24px; height: 24px; background: #c62828; color: white; border: 2px solid white; border-radius: 50%; font-size: 11px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.btn-save { width: 100%; padding: 15px; background: #c62828; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 10px; transition: background 0.15s; }
+.btn-save { width: 100%; padding: 15px; background: #c62828; color: white; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; margin-top: 10px; }
 .btn-save:active { background: #a31515; }
 .btn-save:disabled { background: #e57373; cursor: default; }
+
 .toast { position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%); background: #212121; color: white; padding: 12px 22px; border-radius: 24px; font-size: 14px; font-weight: 600; z-index: 600; opacity: 0; transition: opacity 0.2s; pointer-events: none; white-space: nowrap; }
 .toast.show { opacity: 1; }
 
-/* Settings */
 .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
 .settings-row:last-child { border-bottom: none; }
 .settings-label { font-size: 15px; font-weight: 600; }
 .settings-value { font-size: 14px; color: #888; }
 .settings-btn { padding: 8px 14px; border: 1.5px solid #ddd; border-radius: 8px; background: none; cursor: pointer; font-size: 13px; color: #555; }
 .settings-section-title { font-size: 12px; color: #aaa; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin: 16px 0 8px; }
+.data-btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
 
-/* Viewer */
 .viewer { position: fixed; inset: 0; background: black; z-index: 500; display: none; flex-direction: column; align-items: center; justify-content: center; }
 .viewer.open { display: flex; }
 .viewer img { max-width: 100%; max-height: 90vh; object-fit: contain; }
@@ -132,12 +154,11 @@ textarea.fi { resize: none; }
 
 <div class="header">
   <div class="header-left">
-    <span class="header-sub">광저우 캔톤페어 2026</span>
-    <span class="header-title">바잉 기록</span>
+    <span class="header-sub" id="headerAppName">FairNote</span>
+    <span class="header-title" id="headerEventName">내 행사</span>
     <span class="sync-indicator" id="syncMsg"></span>
   </div>
   <div class="header-right">
-    <span style="font-size:10px;opacity:0.55;margin-right:2px">v2.4</span>
     <span id="headerUser" style="font-size:12px;opacity:0.9;background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;display:none"></span>
     <span class="header-count" id="totalCount">0건</span>
     <button class="icon-btn" onclick="openSettings()">⚙️</button>
@@ -145,21 +166,37 @@ textarea.fi { resize: none; }
 </div>
 
 <div class="toolbar">
-  <input class="search-box" id="searchInput" placeholder="제품명, 부스 검색..." oninput="render()">
-  <button class="btn btn-excel" onclick="exportCSV()">📊 엑셀</button>
-  <button class="btn btn-zip" onclick="exportZip()">📷 사진ZIP</button>
-  <label class="btn btn-import">📂 가져오기<input type="file" accept=".json" onchange="importData(this)" style="display:none"></label>
+  <input class="search-box" id="searchInput" placeholder="제품명, 부스, 가격 검색..." oninput="render()">
+  <button class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleChipBar()">필터 <span class="filter-dot" id="filterDot"></span></button>
+</div>
+
+<div class="chip-bar" id="chipBar">
+  <button class="chip active" id="chip-newest" onclick="setSort('newest')">최신순</button>
+  <button class="chip" id="chip-oldest" onclick="setSort('oldest')">오래된순</button>
+  <button class="chip" id="chip-booth" onclick="setSort('booth')">부스순</button>
+  <button class="chip" id="chip-name" onclick="setSort('name')">이름순</button>
+  <div class="chip-sep"></div>
+  <button class="chip" id="chip-oem" onclick="toggleFilter('oem')">OEM만</button>
+  <button class="chip" id="chip-photo" onclick="toggleFilter('photo')">사진있음</button>
 </div>
 
 <div class="list" id="list"></div>
 <button class="fab" id="fab" onclick="openAdd()" disabled style="opacity:0.4">+</button>
 
-<!-- 이름 입력 (최초 1회) -->
+<!-- 커스텀 다이얼로그 -->
+<div class="dialog-bg" id="dialogBg">
+  <div class="dialog-box">
+    <div class="dialog-msg" id="dialogMsg"></div>
+    <div class="dialog-btns" id="dialogBtns"></div>
+  </div>
+</div>
+
+<!-- 이름 입력 -->
 <div class="name-overlay" id="nameOverlay">
   <div class="name-box">
     <h2>👋 처음 오셨군요</h2>
     <p>이름과 비밀번호(숫자 4자리)를 설정하세요.<br>같은 이름+비밀번호를 입력한 기기끼리만 데이터가 공유됩니다.</p>
-    <input class="name-input" id="nameInput" placeholder="이름 (예: 조승현)" maxlength="20">
+    <input class="name-input" id="nameInput" placeholder="이름" maxlength="20">
     <input class="name-input" id="pinInput" type="password" inputmode="numeric" placeholder="비밀번호 숫자 4자리" maxlength="4" pattern="[0-9]{4}">
     <button class="name-btn" onclick="confirmName()">시작하기</button>
   </div>
@@ -175,15 +212,16 @@ textarea.fi { resize: none; }
     </div>
     <form>
       <input type="hidden" id="fId">
-      <div class="fg"><label class="fl">부스 위치 *</label><input class="fi" id="fBooth" placeholder="예: 11.1 A01" required></div>
-      <div class="fg"><label class="fl">제품명 *</label><input class="fi" id="fName" placeholder="제품명을 입력하세요" required></div>
+      <div class="fg"><label class="fl">부스 위치 *</label><input class="fi" id="fBooth" placeholder="예: 11.1 A01"></div>
+      <div class="fg"><label class="fl">제품명 *</label><input class="fi" id="fName" placeholder="제품명을 입력하세요"></div>
+      <div class="fg"><label class="fl">가격</label><input class="fi" id="fPrice" placeholder="예: $5.50 / 3,500원"></div>
       <div class="frow">
         <div class="fg"><label class="fl">박스 입수</label><input class="fi" id="fBoxQty" type="number" min="0" placeholder="개"></div>
         <div class="fg"><label class="fl">CBM (m³)</label><input class="fi" id="fCbm" type="number" step="0.0001" min="0" placeholder="0.000"></div>
       </div>
       <div class="frow">
         <div class="fg"><label class="fl">MOQ</label><input class="fi" id="fMoq" type="number" min="0" placeholder="최소수량"></div>
-        <div class="fg"><label class="fl">생산기간 (Lead Time)</label><input class="fi" id="fLeadTime" placeholder="예: 30일"></div>
+        <div class="fg"><label class="fl">납기 (Lead Time)</label><input class="fi" id="fLeadTime" placeholder="예: 30일"></div>
       </div>
       <div class="fg">
         <label class="fl">OEM 가능 여부</label>
@@ -192,7 +230,13 @@ textarea.fi { resize: none; }
           <span class="oem-label" id="oemLabel">불가</span>
         </div>
       </div>
-      <div class="fg"><label class="fl">비고</label><textarea class="fi" id="fNotes" rows="2" placeholder="가격, 특이사항, 담당자 연락처 등"></textarea></div>
+      <div class="fg"><label class="fl">담당자 연락처</label><input class="fi" id="fContact" placeholder="위챗 ID, 전화번호 등"></div>
+      <div class="fg"><label class="fl">비고</label><textarea class="fi" id="fNotes" rows="2" placeholder="특이사항, 메모 등"></textarea></div>
+      <div class="fg">
+        <label class="fl">추가 항목</label>
+        <div id="customFieldList"></div>
+        <button type="button" class="btn-add-field" onclick="addCustomField()">+ 항목 추가</button>
+      </div>
       <div class="fg">
         <label class="fl">상품 사진</label>
         <div class="photo-btns">
@@ -213,6 +257,12 @@ textarea.fi { resize: none; }
     <div class="modal-handle"></div>
     <div class="modal-head"><h2>⚙️ 설정</h2><button class="modal-close" onclick="closeSettings()">✕</button></div>
     <div class="settings-row">
+      <div style="flex:1">
+        <div class="settings-label">행사명</div>
+        <input class="fi" id="eventNameInput" placeholder="예: 광저우 캔톤페어 2026" maxlength="40" style="margin-top:6px;font-size:14px" oninput="saveEventName()">
+      </div>
+    </div>
+    <div class="settings-row">
       <div>
         <div class="settings-label">현재 사용자</div>
         <div class="settings-value" id="currentUserLabel"></div>
@@ -229,26 +279,38 @@ textarea.fi { resize: none; }
     <div id="tokenInputArea" style="display:none;padding:10px 0">
       <input id="tokenInput" class="fi" placeholder="github_pat_... 붙여넣기" style="margin-bottom:8px;font-size:13px">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <button class="btn" style="background:#f5f5f5;color:#555" onclick="clearToken()">토큰 삭제</button>
-        <button class="btn btn-excel" onclick="saveToken()">저장</button>
+        <button class="data-btn" style="background:#f5f5f5;color:#555" onclick="clearToken()">토큰 삭제</button>
+        <button class="data-btn" style="background:#1a73e8;color:white" onclick="saveToken()">저장</button>
       </div>
+    </div>
+    <div class="settings-row">
+      <div style="flex:1;padding-right:12px">
+        <div class="settings-label">제한 네트워크 모드</div>
+        <div style="font-size:12px;color:#aaa;line-height:1.5;margin-top:3px">중국 등 GitHub 접근이 차단된 국가에서 사용할 때 켜세요. 동기화를 건너뛰고 기기에만 저장합니다. 귀국 후 끄면 자동으로 동기화됩니다.</div>
+      </div>
+      <label class="switch" style="flex-shrink:0">
+        <input type="checkbox" id="offlineModeToggle" onchange="toggleOfflineMode(this)">
+        <span class="slider"></span>
+      </label>
     </div>
     <div class="settings-row">
       <div class="settings-label">동기화 상태</div>
       <div class="settings-value" id="syncStatusLabel">-</div>
     </div>
-    <div class="settings-section-title">내보내기</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:8px">
-      <button class="btn btn-excel" style="padding:12px" onclick="exportCSV();closeSettings()">📊 엑셀</button>
-      <button class="btn btn-zip" style="padding:12px" onclick="exportZip();closeSettings()">📷 사진ZIP</button>
+    <div class="settings-section-title">데이터</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <button class="data-btn" style="background:#1a73e8;color:white" onclick="exportCSV();closeSettings()">📊 엑셀 내보내기</button>
+      <button class="data-btn" style="background:#f3e5f5;color:#6a1b9a" onclick="exportZip();closeSettings()">📷 사진 ZIP</button>
     </div>
-    <button class="btn" style="width:100%;padding:12px;background:#f0f4ff;color:#1a73e8;margin-top:4px" onclick="backupJSON();closeSettings()">💾 전체 백업 (JSON)</button>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <button class="data-btn" style="background:#f0f4ff;color:#1a73e8" onclick="backupJSON();closeSettings()">💾 전체 백업</button>
+      <label class="data-btn" style="display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:#555;cursor:pointer">📂 가져오기<input type="file" accept=".json" onchange="importData(this)" style="display:none"></label>
+    </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
-<!-- 사진 뷰어 -->
 <div class="viewer" id="viewer">
   <button class="viewer-close" onclick="closeViewer()">✕</button>
   <button class="viewer-prev" id="vPrev" onclick="vNav(-1)">‹</button>
@@ -259,22 +321,62 @@ textarea.fi { resize: none; }
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
-// 로그인 여부를 페이지 로드 즉시 동기적으로 확인
 if (!localStorage.getItem('cf_user') || !localStorage.getItem('cf_pin')) {
   document.getElementById('nameOverlay').classList.add('open');
 }
 
-// ─── GitHub 설정 ─────────────────────────────────────────
 const GH_OWNER = 'harich1';
 const GH_REPO  = 'canton-fair-data';
 
-function ghToken()  { return localStorage.getItem('cf_gh_token') || ''; }
-function ghFile()   { return `data/${userKey()}.json`; }
-function userName() { return localStorage.getItem('cf_user') || ''; }
-function userPin()  { return localStorage.getItem('cf_pin')  || ''; }
-function userKey()  { return userName() ? `${userName()}_${userPin()}` : ''; }
+function ghToken()   { return localStorage.getItem('cf_gh_token') || ''; }
+function ghFile()    { return `data/${userKey()}.json`; }
+function userName()  { return localStorage.getItem('cf_user') || ''; }
+function userPin()   { return localStorage.getItem('cf_pin')  || ''; }
+function userKey()   { return userName() ? `${userName()}_${userPin()}` : ''; }
+function eventName() { return localStorage.getItem('cf_event_name') || ''; }
+function offlineMode() { return localStorage.getItem('cf_offline_mode') === '1'; }
 
-// ─── IndexedDB (사용자별 별도 DB) ────────────────────────
+function saveEventName() {
+  const v = document.getElementById('eventNameInput').value.trim();
+  localStorage.setItem('cf_event_name', v);
+  document.getElementById('headerEventName').textContent = v || 'FairNote';
+}
+function toggleOfflineMode(el) {
+  localStorage.setItem('cf_offline_mode', el.checked ? '1' : '0');
+  if (!el.checked && userName() && ghToken()) { ghSha = null; ghPull(); }
+}
+
+// ─── 다이얼로그 ───────────────────────────────────────────
+function showAlert(msg, onOk) {
+  document.getElementById('dialogMsg').textContent = msg;
+  const btns = document.getElementById('dialogBtns');
+  btns.innerHTML = '';
+  const b = document.createElement('button');
+  b.className = 'dialog-btn dialog-btn-ok';
+  b.textContent = '확인';
+  b.onclick = () => { closeDialog(); onOk && onOk(); };
+  btns.appendChild(b);
+  document.getElementById('dialogBg').classList.add('open');
+}
+function showConfirm(msg, onOk) {
+  document.getElementById('dialogMsg').textContent = msg;
+  const btns = document.getElementById('dialogBtns');
+  btns.innerHTML = '';
+  const cancel = document.createElement('button');
+  cancel.className = 'dialog-btn dialog-btn-cancel';
+  cancel.textContent = '취소';
+  cancel.onclick = closeDialog;
+  const ok = document.createElement('button');
+  ok.className = 'dialog-btn dialog-btn-ok';
+  ok.textContent = '확인';
+  ok.onclick = () => { closeDialog(); onOk && onOk(); };
+  btns.appendChild(cancel);
+  btns.appendChild(ok);
+  document.getElementById('dialogBg').classList.add('open');
+}
+function closeDialog() { document.getElementById('dialogBg').classList.remove('open'); }
+
+// ─── IndexedDB ────────────────────────────────────────────
 let db;
 function dbName() { return userKey() ? `cf_${userKey()}` : 'cf_guest'; }
 function openDB(name) {
@@ -286,9 +388,7 @@ function openDB(name) {
     r.onblocked = () => rej(new Error('다른 탭을 닫고 새로고침해주세요'));
   });
 }
-function st(m='readonly') {
-  return db.transaction('p', m).objectStore('p');
-}
+function st(m='readonly') { return db.transaction('p', m).objectStore('p'); }
 const getAll = () => new Promise((res,rej) => { const r=st().getAll(); r.onsuccess=e=>res(e.target.result); r.onerror=rej; });
 const dbPut  = p  => new Promise((res,rej) => { const r=st('readwrite').put(p); r.onsuccess=e=>res(e.target.result); r.onerror=rej; });
 const dbDel  = id => new Promise((res,rej) => { const r=st('readwrite').delete(id); r.onsuccess=()=>res(); r.onerror=rej; });
@@ -309,9 +409,8 @@ async function ghGet() {
     return { data: JSON.parse(decodeURIComponent(escape(atob(j.content.replace(/\n/g,''))))), sha: j.sha };
   } catch { return null; }
 }
-
 async function ghPush(products) {
-  if (!userName() || !ghToken()) return;
+  if (!userName() || !ghToken() || offlineMode()) return;
   try {
     setSync('⏫ 동기화 중...');
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(products))));
@@ -324,17 +423,15 @@ async function ghPush(products) {
     });
     if (res.ok) {
       ghSha = (await res.json()).content.sha;
-      setSync('✅ 저장됨');
-      setTimeout(() => setSync(''), 2000);
+      setSync('✅ 저장됨'); setTimeout(() => setSync(''), 2000);
     } else if (res.status === 409) {
       const fresh = await ghGet();
       if (fresh) { ghSha = fresh.sha; await ghPush(products); }
     } else { setSync('⚠️ 동기화 실패'); setTimeout(()=>setSync(''),3000); }
   } catch { setSync('⚠️ 동기화 실패'); setTimeout(()=>setSync(''),3000); }
 }
-
 async function ghPull() {
-  if (!userName() || !ghToken()) return;
+  if (!userName() || !ghToken() || offlineMode()) return;
   setSync('🔄 불러오는 중...');
   const result = await ghGet();
   if (!result) { setSync('⚠️ 연결 실패'); setTimeout(()=>setSync(''),3000); return; }
@@ -342,21 +439,22 @@ async function ghPull() {
   if (result.data.length) {
     await dbClear();
     for (const p of result.data) await dbPut(p);
+    await render();
+    setSync('✅ 동기화 완료'); setTimeout(()=>setSync(''),2000);
+  } else {
+    await render();
+    const local = await getAll();
+    if (local.length) await ghPush(local);
+    else setSync('');
   }
-  await render();
-  setSync('✅ 동기화 완료');
-  setTimeout(()=>setSync(''),2000);
 }
-
 function setSync(msg) { document.getElementById('syncMsg').textContent = msg; }
 
 function updateHeaderUser() {
   const el = document.getElementById('headerUser');
-  const name = userName();
-  if (name) { el.textContent = name; el.style.display = ''; }
+  if (userName()) { el.textContent = userName(); el.style.display = ''; }
   else { el.style.display = 'none'; }
 }
-
 function openTokenInput() {
   const area = document.getElementById('tokenInputArea');
   area.style.display = area.style.display === 'none' ? 'block' : 'none';
@@ -364,20 +462,21 @@ function openTokenInput() {
 }
 function saveToken() {
   const t = document.getElementById('tokenInput').value.trim();
-  if (!t) { alert('토큰을 입력해주세요.'); return; }
+  if (!t) { showAlert('토큰을 입력해주세요.'); return; }
   localStorage.setItem('cf_gh_token', t);
   document.getElementById('tokenInputArea').style.display = 'none';
   showToast('✅ 토큰 저장됨');
-  ghSha = null;
-  ghPull();
+  ghSha = null; ghPull();
 }
 function clearToken() {
-  if (!confirm('토큰을 삭제하면 동기화가 중단됩니다.')) return;
-  localStorage.removeItem('cf_gh_token');
-  document.getElementById('tokenInputArea').style.display = 'none';
-  showToast('토큰 삭제됨');
+  showConfirm('토큰을 삭제하면 동기화가 중단됩니다.', () => {
+    localStorage.removeItem('cf_gh_token');
+    document.getElementById('tokenInputArea').style.display = 'none';
+    showToast('토큰 삭제됨');
+  });
 }
 
+// ─── Toast ────────────────────────────────────────────────
 let toastTimer;
 function showToast(msg) {
   const el = document.getElementById('toast');
@@ -391,38 +490,56 @@ function showToast(msg) {
 function checkName() {
   if (!userName() || !userPin()) document.getElementById('nameOverlay').classList.add('open');
 }
-
 async function confirmName() {
   const name = document.getElementById('nameInput').value.trim();
   const pin  = document.getElementById('pinInput').value.trim();
-  if (!name) { alert('이름을 입력해주세요.'); return; }
-  if (!/^\d{4}$/.test(pin)) { alert('비밀번호는 숫자 4자리로 입력해주세요.'); return; }
+  if (!name) { showAlert('이름을 입력해주세요.'); return; }
+  if (!/^\d{4}$/.test(pin)) { showAlert('비밀번호는 숫자 4자리로 입력해주세요.'); return; }
   localStorage.setItem('cf_user', name);
   localStorage.setItem('cf_pin', pin);
   document.getElementById('nameOverlay').classList.remove('open');
   updateHeaderUser();
   if (db) { db.close(); db = null; }
-  try {
-    db = await openDB();
-    await render();
-  } catch(e) { alert('DB 오류: ' + e.message); return; }
-  ghSha = null;
-  ghPull();
+  try { db = await openDB(); await render(); }
+  catch(e) { showAlert('DB 오류: ' + e.message); return; }
+  ghSha = null; ghPull();
+}
+async function changeName() {
+  showConfirm('사용자를 변경하시겠습니까?\n기존 데이터는 이 기기에 보존됩니다.', async () => {
+    localStorage.removeItem('cf_user'); localStorage.removeItem('cf_pin');
+    ghSha = null;
+    document.getElementById('nameInput').value = '';
+    document.getElementById('pinInput').value = '';
+    closeSettings();
+    updateHeaderUser();
+    if (db) { db.close(); db = null; }
+    db = await openDB(); await render(); checkName();
+  });
 }
 
-async function changeName() {
-  if (!confirm('사용자를 변경하시겠습니까?\n기존 데이터는 이 기기에 보존됩니다.')) return;
-  localStorage.removeItem('cf_user');
-  localStorage.removeItem('cf_pin');
-  ghSha = null;
-  document.getElementById('nameInput').value = '';
-  document.getElementById('pinInput').value = '';
-  closeSettings();
-  updateHeaderUser();
-  if (db) { db.close(); db = null; }
-  db = await openDB();
-  await render();
-  checkName();
+// ─── 정렬 / 필터 ─────────────────────────────────────────
+let sortBy = 'newest', filterOem = false, filterPhoto = false, chipBarOpen = false;
+
+function toggleChipBar() {
+  chipBarOpen = !chipBarOpen;
+  document.getElementById('chipBar').classList.toggle('open', chipBarOpen);
+  document.getElementById('filterToggleBtn').classList.toggle('active', chipBarOpen);
+}
+function setSort(val) {
+  sortBy = val;
+  ['newest','oldest','booth','name'].forEach(k =>
+    document.getElementById(`chip-${k}`).classList.toggle('active', k === val));
+  updateFilterDot(); render();
+}
+function toggleFilter(type) {
+  if (type === 'oem') filterOem = !filterOem;
+  else if (type === 'photo') filterPhoto = !filterPhoto;
+  document.getElementById('chip-oem').classList.toggle('active', filterOem);
+  document.getElementById('chip-photo').classList.toggle('active', filterPhoto);
+  updateFilterDot(); render();
+}
+function updateFilterDot() {
+  document.getElementById('filterDot').classList.toggle('show', sortBy !== 'newest' || filterOem || filterPhoto);
 }
 
 // ─── 사진 ────────────────────────────────────────────────
@@ -446,23 +563,19 @@ function compress(file) {
     rd.readAsDataURL(file);
   });
 }
-
 async function capturePhoto(input) {
   const f = input.files[0]; if (!f) return;
   const url = URL.createObjectURL(f);
   const a = document.createElement('a');
-  a.href=url; a.download=`canton_${new Date().toISOString().replace(/[:.]/g,'-').slice(0,19)}.jpg`; a.click();
+  a.href=url; a.download=`fairnote_${new Date().toISOString().replace(/[:.]/g,'-').slice(0,19)}.jpg`; a.click();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
   curPhotos.push(await compress(f)); renderPhotos(); input.value='';
 }
-
 async function addPhotos(input) {
   for(const f of Array.from(input.files)) curPhotos.push(await compress(f));
   renderPhotos(); input.value='';
 }
-
 function removePhoto(i) { curPhotos.splice(i,1); renderPhotos(); }
-
 function renderPhotos() {
   document.getElementById('photoHint').style.display = curPhotos.length ? 'none' : 'block';
   document.getElementById('photoGrid').innerHTML = curPhotos.map((s,i)=>`
@@ -472,6 +585,27 @@ function renderPhotos() {
     </div>`).join('');
 }
 
+// ─── 커스텀 필드 ─────────────────────────────────────────
+let curCustomFields = [];
+
+function addCustomField() {
+  curCustomFields.push({label:'', value:''});
+  renderCustomFields();
+  const inputs = document.querySelectorAll('.cf-label-input');
+  if (inputs.length) inputs[inputs.length-1].focus();
+}
+function removeCustomField(i) { curCustomFields.splice(i,1); renderCustomFields(); }
+function updateCF(i, key, val) { curCustomFields[i][key] = val; }
+function renderCustomFields() {
+  document.getElementById('customFieldList').innerHTML = curCustomFields.map((f,i)=>`
+    <div class="cf-row">
+      <input class="fi cf-label-input" placeholder="항목명" value="${esc(f.label)}" oninput="updateCF(${i},'label',this.value)">
+      <input class="fi cf-value-input" placeholder="내용" value="${esc(f.value)}" oninput="updateCF(${i},'value',this.value)">
+      <button type="button" class="cf-remove" onclick="removeCustomField(${i})">✕</button>
+    </div>`).join('');
+}
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
 // ─── 모달 ────────────────────────────────────────────────
 let cache = {};
 
@@ -480,19 +614,22 @@ function openModal(p) {
   editId = p?.id || null;
   document.getElementById('modalTitle').textContent = p ? '상품 수정' : '새 상품 추가';
   document.getElementById('saveBtn').textContent = p ? '수정 완료' : '저장하기';
-  ['fBooth','fName','fBoxQty','fCbm','fMoq','fLeadTime','fNotes'].forEach(id => {
-    const map = {fBooth:'booth',fName:'name',fBoxQty:'boxQty',fCbm:'cbm',fMoq:'moq',fLeadTime:'leadTime',fNotes:'notes'};
-    document.getElementById(id).value = p ? (p[map[id]]||'') : '';
-  });
+  const map = {fBooth:'booth',fName:'name',fPrice:'price',fBoxQty:'boxQty',fCbm:'cbm',fMoq:'moq',fLeadTime:'leadTime',fContact:'contact',fNotes:'notes'};
+  Object.entries(map).forEach(([id,key]) => document.getElementById(id).value = p ? (p[key]||'') : '');
   document.getElementById('fId').value = p?.id||'';
   document.getElementById('fOem').checked = p?.oem||false;
   updateOemLabel();
   curPhotos = p ? [...(p.photos||[])] : [];
-  renderPhotos();
+  curCustomFields = p ? JSON.parse(JSON.stringify(p.customFields||[])) : [];
+  renderPhotos(); renderCustomFields();
   document.getElementById('overlay').classList.add('open');
+  history.pushState({modal:'product'}, '');
   setTimeout(()=>document.getElementById('fBooth').focus(),150);
 }
-function closeModal() { document.getElementById('overlay').classList.remove('open'); }
+function closeModal(fromPop=false) {
+  document.getElementById('overlay').classList.remove('open');
+  if (!fromPop) history.back();
+}
 function onOverlayClick(e) { if(e.target===document.getElementById('overlay')) closeModal(); }
 function updateOemLabel() {
   const v = document.getElementById('fOem').checked;
@@ -505,23 +642,24 @@ async function saveProduct() {
   if (!userName() || !userPin()) { checkName(); return; }
   const booth = document.getElementById('fBooth').value.trim();
   const name  = document.getElementById('fName').value.trim();
-  if (!booth) { alert('부스 위치를 입력해주세요.'); document.getElementById('fBooth').focus(); return; }
-  if (!name)  { alert('제품명을 입력해주세요.');   document.getElementById('fName').focus();  return; }
+  if (!booth) { showAlert('부스 위치를 입력해주세요.'); document.getElementById('fBooth').focus(); return; }
+  if (!name)  { showAlert('제품명을 입력해주세요.');   document.getElementById('fName').focus();  return; }
   const btn = document.getElementById('saveBtn');
-  btn.disabled = true;
-  btn.textContent = '저장 중...';
+  btn.disabled = true; btn.textContent = '저장 중...';
   try {
     const now = new Date().toISOString();
     const p = {
-      booth,
-      name,
-      boxQty: document.getElementById('fBoxQty').value||null,
-      cbm:    document.getElementById('fCbm').value||null,
-      moq:    document.getElementById('fMoq').value||null,
+      booth, name,
+      price:    document.getElementById('fPrice').value.trim(),
+      boxQty:   document.getElementById('fBoxQty').value||null,
+      cbm:      document.getElementById('fCbm').value||null,
+      moq:      document.getElementById('fMoq').value||null,
       leadTime: document.getElementById('fLeadTime').value.trim(),
-      oem:    document.getElementById('fOem').checked,
-      notes:  document.getElementById('fNotes').value.trim(),
-      photos: [...curPhotos],
+      oem:      document.getElementById('fOem').checked,
+      contact:  document.getElementById('fContact').value.trim(),
+      notes:    document.getElementById('fNotes').value.trim(),
+      customFields: curCustomFields.filter(f=>f.label||f.value),
+      photos:   [...curPhotos],
       updatedAt: now,
       createdAt: editId ? (cache[editId]?.createdAt||now) : now,
     };
@@ -534,49 +672,91 @@ async function saveProduct() {
   } catch(err) {
     btn.disabled = false;
     btn.textContent = editId ? '수정 완료' : '저장하기';
-    alert('저장 오류: ' + err.message);
+    showAlert('저장 오류: ' + err.message);
   }
 }
-
 async function deleteProduct(id) {
-  if (!confirm('삭제하시겠습니까?')) return;
-  await dbDel(id); render();
-  ghPush(await getAll());
+  showConfirm('이 상품을 삭제할까요?', async () => {
+    await dbDel(id); render(); ghPush(await getAll());
+  });
 }
 
 // ─── 렌더 ────────────────────────────────────────────────
 async function render() {
   const q = document.getElementById('searchInput').value.toLowerCase();
   let list = await getAll();
-  list.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+
+  if(sortBy==='newest') list.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  else if(sortBy==='oldest') list.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+  else if(sortBy==='booth') list.sort((a,b)=>(a.booth||'').localeCompare(b.booth||'','ko'));
+  else if(sortBy==='name') list.sort((a,b)=>(a.name||'').localeCompare(b.name||'','ko'));
+
   cache={}; list.forEach(p=>cache[p.id]=p);
-  if(q) list=list.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.booth||'').toLowerCase().includes(q)||(p.notes||'').toLowerCase().includes(q));
+
+  if(q) list=list.filter(p=>
+    (p.name||'').toLowerCase().includes(q)||
+    (p.booth||'').toLowerCase().includes(q)||
+    (p.notes||'').toLowerCase().includes(q)||
+    (p.price||'').toLowerCase().includes(q)||
+    (p.contact||'').toLowerCase().includes(q)
+  );
+  if(filterOem) list=list.filter(p=>p.oem);
+  if(filterPhoto) list=list.filter(p=>(p.photos||[]).length>0);
+
   document.getElementById('totalCount').textContent=`${list.length}건`;
   const el=document.getElementById('list');
-  if(!list.length){ el.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">${q?'검색 결과 없음':'기록된 상품이 없습니다'}</div><div class="empty-hint">+ 버튼을 눌러 추가하세요</div></div>`; return; }
+  if(!list.length){
+    el.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">${q||filterOem||filterPhoto?'검색 결과 없음':'기록된 상품이 없습니다'}</div><div class="empty-hint">+ 버튼을 눌러 추가하세요</div></div>`;
+    return;
+  }
   el.innerHTML=list.map(p=>{
     const thumb=p.photos?.length?`<img class="card-thumb" src="${p.photos[0]}" onclick="openViewer(${p.id},0)">`:`<div class="card-thumb-empty">📷</div>`;
     const tags=[p.moq?`MOQ ${Number(p.moq).toLocaleString()}`:null,p.cbm?`CBM ${p.cbm}`:null,p.boxQty?`입수 ${p.boxQty}`:null,p.leadTime?`납기 ${p.leadTime}`:null].filter(Boolean).map(t=>`<span class="tag">${t}</span>`).join('');
-    return `<div class="card"><div class="card-body">${thumb}<div class="card-info"><div class="card-booth">${p.booth||'-'}</div><div class="card-name">${p.name}</div><div class="card-tags">${tags}${p.oem?'<span class="tag tag-oem">OEM가능</span>':''}${p.photos?.length>1?`<span class="tag tag-photo">📷${p.photos.length}</span>`:''}</div>${p.notes?`<div class="card-notes">${p.notes}</div>`:''}</div></div><div class="card-footer"><button class="card-btn" onclick="openModal(cache[${p.id}])">✏️ 수정</button><button class="card-btn card-btn-del" onclick="deleteProduct(${p.id})">🗑️ 삭제</button></div></div>`;
+    const customTags=(p.customFields||[]).filter(f=>f.label).map(f=>`<span class="tag tag-custom">${esc(f.label)}: ${esc(f.value)}</span>`).join('');
+    return `<div class="card">
+      <div class="card-body">${thumb}
+        <div class="card-info">
+          <div class="card-booth">${esc(p.booth||'-')}</div>
+          <div class="card-name">${esc(p.name)}</div>
+          ${p.price?`<div class="card-price">${esc(p.price)}</div>`:''}
+          <div class="card-tags">${tags}${p.oem?'<span class="tag tag-oem">OEM가능</span>':''}${(p.photos||[]).length>1?`<span class="tag tag-photo">📷${p.photos.length}</span>`:''}${customTags}</div>
+          ${p.notes?`<div class="card-notes">${esc(p.notes)}</div>`:''}
+          ${p.contact?`<div class="card-contact">📞 ${esc(p.contact)}</div>`:''}
+        </div>
+      </div>
+      <div class="card-footer">
+        <button class="card-btn" onclick="openModal(cache[${p.id}])">✏️ 수정</button>
+        <button class="card-btn card-btn-del" onclick="deleteProduct(${p.id})">🗑️ 삭제</button>
+      </div>
+    </div>`;
   }).join('');
 }
 
 // ─── 설정 ────────────────────────────────────────────────
 function openSettings() {
+  document.getElementById('eventNameInput').value = eventName();
   document.getElementById('currentUserLabel').textContent = userName() ? `${userName()} (●●●●)` : '(없음)';
   document.getElementById('tokenLabel').textContent = ghToken() ? '설정됨 ✓' : '미설정';
-  document.getElementById('syncStatusLabel').textContent = document.getElementById('syncMsg').textContent || (ghToken() ? '대기 중' : '토큰 없음');
+  document.getElementById('offlineModeToggle').checked = offlineMode();
+  const syncMsg = document.getElementById('syncMsg').textContent;
+  document.getElementById('syncStatusLabel').textContent = syncMsg||(offlineMode()?'제한 네트워크 모드':ghToken()?'대기 중':'토큰 없음');
   document.getElementById('tokenInputArea').style.display = 'none';
   document.getElementById('settingsOverlay').classList.add('open');
+  history.pushState({modal:'settings'}, '');
 }
-function closeSettings() { document.getElementById('settingsOverlay').classList.remove('open'); }
+function closeSettings(fromPop=false) {
+  document.getElementById('settingsOverlay').classList.remove('open');
+  if (!fromPop) history.back();
+}
 function onSettingsClick(e) { if(e.target===document.getElementById('settingsOverlay')) closeSettings(); }
 
 // ─── 뷰어 ────────────────────────────────────────────────
 let vPhotos=[], vIdx=0;
 function openViewer(src,idx) {
   vPhotos = src==='m' ? [...curPhotos] : (cache[src]?.photos||[]);
-  vIdx=idx||0; showV(); document.getElementById('viewer').classList.add('open');
+  vIdx=idx||0; showV();
+  document.getElementById('viewer').classList.add('open');
+  history.pushState({modal:'viewer'}, '');
 }
 function showV() {
   document.getElementById('vImg').src=vPhotos[vIdx];
@@ -586,41 +766,55 @@ function showV() {
 }
 function vNav(d){const n=vIdx+d;if(n>=0&&n<vPhotos.length){vIdx=n;showV();}}
 function vGo(i){vIdx=i;showV();}
-function closeViewer(){document.getElementById('viewer').classList.remove('open');}
+function closeViewer(fromPop=false){
+  document.getElementById('viewer').classList.remove('open');
+  if (!fromPop) history.back();
+}
+
+// ─── Android 뒤로가기 ────────────────────────────────────
+window.addEventListener('popstate', () => {
+  if(document.getElementById('viewer').classList.contains('open')) closeViewer(true);
+  else if(document.getElementById('overlay').classList.contains('open')) closeModal(true);
+  else if(document.getElementById('settingsOverlay').classList.contains('open')) closeSettings(true);
+  else if(document.getElementById('dialogBg').classList.contains('open')) closeDialog();
+});
 
 // ─── 내보내기 ─────────────────────────────────────────────
 async function exportCSV() {
-  const list=await getAll(); if(!list.length){alert('데이터 없음');return;}
+  const list=await getAll();
+  if(!list.length){showAlert('내보낼 데이터가 없습니다.');return;}
   list.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
-  const h=['번호','부스위치','제품명','박스입수','CBM','MOQ','생산기간','OEM','비고','사진수','등록일시'];
-  const rows=list.map((p,i)=>[i+1,p.booth||'',p.name||'',p.boxQty||'',p.cbm||'',p.moq||'',p.leadTime||'',p.oem?'O':'X',p.notes||'',(p.photos||[]).length,p.createdAt?new Date(p.createdAt).toLocaleString('ko-KR'):'']);
+  const allCfLabels=[...new Set(list.flatMap(p=>(p.customFields||[]).map(f=>f.label).filter(Boolean)))];
+  const h=['번호','부스위치','제품명','가격','박스입수','CBM','MOQ','납기','OEM','담당자연락처','비고','사진수','등록일시',...allCfLabels];
+  const rows=list.map((p,i)=>{
+    const cfVals=allCfLabels.map(label=>(p.customFields||[]).find(f=>f.label===label)?.value||'');
+    return [i+1,p.booth||'',p.name||'',p.price||'',p.boxQty||'',p.cbm||'',p.moq||'',p.leadTime||'',p.oem?'O':'X',p.contact||'',p.notes||'',(p.photos||[]).length,p.createdAt?new Date(p.createdAt).toLocaleString('ko-KR'):'',...cfVals];
+  });
   const csv='﻿'+[h,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
-  dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}),`캔톤페어_${userName()}_${today()}.csv`);
+  dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}),`FairNote_${userName()}_${today()}.csv`);
 }
-
 async function exportZip() {
   const list=await getAll(); const items=[];
   list.forEach(p=>(p.photos||[]).forEach((b,i)=>items.push({name:`${safe(p.booth)}_${safe(p.name)}_${i+1}.jpg`,b64:b.split(',')[1]})));
-  if(!items.length){alert('사진 없음');return;}
+  if(!items.length){showAlert('저장된 사진이 없습니다.');return;}
   const zip=new JSZip();
   items.forEach(({name,b64})=>zip.file(name,b64,{base64:true}));
-  dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`캔톤페어_사진_${userName()}_${today()}.zip`);
+  dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`FairNote_사진_${userName()}_${today()}.zip`);
 }
-
 async function backupJSON() {
   const list=await getAll();
-  dl(new Blob([JSON.stringify({version:1,user:userName(),exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/json'}),`캔톤페어_백업_${userName()}_${today()}.json`);
+  dl(new Blob([JSON.stringify({version:2,app:'FairNote',event:eventName(),user:userName(),exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/json'}),`FairNote_백업_${userName()}_${today()}.json`);
 }
-
 async function importData(input) {
   const f=input.files[0]; if(!f) return;
   try {
     const d=JSON.parse(await f.text());
     const list=d.products||d;
-    if(!confirm(`${list.length}개 상품을 불러옵니다.\n기존 데이터는 유지됩니다.`)) return;
-    for(const p of list){const{id,...r}=p;await dbPut(r);}
-    render(); ghPush(await getAll()); alert(`✅ ${list.length}개 완료`);
-  } catch{alert('파일 오류');}
+    showConfirm(`${list.length}개 상품을 가져옵니다.\n기존 데이터는 유지됩니다.`, async () => {
+      for(const p of list){const{id,...r}=p;await dbPut(r);}
+      render(); ghPush(await getAll()); showToast(`✅ ${list.length}개 가져오기 완료`);
+    });
+  } catch { showAlert('파일을 읽을 수 없습니다.'); }
   input.value='';
 }
 
@@ -635,21 +829,20 @@ function dl(blob,name){const a=document.createElement('a');a.href=URL.createObje
     document.getElementById('fab').disabled = false;
     document.getElementById('fab').style.opacity = '1';
     await render();
-  } catch (e) {
+  } catch(e) {
     document.getElementById('list').innerHTML =
       `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">저장소 초기화 실패</div><div class="empty-hint">${e.message||'새로고침해주세요'}</div></div>`;
   } finally {
+    document.getElementById('headerEventName').textContent = eventName() || 'FairNote';
     updateHeaderUser();
     checkName();
     if (userName()) ghPull();
   }
 })();
 
-// ─── 서비스 워커 등록 (오프라인 지원) ────────────────────
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/canton-fair-app/sw.js')
-      .catch(() => {});
+    navigator.serviceWorker.register('/canton-fair-app/sw.js').catch(()=>{});
   });
 }
 </script>

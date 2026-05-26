@@ -1,7 +1,7 @@
 {
-  "name": "캔톤페어 바잉 기록",
-  "short_name": "바잉기록",
-  "description": "캔톤페어 현장 상품 기록 앱",
+  "name": "FairNote",
+  "short_name": "FairNote",
+  "description": "박람회 현장 바잉 기록 앱",
   "start_url": "/canton-fair-app/",
   "scope": "/canton-fair-app/",
   "display": "standalone",
