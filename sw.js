@@ -1,4 +1,4 @@
-const CACHE = 'fairnote-v3.4';
+const CACHE = 'fairnote-v3.5';
 const ASSETS = [
   '/canton-fair-app/',
   '/canton-fair-app/index.html',
@@ -8,6 +8,7 @@ const ASSETS = [
   '/canton-fair-app/icon-192.png',
   '/canton-fair-app/icon-512.png',
   '/canton-fair-app/icon-maskable.png',
+  '/canton-fair-app/logo.png',
   'https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js'
 ];
 
