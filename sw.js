@@ -1,4 +1,4 @@
-const CACHE = 'fairnote-v3.1';
+const CACHE = 'fairnote-v3.4';
 const ASSETS = [
   '/canton-fair-app/',
   '/canton-fair-app/index.html',
@@ -28,9 +28,23 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
-  // GitHub API 요청은 캐시하지 않음
   if (e.request.url.includes('api.github.com')) return;
 
+  // HTML 문서는 네트워크 우선 — 앱 업데이트가 항상 즉시 반영됨
+  if (e.request.destination === 'document') {
+    e.respondWith(
+      fetch(e.request)
+        .then(res => {
+          const clone = res.clone();
+          caches.open(CACHE).then(c => c.put(e.request, clone));
+          return res;
+        })
+        .catch(() => caches.match(e.request))
+    );
+    return;
+  }
+
+  // 나머지 자산은 캐시 우선 (빠른 로딩 + 오프라인 지원)
   e.respondWith(
     caches.match(e.request).then(cached => {
       if (cached) return cached;
