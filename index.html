@@ -17,7 +17,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .header { background: #c62828; color: white; padding: 14px 16px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 .header-left { display: flex; flex-direction: column; flex: 1; }
 .header-sub { font-size: 11px; opacity: 0.75; margin-bottom: 2px; }
-.header-title { font-size: 18px; font-weight: 700; }
+.header-title { font-size: 18px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; user-select: none; }
+.header-title::after { content: '▾'; font-size: 11px; opacity: 0.7; }
 .sync-indicator { font-size: 11px; opacity: 0.85; margin-top: 2px; min-height: 14px; }
 .header-right { display: flex; align-items: center; gap: 10px; }
 .header-count { background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: 600; }
@@ -76,7 +77,8 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .dialog-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 900; display: none; align-items: center; justify-content: center; padding: 32px; }
 .dialog-bg.open { display: flex; }
 .dialog-box { background: white; border-radius: 20px; padding: 24px 20px 16px; width: 100%; max-width: 320px; }
-.dialog-msg { font-size: 15px; color: #333; line-height: 1.6; margin-bottom: 20px; white-space: pre-line; }
+.dialog-title { font-size: 16px; font-weight: 800; margin-bottom: 8px; }
+.dialog-msg { font-size: 15px; color: #555; line-height: 1.6; margin-bottom: 16px; white-space: pre-line; }
 .dialog-btns { display: flex; gap: 8px; }
 .dialog-btn { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; }
 .dialog-btn-cancel { background: #f0f0f0; color: #555; }
@@ -151,6 +153,18 @@ textarea.fi { resize: none; }
 .viewer-prev, .viewer-next { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.15); color: white; border: none; width: 42px; height: 42px; border-radius: 50%; font-size: 20px; cursor: pointer; }
 .viewer-prev { left: 12px; }
 .viewer-next { right: 12px; }
+
+/* Event picker */
+.event-picker { position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 350; display: none; align-items: flex-end; }
+.event-picker.open { display: flex; }
+.event-item { display: flex; align-items: center; padding: 15px 4px; border-bottom: 1px solid #f5f5f5; cursor: pointer; gap: 12px; }
+.event-item:active { background: #fafafa; }
+.event-item-name { flex: 1; font-size: 15px; font-weight: 600; color: #1a1a1a; }
+.event-item-count { font-size: 12px; color: #aaa; }
+.event-item-check { color: #c62828; font-size: 18px; font-weight: 700; }
+.event-item-del { width: 28px; height: 28px; border: none; background: #fee2e2; color: #c62828; border-radius: 6px; font-size: 13px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.btn-new-event { width: 100%; padding: 13px; border: 1.5px dashed #ddd; border-radius: 10px; background: none; color: #888; font-size: 14px; font-weight: 600; cursor: pointer; margin-top: 12px; }
+.btn-new-event:active { background: #f5f5f5; }
 </style>
 </head>
 <body>
@@ -158,12 +172,12 @@ textarea.fi { resize: none; }
 <div class="header">
   <div class="header-left">
     <span class="header-sub">FairNote</span>
-    <span class="header-title" id="headerEventName">-</span>
+    <span class="header-title" id="headerEventName" onclick="openEventPicker()">-</span>
     <span class="sync-indicator" id="syncMsg"></span>
   </div>
   <div class="header-right">
     <span id="headerUser" style="font-size:12px;opacity:0.9;background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;display:none"></span>
-    <span class="header-count" id="totalCount">0건</span>
+    <span class="header-count" id="totalCount">0</span>
     <button class="icon-btn" onclick="openSettings()">⚙️</button>
   </div>
 </div>
@@ -189,7 +203,9 @@ textarea.fi { resize: none; }
 <!-- 커스텀 다이얼로그 -->
 <div class="dialog-bg" id="dialogBg">
   <div class="dialog-box">
+    <div class="dialog-title" id="dialogTitle" style="display:none"></div>
     <div class="dialog-msg" id="dialogMsg"></div>
+    <input class="fi" id="dialogInput" style="display:none;margin-bottom:16px">
     <div class="dialog-btns" id="dialogBtns"></div>
   </div>
 </div>
@@ -312,9 +328,12 @@ textarea.fi { resize: none; }
       <button class="data-btn" id="btnExcelExport" style="background:#1a73e8;color:white" onclick="exportCSV();closeSettings()"></button>
       <button class="data-btn" id="btnZipExport" style="background:#f3e5f5;color:#6a1b9a" onclick="exportZip();closeSettings()"></button>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
       <button class="data-btn" id="btnBackup" style="background:#f0f4ff;color:#1a73e8" onclick="backupJSON();closeSettings()"></button>
       <label class="data-btn" id="btnImport" style="display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:#555;cursor:pointer"><input type="file" accept=".json" onchange="importData(this)" style="display:none"></label>
+    </div>
+    <div style="padding-top:8px;text-align:center">
+      <a id="privacyLink" href="privacy.html" style="font-size:12px;color:#aaa;text-decoration:none"></a>
     </div>
   </div>
 </div>
@@ -327,6 +346,19 @@ textarea.fi { resize: none; }
   <img id="vImg" src="">
   <button class="viewer-next" id="vNext" onclick="vNav(1)">›</button>
   <div class="viewer-nav" id="vDots"></div>
+</div>
+
+<!-- 이벤트 선택 -->
+<div class="event-picker" id="eventPicker" onclick="onEventPickerClick(event)">
+  <div class="modal" style="max-height:80vh">
+    <div class="modal-handle"></div>
+    <div class="modal-head">
+      <h2 id="eventPickerTitle"></h2>
+      <button class="modal-close" onclick="closeEventPicker()">✕</button>
+    </div>
+    <div id="eventList"></div>
+    <button type="button" class="btn-new-event" id="btnNewEvent" onclick="promptNewEvent()"></button>
+  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -357,7 +389,7 @@ const STRINGS = {
     saveBtn: '저장하기', editBtn: '수정 완료', savingBtn: '저장 중...',
     editCard: '✏️ 수정', deleteCard: '🗑️ 삭제', contactIcon: '📞 ',
     settingsTitle: '⚙️ 설정',
-    eventNameLabel: '행사명', eventNamePh: '예: 광저우 캔톤페어 2026',
+    eventNameLabel: '현재 행사명', eventNamePh: '예: 광저우 캔톤페어 2026',
     currentUserLabel: '현재 사용자', changeBtn: '변경',
     syncTokenLabel: 'GitHub 동기화 토큰', tokenSetBtn: '설정',
     tokenPh: 'github_pat_... 붙여넣기', tokenDeleteBtn: '토큰 삭제', tokenSaveBtn: '저장',
@@ -368,6 +400,7 @@ const STRINGS = {
     langLabel: '언어',
     dataSection: '데이터',
     excelBtn: '📊 엑셀 내보내기', zipBtn: '📷 사진 ZIP', backupBtn: '💾 전체 백업', importBtn: '📂 가져오기',
+    privacyLink: '개인정보처리방침',
     emptyText: '기록된 상품이 없습니다', emptyHint: '+ 버튼을 눌러 추가하세요', noResult: '검색 결과 없음',
     tokenSavedToast: '✅ 토큰 저장됨', tokenDeletedToast: '토큰 삭제됨',
     savedToast: '✅ 저장됐습니다', editedToast: '✅ 수정됐습니다',
@@ -391,6 +424,14 @@ const STRINGS = {
     csvHeaders: ['번호','부스위치','제품명','가격','박스입수','CBM','MOQ','납기','OEM','담당자연락처','비고','사진수','등록일시'],
     tagMoq: v => `MOQ ${Number(v).toLocaleString()}`, tagCbm: v => `CBM ${v}`,
     tagBoxQty: v => `입수 ${v}`, tagLeadTime: v => `납기 ${v}`, tagOem: 'OEM가능',
+    eventPickerTitle: '행사 선택',
+    newEventBtn: '+ 새 행사 추가',
+    newEventTitle: '새 행사',
+    newEventMsg: '행사 이름을 입력하세요',
+    newEventPh: '예: 광저우 캔톤페어 2026',
+    confirmDeleteEvent: n => `"${n}" 행사와 모든 상품을 삭제할까요?`,
+    eventSwitched: n => `"${n}"으로 전환됐습니다`,
+    countUnit: n => `${n}건`,
   },
   en: {
     defaultEvent: 'My Event',
@@ -416,7 +457,7 @@ const STRINGS = {
     saveBtn: 'Save', editBtn: 'Update', savingBtn: 'Saving...',
     editCard: '✏️ Edit', deleteCard: '🗑️ Delete', contactIcon: '📞 ',
     settingsTitle: '⚙️ Settings',
-    eventNameLabel: 'Event Name', eventNamePh: 'e.g. Canton Fair 2026',
+    eventNameLabel: 'Current Event Name', eventNamePh: 'e.g. Canton Fair 2026',
     currentUserLabel: 'Current User', changeBtn: 'Change',
     syncTokenLabel: 'GitHub Sync Token', tokenSetBtn: 'Set',
     tokenPh: 'Paste github_pat_...', tokenDeleteBtn: 'Delete Token', tokenSaveBtn: 'Save',
@@ -427,6 +468,7 @@ const STRINGS = {
     langLabel: 'Language',
     dataSection: 'Data',
     excelBtn: '📊 Export CSV', zipBtn: '📷 Photo ZIP', backupBtn: '💾 Backup (JSON)', importBtn: '📂 Import',
+    privacyLink: 'Privacy Policy',
     emptyText: 'No products recorded', emptyHint: 'Tap + to add your first product', noResult: 'No results found',
     tokenSavedToast: '✅ Token saved', tokenDeletedToast: 'Token deleted',
     savedToast: '✅ Saved', editedToast: '✅ Updated',
@@ -450,6 +492,14 @@ const STRINGS = {
     csvHeaders: ['No.','Booth','Product','Price','Box Qty','CBM','MOQ','Lead Time','OEM','Contact','Notes','Photos','Date'],
     tagMoq: v => `MOQ ${Number(v).toLocaleString()}`, tagCbm: v => `CBM ${v}`,
     tagBoxQty: v => `Qty ${v}`, tagLeadTime: v => `Lead ${v}`, tagOem: 'OEM',
+    eventPickerTitle: 'Select Event',
+    newEventBtn: '+ Add New Event',
+    newEventTitle: 'New Event',
+    newEventMsg: 'Enter event name',
+    newEventPh: 'e.g. Canton Fair 2026',
+    confirmDeleteEvent: n => `Delete "${n}" and all its products?`,
+    eventSwitched: n => `Switched to "${n}"`,
+    countUnit: n => `${n}`,
   }
 };
 
@@ -466,20 +516,16 @@ function setLang(l) {
 function applyLang() {
   const l = lang();
   document.documentElement.lang = l;
-  // Toolbar
   document.getElementById('searchInput').placeholder = t('searchPlaceholder');
   document.getElementById('filterBtnText').textContent = t('filterBtn');
-  // Chips
   ['newest','oldest','booth','name'].forEach(k => document.getElementById(`chip-${k}`).textContent = t(`sort${k.charAt(0).toUpperCase()+k.slice(1)}`));
   document.getElementById('chip-oem').textContent = t('filterOemOnly');
   document.getElementById('chip-photo').textContent = t('filterPhotoOnly');
-  // Name overlay
   document.getElementById('nameTitle').textContent = t('firstVisit');
   document.getElementById('nameDesc').textContent = t('firstVisitDesc');
   document.getElementById('nameInput').placeholder = t('namePlaceholder');
   document.getElementById('pinInput').placeholder = t('pinPlaceholder');
   document.getElementById('nameStartBtn').textContent = t('startBtn');
-  // Product form
   document.getElementById('lBooth').textContent = t('boothLabel');
   document.getElementById('fBooth').placeholder = t('boothPh');
   document.getElementById('lName').textContent = t('nameLabel');
@@ -503,7 +549,6 @@ function applyLang() {
   document.getElementById('btnGal').childNodes[0].textContent = t('galleryBtn');
   document.getElementById('photoHint').textContent = t('noPhoto');
   updateOemLabel();
-  // Settings
   document.getElementById('settingsTitle').textContent = t('settingsTitle');
   document.getElementById('lEventName').textContent = t('eventNameLabel');
   document.getElementById('eventNameInput').placeholder = t('eventNamePh');
@@ -523,12 +568,123 @@ function applyLang() {
   document.getElementById('btnZipExport').textContent = t('zipBtn');
   document.getElementById('btnBackup').textContent = t('backupBtn');
   document.getElementById('btnImport').childNodes[1].textContent = t('importBtn');
+  document.getElementById('privacyLink').textContent = t('privacyLink');
   document.getElementById('tokenLabel').textContent = ghToken() ? t('tokenSet') : t('tokenNotSet');
-  // Lang buttons
   document.getElementById('langKo').classList.toggle('active', l === 'ko');
   document.getElementById('langEn').classList.toggle('active', l === 'en');
-  // Header count suffix
+  document.getElementById('eventPickerTitle').textContent = t('eventPickerTitle');
+  document.getElementById('btnNewEvent').textContent = t('newEventBtn');
   updateTotalCount();
+}
+
+// ─── 이벤트 관리 ────────────────────────────────────────────
+function getEvents() { try { return JSON.parse(localStorage.getItem('cf_events')||'[]'); } catch { return []; } }
+function saveEvents(events) { localStorage.setItem('cf_events', JSON.stringify(events)); }
+function currentEventId() { return localStorage.getItem('cf_current_event')||''; }
+function currentEvent() { return getEvents().find(e=>e.id===currentEventId())||null; }
+function eventName() { return currentEvent()?.name||''; }
+
+function ensureDefaultEvent() {
+  let events = getEvents();
+  if (!events.length) {
+    const legacyName = localStorage.getItem('cf_event_name') || '';
+    const name = legacyName || t('defaultEvent');
+    const e = {id:'evt_'+Date.now(), name, createdAt:new Date().toISOString()};
+    events=[e]; saveEvents(events); localStorage.setItem('cf_current_event', e.id);
+  } else if (!currentEventId() || !events.find(e=>e.id===currentEventId())) {
+    localStorage.setItem('cf_current_event', events[0].id);
+  }
+}
+
+async function migrateProductEvents() {
+  const firstId = getEvents()[0]?.id;
+  if (!firstId) return;
+  const all = await getAll();
+  const toMigrate = all.filter(p=>!p.eventId);
+  if (!toMigrate.length) return;
+  for (const p of toMigrate) { p.eventId = firstId; await dbPut(p); }
+}
+
+function openEventPicker() {
+  renderEventList();
+  document.getElementById('eventPicker').classList.add('open');
+  history.pushState({modal:'eventPicker'}, '');
+}
+function closeEventPicker(fromPop=false) {
+  document.getElementById('eventPicker').classList.remove('open');
+  if (!fromPop) history.back();
+}
+function onEventPickerClick(e) { if(e.target===document.getElementById('eventPicker')) closeEventPicker(); }
+
+async function renderEventList() {
+  const events = getEvents();
+  const cur = currentEventId();
+  const all = await getAll();
+  const counts = {};
+  all.forEach(p=>{ const id=p.eventId||events[0]?.id||''; counts[id]=(counts[id]||0)+1; });
+  document.getElementById('eventList').innerHTML = events.map(ev=>`
+    <div class="event-item" onclick="switchEvent('${ev.id}')">
+      <span class="event-item-name">${esc(ev.name)}</span>
+      <span class="event-item-count">${t('countUnit',counts[ev.id]||0)}</span>
+      ${ev.id===cur?'<span class="event-item-check">✓</span>':''}
+      ${events.length>1?`<button class="event-item-del" onclick="deleteEvent(event,'${ev.id}','${esc(ev.name)}')">✕</button>`:''}
+    </div>`).join('');
+}
+
+function switchEvent(id) {
+  localStorage.setItem('cf_current_event', id);
+  const ev = getEvents().find(e=>e.id===id);
+  showToast(t('eventSwitched', ev?.name||''));
+  closeEventPicker();
+  updateHeaderTitle();
+  render();
+}
+
+function promptNewEvent() {
+  showPrompt(t('newEventMsg'), t('newEventPh'), name => {
+    if (!name) return;
+    const events = getEvents();
+    const e = {id:'evt_'+Date.now(), name, createdAt:new Date().toISOString()};
+    events.push(e); saveEvents(events);
+    localStorage.setItem('cf_current_event', e.id);
+    updateHeaderTitle();
+    render();
+    showToast(t('eventSwitched', name));
+    closeEventPicker();
+  });
+}
+
+function deleteEvent(evt, id, name) {
+  evt.stopPropagation();
+  showConfirm(t('confirmDeleteEvent', name), async () => {
+    const events = getEvents().filter(e=>e.id!==id);
+    if (!events.length) {
+      const e = {id:'evt_'+Date.now(), name:t('defaultEvent'), createdAt:new Date().toISOString()};
+      events.push(e);
+    }
+    saveEvents(events);
+    const all = await getAll();
+    for (const p of all.filter(p=>p.eventId===id)) await dbDel(p.id);
+    if (currentEventId()===id) {
+      localStorage.setItem('cf_current_event', events[0].id);
+      updateHeaderTitle();
+    }
+    await render();
+    await renderEventList();
+  });
+}
+
+function saveEventName() {
+  const v = document.getElementById('eventNameInput').value.trim();
+  if (!v) return;
+  const events = getEvents();
+  const idx = events.findIndex(e=>e.id===currentEventId());
+  if (idx>=0) { events[idx].name=v; saveEvents(events); }
+  document.getElementById('headerEventName').textContent = v;
+}
+
+function updateHeaderTitle() {
+  document.getElementById('headerEventName').textContent = eventName() || t('defaultEvent');
 }
 
 // ─── GitHub 설정 ─────────────────────────────────────────
@@ -540,14 +696,8 @@ function ghFile()    { return `data/${userKey()}.json`; }
 function userName()  { return localStorage.getItem('cf_user') || ''; }
 function userPin()   { return localStorage.getItem('cf_pin')  || ''; }
 function userKey()   { return userName() ? `${userName()}_${userPin()}` : ''; }
-function eventName() { return localStorage.getItem('cf_event_name') || ''; }
 function offlineMode() { return localStorage.getItem('cf_offline_mode') === '1'; }
 
-function saveEventName() {
-  const v = document.getElementById('eventNameInput').value.trim();
-  localStorage.setItem('cf_event_name', v);
-  document.getElementById('headerEventName').textContent = v || t('defaultEvent');
-}
 function toggleOfflineMode(el) {
   localStorage.setItem('cf_offline_mode', el.checked ? '1' : '0');
   if (!el.checked && userName() && ghToken()) { ghSha = null; ghPull(); }
@@ -555,7 +705,9 @@ function toggleOfflineMode(el) {
 
 // ─── 다이얼로그 ───────────────────────────────────────────
 function showAlert(msg, onOk) {
+  document.getElementById('dialogTitle').style.display = 'none';
   document.getElementById('dialogMsg').textContent = msg;
+  document.getElementById('dialogInput').style.display = 'none';
   const btns = document.getElementById('dialogBtns');
   btns.innerHTML = '';
   const b = document.createElement('button');
@@ -566,7 +718,9 @@ function showAlert(msg, onOk) {
   document.getElementById('dialogBg').classList.add('open');
 }
 function showConfirm(msg, onOk) {
+  document.getElementById('dialogTitle').style.display = 'none';
   document.getElementById('dialogMsg').textContent = msg;
+  document.getElementById('dialogInput').style.display = 'none';
   const btns = document.getElementById('dialogBtns');
   btns.innerHTML = '';
   const cancel = document.createElement('button');
@@ -581,7 +735,29 @@ function showConfirm(msg, onOk) {
   btns.appendChild(ok);
   document.getElementById('dialogBg').classList.add('open');
 }
-function closeDialog() { document.getElementById('dialogBg').classList.remove('open'); }
+function showPrompt(msg, placeholder, onOk) {
+  document.getElementById('dialogTitle').style.display = 'none';
+  document.getElementById('dialogMsg').textContent = msg;
+  const inp = document.getElementById('dialogInput');
+  inp.placeholder = placeholder||''; inp.value=''; inp.style.display='block';
+  const btns = document.getElementById('dialogBtns');
+  btns.innerHTML = '';
+  const cancel = document.createElement('button');
+  cancel.className = 'dialog-btn dialog-btn-cancel';
+  cancel.textContent = t('cancel');
+  cancel.onclick = closeDialog;
+  const ok = document.createElement('button');
+  ok.className = 'dialog-btn dialog-btn-ok';
+  ok.textContent = t('ok');
+  ok.onclick = () => { const v=inp.value.trim(); closeDialog(); onOk&&onOk(v); };
+  btns.appendChild(cancel); btns.appendChild(ok);
+  document.getElementById('dialogBg').classList.add('open');
+  setTimeout(()=>inp.focus(),100);
+}
+function closeDialog() {
+  document.getElementById('dialogBg').classList.remove('open');
+  document.getElementById('dialogInput').style.display='none';
+}
 
 // ─── IndexedDB ────────────────────────────────────────────
 let db;
@@ -664,8 +840,8 @@ function updateHeaderUser() {
 }
 function updateTotalCount() {
   const el = document.getElementById('totalCount');
-  const n = parseInt(el.textContent) || 0;
-  el.textContent = lang() === 'ko' ? `${n}건` : `${n}`;
+  const n = parseInt(el.dataset.count||el.textContent)||0;
+  el.textContent = t('countUnit', n);
 }
 function openTokenInput() {
   const area = document.getElementById('tokenInputArea');
@@ -872,6 +1048,7 @@ async function saveProduct() {
       notes:    document.getElementById('fNotes').value.trim(),
       customFields: curCustomFields.filter(f=>f.label||f.value),
       photos:   [...curPhotos],
+      eventId:  currentEventId(),
       updatedAt: now,
       createdAt: editId ? (cache[editId]?.createdAt||now) : now,
     };
@@ -896,7 +1073,11 @@ async function deleteProduct(id) {
 // ─── 렌더 ────────────────────────────────────────────────
 async function render() {
   const q = document.getElementById('searchInput').value.toLowerCase();
+  const evtId = currentEventId();
   let list = await getAll();
+
+  // 현재 이벤트만 표시
+  list = list.filter(p => p.eventId===evtId || (!p.eventId && evtId===getEvents()[0]?.id));
 
   if(sortBy==='newest') list.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
   else if(sortBy==='oldest') list.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
@@ -916,7 +1097,9 @@ async function render() {
   if(filterPhoto) list=list.filter(p=>(p.photos||[]).length>0);
 
   const count = list.length;
-  document.getElementById('totalCount').textContent = lang()==='ko' ? `${count}건` : `${count}`;
+  const countEl = document.getElementById('totalCount');
+  countEl.dataset.count = count;
+  countEl.textContent = t('countUnit', count);
   const el=document.getElementById('list');
   if(!list.length){
     el.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">${q||filterOem||filterPhoto?t('noResult'):t('emptyText')}</div><div class="empty-hint">${t('emptyHint')}</div></div>`;
@@ -992,12 +1175,15 @@ window.addEventListener('popstate', () => {
   if(document.getElementById('viewer').classList.contains('open')) closeViewer(true);
   else if(document.getElementById('overlay').classList.contains('open')) closeModal(true);
   else if(document.getElementById('settingsOverlay').classList.contains('open')) closeSettings(true);
+  else if(document.getElementById('eventPicker').classList.contains('open')) closeEventPicker(true);
   else if(document.getElementById('dialogBg').classList.contains('open')) closeDialog();
 });
 
 // ─── 내보내기 ─────────────────────────────────────────────
 async function exportCSV() {
-  const list=await getAll();
+  const evtId = currentEventId();
+  let list = await getAll();
+  list = list.filter(p=>p.eventId===evtId||(!p.eventId&&evtId===getEvents()[0]?.id));
   if(!list.length){showAlert(t('alertNoData'));return;}
   list.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
   const allCfLabels=[...new Set(list.flatMap(p=>(p.customFields||[]).map(f=>f.label).filter(Boolean)))];
@@ -1007,25 +1193,36 @@ async function exportCSV() {
     return [i+1,p.booth||'',p.name||'',p.price||'',p.boxQty||'',p.cbm||'',p.moq||'',p.leadTime||'',p.oem?'O':'X',p.contact||'',p.notes||'',(p.photos||[]).length,p.createdAt?new Date(p.createdAt).toLocaleString():'', ...cfVals];
   });
   const csv='﻿'+[h,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
-  dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}),`FairNote_${userName()}_${today()}.csv`);
+  dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}),`FairNote_${userName()}_${safe(eventName())}_${today()}.csv`);
 }
 async function exportZip() {
-  const list=await getAll(); const items=[];
+  const evtId = currentEventId();
+  let list = await getAll();
+  list = list.filter(p=>p.eventId===evtId||(!p.eventId&&evtId===getEvents()[0]?.id));
+  const items=[];
   list.forEach(p=>(p.photos||[]).forEach((b,i)=>items.push({name:`${safe(p.booth)}_${safe(p.name)}_${i+1}.jpg`,b64:b.split(',')[1]})));
   if(!items.length){showAlert(t('alertNoPhoto'));return;}
   const zip=new JSZip();
   items.forEach(({name,b64})=>zip.file(name,b64,{base64:true}));
-  dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`FairNote_photos_${userName()}_${today()}.zip`);
+  dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`FairNote_photos_${userName()}_${safe(eventName())}_${today()}.zip`);
 }
 async function backupJSON() {
   const list=await getAll();
-  dl(new Blob([JSON.stringify({version:2,app:'FairNote',event:eventName(),user:userName(),exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/json'}),`FairNote_backup_${userName()}_${today()}.json`);
+  const events=getEvents();
+  dl(new Blob([JSON.stringify({version:3,app:'FairNote',events,currentEvent:currentEventId(),user:userName(),exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/json'}),`FairNote_backup_${userName()}_${today()}.json`);
 }
 async function importData(input) {
   const f=input.files[0]; if(!f) return;
   try {
     const d=JSON.parse(await f.text());
     const list=d.products||d;
+    // v3: restore events if present
+    if (d.version===3 && d.events?.length) {
+      const existing=getEvents();
+      const existingIds=new Set(existing.map(e=>e.id));
+      const toAdd=d.events.filter(e=>!existingIds.has(e.id));
+      if (toAdd.length) saveEvents([...existing,...toAdd]);
+    }
     showConfirm(t('confirmImport', list.length), async () => {
       for(const p of list){const{id,...r}=p;await dbPut(r);}
       render(); ghPush(await getAll()); showToast(t('importDone', list.length));
@@ -1045,8 +1242,11 @@ if (!localStorage.getItem('cf_user') || !localStorage.getItem('cf_pin')) {
 
 (async () => {
   applyLang();
+  ensureDefaultEvent();
+  updateHeaderTitle();
   try {
     db = await openDB();
+    await migrateProductEvents();
     document.getElementById('fab').disabled = false;
     document.getElementById('fab').style.opacity = '1';
     await render();
@@ -1054,7 +1254,6 @@ if (!localStorage.getItem('cf_user') || !localStorage.getItem('cf_pin')) {
     document.getElementById('list').innerHTML =
       `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${t('dbError',e.message||'')}</div></div>`;
   } finally {
-    document.getElementById('headerEventName').textContent = eventName() || t('defaultEvent');
     updateHeaderUser();
     checkName();
     if (userName()) ghPull();

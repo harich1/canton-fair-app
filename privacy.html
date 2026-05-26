@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>개인정보처리방침 – FairNote</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f9; color: #222; line-height: 1.7; }
+.wrap { max-width: 680px; margin: 0 auto; padding: 40px 24px 80px; }
+h1 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+.updated { font-size: 13px; color: #888; margin-bottom: 36px; }
+h2 { font-size: 16px; font-weight: 700; margin: 28px 0 8px; color: #c62828; }
+p, li { font-size: 14px; color: #444; margin-bottom: 6px; }
+ul { padding-left: 20px; margin-bottom: 8px; }
+.lang-switch { text-align: right; margin-bottom: 24px; }
+.lang-switch a { font-size: 13px; color: #c62828; text-decoration: none; margin-left: 12px; }
+.contact-box { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 16px 20px; margin-top: 32px; font-size: 13px; color: #555; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lang-switch">
+    <a href="#ko" onclick="showLang('ko')">한국어</a>
+    <a href="#en" onclick="showLang('en')">English</a>
+  </div>
+
+  <div id="ko">
+    <h1>개인정보처리방침</h1>
+    <div class="updated">최종 수정일: 2026년 5월 26일</div>
+
+    <p><strong>FairNote</strong> 앱(이하 "앱")은 박람회 현장에서 상품 정보를 기록·관리하기 위한 개인 생산성 도구입니다.</p>
+
+    <h2>1. 수집하는 정보</h2>
+    <p>앱은 사용자가 직접 입력한 다음 정보를 처리합니다.</p>
+    <ul>
+      <li>사용자 이름 및 4자리 비밀번호 (기기 내 로컬 저장)</li>
+      <li>상품 정보: 부스 위치, 제품명, 가격, MOQ, CBM, 납기, 메모 등 (기기 내 로컬 저장)</li>
+      <li>상품 사진 (기기 내 로컬 저장, JPEG 압축 후 IndexedDB 보관)</li>
+      <li>GitHub 개인 액세스 토큰 (선택 사항, 기기 로컬 저장만, 서버에 전송하지 않음)</li>
+    </ul>
+
+    <h2>2. 정보 저장 방식</h2>
+    <ul>
+      <li>모든 데이터는 <strong>사용자의 기기 내 브라우저(IndexedDB, localStorage)</strong>에만 저장됩니다.</li>
+      <li>앱 개발자는 어떠한 서버도 운영하지 않으며, 데이터를 수신·저장·처리하지 않습니다.</li>
+      <li>GitHub 동기화 기능을 사용할 경우, 사용자가 직접 설정한 GitHub 계정의 비공개 레포지토리에 데이터가 저장됩니다. 이는 사용자-GitHub 간 직접 통신이며, 앱 개발자를 경유하지 않습니다.</li>
+    </ul>
+
+    <h2>3. 제3자 공유</h2>
+    <p>앱은 사용자 데이터를 제3자에게 공유하거나 판매하지 않습니다.</p>
+
+    <h2>4. 외부 서비스</h2>
+    <ul>
+      <li><strong>GitHub API</strong> (선택 사항): 사용자가 동기화를 설정할 경우 GitHub 서버와 직접 통신합니다. GitHub의 개인정보처리방침이 별도로 적용됩니다.</li>
+      <li><strong>jsDelivr CDN</strong>: JSZip 라이브러리를 불러오는 데 사용됩니다. jsDelivr의 개인정보처리방침이 적용됩니다.</li>
+      <li><strong>GitHub Pages</strong>: 앱 호스팅에 사용됩니다. GitHub의 개인정보처리방침이 적용됩니다.</li>
+    </ul>
+
+    <h2>5. 카메라 및 저장소 권한</h2>
+    <p>앱은 상품 사진 촬영 및 갤러리 선택을 위해 카메라 및 파일 접근 권한을 요청할 수 있습니다. 촬영된 사진은 기기 내에만 저장되며, 외부로 전송되지 않습니다.</p>
+
+    <h2>6. 데이터 삭제</h2>
+    <p>앱의 설정 메뉴에서 데이터 내보내기 및 삭제가 가능합니다. 또한 브라우저의 사이트 데이터 삭제 기능을 통해 앱의 모든 데이터를 완전히 제거할 수 있습니다.</p>
+
+    <h2>7. 미성년자</h2>
+    <p>앱은 13세 미만 아동을 대상으로 하지 않으며, 의도적으로 미성년자의 개인 정보를 수집하지 않습니다.</p>
+
+    <h2>8. 방침 변경</h2>
+    <p>본 방침이 변경될 경우 앱 내 또는 GitHub 레포지토리를 통해 공지합니다.</p>
+
+    <div class="contact-box">
+      <strong>문의</strong><br>
+      이메일: rewardless@gmail.com<br>
+      GitHub: <a href="https://github.com/harich1/canton-fair-app" style="color:#c62828">harich1/canton-fair-app</a>
+    </div>
+  </div>
+
+  <div id="en" style="display:none">
+    <h1>Privacy Policy</h1>
+    <div class="updated">Last updated: May 26, 2026</div>
+
+    <p><strong>FairNote</strong> is a personal productivity app for recording and managing product information at trade fairs and exhibitions.</p>
+
+    <h2>1. Information We Collect</h2>
+    <p>The app processes only information that users directly enter:</p>
+    <ul>
+      <li>Username and 4-digit PIN (stored locally on device only)</li>
+      <li>Product data: booth location, product name, price, MOQ, CBM, lead time, notes, etc. (stored locally on device)</li>
+      <li>Product photos (stored locally, compressed to JPEG in IndexedDB)</li>
+      <li>GitHub personal access token (optional, stored locally on device only, never transmitted to our servers)</li>
+    </ul>
+
+    <h2>2. How We Store Information</h2>
+    <ul>
+      <li>All data is stored exclusively in <strong>the user's browser on-device</strong> (IndexedDB, localStorage).</li>
+      <li>The developer operates no servers and does not receive, store, or process any user data.</li>
+      <li>If GitHub sync is enabled, data is stored directly in the user's own private GitHub repository. This is a direct user-to-GitHub communication with no developer involvement.</li>
+    </ul>
+
+    <h2>3. Third-Party Sharing</h2>
+    <p>We do not share or sell user data to any third parties.</p>
+
+    <h2>4. Third-Party Services</h2>
+    <ul>
+      <li><strong>GitHub API</strong> (optional): Used for data sync if configured by the user. GitHub's Privacy Policy applies.</li>
+      <li><strong>jsDelivr CDN</strong>: Used to load the JSZip library. jsDelivr's Privacy Policy applies.</li>
+      <li><strong>GitHub Pages</strong>: Used to host the app. GitHub's Privacy Policy applies.</li>
+    </ul>
+
+    <h2>5. Camera and Storage Permissions</h2>
+    <p>The app may request camera and file access to take and select product photos. Photos are stored on-device only and are never transmitted externally.</p>
+
+    <h2>6. Data Deletion</h2>
+    <p>You can export or delete your data at any time via the app's Settings menu. You can also clear all app data using your browser's site data deletion feature.</p>
+
+    <h2>7. Children</h2>
+    <p>The app is not directed at children under 13 and does not knowingly collect personal information from minors.</p>
+
+    <h2>8. Changes to This Policy</h2>
+    <p>We will notify users of any changes via the app or the GitHub repository.</p>
+
+    <div class="contact-box">
+      <strong>Contact</strong><br>
+      Email: rewardless@gmail.com<br>
+      GitHub: <a href="https://github.com/harich1/canton-fair-app" style="color:#c62828">harich1/canton-fair-app</a>
+    </div>
+  </div>
+</div>
+<script>
+function showLang(l) {
+  document.getElementById('ko').style.display = l==='ko' ? '' : 'none';
+  document.getElementById('en').style.display = l==='en' ? '' : 'none';
+  document.documentElement.lang = l;
+}
+</script>
+</body>
+</html>
