@@ -86,7 +86,7 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; b
 .name-overlay.open { display: flex; }
 .name-box { background: white; border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 360px; }
 .name-box h2 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
-.name-box p { font-size: 14px; color: #777; margin-bottom: 20px; line-height: 1.6; }
+.name-box p { font-size: 14px; color: #777; margin-bottom: 20px; line-height: 1.6; white-space: pre-line; }
 .name-input { width: 100%; padding: 13px; border: 1.5px solid #ddd; border-radius: 10px; font-size: 16px; margin-bottom: 12px; }
 .name-input:focus { outline: none; border-color: #c62828; }
 .name-btn { width: 100%; padding: 14px; background: #c62828; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; }
@@ -138,6 +138,9 @@ textarea.fi { resize: none; }
 .settings-section-title { font-size: 12px; color: #aaa; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin: 16px 0 8px; }
 .data-btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; }
 
+.lang-btn { padding: 7px 14px; border: 1.5px solid #ddd; border-radius: 8px; background: white; font-size: 13px; font-weight: 600; color: #666; cursor: pointer; }
+.lang-btn.active { background: #c62828; color: white; border-color: #c62828; }
+
 .viewer { position: fixed; inset: 0; background: black; z-index: 500; display: none; flex-direction: column; align-items: center; justify-content: center; }
 .viewer.open { display: flex; }
 .viewer img { max-width: 100%; max-height: 90vh; object-fit: contain; }
@@ -154,8 +157,8 @@ textarea.fi { resize: none; }
 
 <div class="header">
   <div class="header-left">
-    <span class="header-sub" id="headerAppName">FairNote</span>
-    <span class="header-title" id="headerEventName">내 행사</span>
+    <span class="header-sub">FairNote</span>
+    <span class="header-title" id="headerEventName">-</span>
     <span class="sync-indicator" id="syncMsg"></span>
   </div>
   <div class="header-right">
@@ -166,18 +169,18 @@ textarea.fi { resize: none; }
 </div>
 
 <div class="toolbar">
-  <input class="search-box" id="searchInput" placeholder="제품명, 부스, 가격 검색..." oninput="render()">
-  <button class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleChipBar()">필터 <span class="filter-dot" id="filterDot"></span></button>
+  <input class="search-box" id="searchInput" oninput="render()">
+  <button class="filter-toggle-btn" id="filterToggleBtn" onclick="toggleChipBar()"><span id="filterBtnText"></span> <span class="filter-dot" id="filterDot"></span></button>
 </div>
 
 <div class="chip-bar" id="chipBar">
-  <button class="chip active" id="chip-newest" onclick="setSort('newest')">최신순</button>
-  <button class="chip" id="chip-oldest" onclick="setSort('oldest')">오래된순</button>
-  <button class="chip" id="chip-booth" onclick="setSort('booth')">부스순</button>
-  <button class="chip" id="chip-name" onclick="setSort('name')">이름순</button>
+  <button class="chip active" id="chip-newest" onclick="setSort('newest')"></button>
+  <button class="chip" id="chip-oldest" onclick="setSort('oldest')"></button>
+  <button class="chip" id="chip-booth" onclick="setSort('booth')"></button>
+  <button class="chip" id="chip-name" onclick="setSort('name')"></button>
   <div class="chip-sep"></div>
-  <button class="chip" id="chip-oem" onclick="toggleFilter('oem')">OEM만</button>
-  <button class="chip" id="chip-photo" onclick="toggleFilter('photo')">사진있음</button>
+  <button class="chip" id="chip-oem" onclick="toggleFilter('oem')"></button>
+  <button class="chip" id="chip-photo" onclick="toggleFilter('photo')"></button>
 </div>
 
 <div class="list" id="list"></div>
@@ -194,11 +197,11 @@ textarea.fi { resize: none; }
 <!-- 이름 입력 -->
 <div class="name-overlay" id="nameOverlay">
   <div class="name-box">
-    <h2>👋 처음 오셨군요</h2>
-    <p>이름과 비밀번호(숫자 4자리)를 설정하세요.<br>같은 이름+비밀번호를 입력한 기기끼리만 데이터가 공유됩니다.</p>
-    <input class="name-input" id="nameInput" placeholder="이름" maxlength="20">
-    <input class="name-input" id="pinInput" type="password" inputmode="numeric" placeholder="비밀번호 숫자 4자리" maxlength="4" pattern="[0-9]{4}">
-    <button class="name-btn" onclick="confirmName()">시작하기</button>
+    <h2 id="nameTitle"></h2>
+    <p id="nameDesc"></p>
+    <input class="name-input" id="nameInput" maxlength="20">
+    <input class="name-input" id="pinInput" type="password" inputmode="numeric" maxlength="4" pattern="[0-9]{4}">
+    <button class="name-btn" id="nameStartBtn" onclick="confirmName()"></button>
   </div>
 </div>
 
@@ -207,46 +210,46 @@ textarea.fi { resize: none; }
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-head">
-      <h2 id="modalTitle">새 상품 추가</h2>
+      <h2 id="modalTitle"></h2>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <form>
       <input type="hidden" id="fId">
-      <div class="fg"><label class="fl">부스 위치 *</label><input class="fi" id="fBooth" placeholder="예: 11.1 A01"></div>
-      <div class="fg"><label class="fl">제품명 *</label><input class="fi" id="fName" placeholder="제품명을 입력하세요"></div>
-      <div class="fg"><label class="fl">가격</label><input class="fi" id="fPrice" placeholder="예: $5.50 / 3,500원"></div>
+      <div class="fg"><label class="fl" id="lBooth"></label><input class="fi" id="fBooth"></div>
+      <div class="fg"><label class="fl" id="lName"></label><input class="fi" id="fName"></div>
+      <div class="fg"><label class="fl" id="lPrice"></label><input class="fi" id="fPrice"></div>
       <div class="frow">
-        <div class="fg"><label class="fl">박스 입수</label><input class="fi" id="fBoxQty" type="number" min="0" placeholder="개"></div>
-        <div class="fg"><label class="fl">CBM (m³)</label><input class="fi" id="fCbm" type="number" step="0.0001" min="0" placeholder="0.000"></div>
+        <div class="fg"><label class="fl" id="lBoxQty"></label><input class="fi" id="fBoxQty" type="number" min="0" placeholder=""></div>
+        <div class="fg"><label class="fl" id="lCbm"></label><input class="fi" id="fCbm" type="number" step="0.0001" min="0" placeholder="0.000"></div>
       </div>
       <div class="frow">
-        <div class="fg"><label class="fl">MOQ</label><input class="fi" id="fMoq" type="number" min="0" placeholder="최소수량"></div>
-        <div class="fg"><label class="fl">납기 (Lead Time)</label><input class="fi" id="fLeadTime" placeholder="예: 30일"></div>
+        <div class="fg"><label class="fl" id="lMoq"></label><input class="fi" id="fMoq" type="number" min="0" placeholder=""></div>
+        <div class="fg"><label class="fl" id="lLeadTime"></label><input class="fi" id="fLeadTime"></div>
       </div>
       <div class="fg">
-        <label class="fl">OEM 가능 여부</label>
+        <label class="fl" id="lOem"></label>
         <div class="oem-row">
           <label class="switch"><input type="checkbox" id="fOem" onchange="updateOemLabel()"><span class="slider"></span></label>
-          <span class="oem-label" id="oemLabel">불가</span>
+          <span class="oem-label" id="oemLabel"></span>
         </div>
       </div>
-      <div class="fg"><label class="fl">담당자 연락처</label><input class="fi" id="fContact" placeholder="위챗 ID, 전화번호 등"></div>
-      <div class="fg"><label class="fl">비고</label><textarea class="fi" id="fNotes" rows="2" placeholder="특이사항, 메모 등"></textarea></div>
+      <div class="fg"><label class="fl" id="lContact"></label><input class="fi" id="fContact"></div>
+      <div class="fg"><label class="fl" id="lNotes"></label><textarea class="fi" id="fNotes" rows="2"></textarea></div>
       <div class="fg">
-        <label class="fl">추가 항목</label>
+        <label class="fl" id="lCustomFields"></label>
         <div id="customFieldList"></div>
-        <button type="button" class="btn-add-field" onclick="addCustomField()">+ 항목 추가</button>
+        <button type="button" class="btn-add-field" id="addFieldBtn" onclick="addCustomField()"></button>
       </div>
       <div class="fg">
-        <label class="fl">상품 사진</label>
+        <label class="fl" id="lPhotos"></label>
         <div class="photo-btns">
-          <label class="btn-cam">📸 카메라 촬영<input type="file" accept="image/*" capture="environment" onchange="capturePhoto(this)"></label>
-          <label class="btn-gal">🖼️ 갤러리 선택<input type="file" accept="image/*" multiple onchange="addPhotos(this)"></label>
+          <label class="btn-cam" id="btnCam"><input type="file" accept="image/*" capture="environment" onchange="capturePhoto(this)"></label>
+          <label class="btn-gal" id="btnGal"><input type="file" accept="image/*" multiple onchange="addPhotos(this)"></label>
         </div>
         <div class="photo-grid" id="photoGrid"></div>
-        <div class="photo-empty" id="photoHint">사진 없음</div>
+        <div class="photo-empty" id="photoHint"></div>
       </div>
-      <button type="button" class="btn-save" id="saveBtn" onclick="saveProduct()">저장하기</button>
+      <button type="button" class="btn-save" id="saveBtn" onclick="saveProduct()"></button>
     </form>
   </div>
 </div>
@@ -255,38 +258,38 @@ textarea.fi { resize: none; }
 <div class="overlay" id="settingsOverlay" onclick="onSettingsClick(event)">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-head"><h2>⚙️ 설정</h2><button class="modal-close" onclick="closeSettings()">✕</button></div>
+    <div class="modal-head"><h2 id="settingsTitle"></h2><button class="modal-close" onclick="closeSettings()">✕</button></div>
     <div class="settings-row">
       <div style="flex:1">
-        <div class="settings-label">행사명</div>
-        <input class="fi" id="eventNameInput" placeholder="예: 광저우 캔톤페어 2026" maxlength="40" style="margin-top:6px;font-size:14px" oninput="saveEventName()">
+        <div class="settings-label" id="lEventName"></div>
+        <input class="fi" id="eventNameInput" maxlength="40" style="margin-top:6px;font-size:14px" oninput="saveEventName()">
       </div>
     </div>
     <div class="settings-row">
       <div>
-        <div class="settings-label">현재 사용자</div>
+        <div class="settings-label" id="lCurrentUser"></div>
         <div class="settings-value" id="currentUserLabel"></div>
       </div>
-      <button class="settings-btn" onclick="changeName()">변경</button>
+      <button class="settings-btn" id="changeUserBtn" onclick="changeName()"></button>
     </div>
     <div class="settings-row">
       <div>
-        <div class="settings-label">GitHub 동기화 토큰</div>
-        <div class="settings-value" id="tokenLabel">미설정</div>
+        <div class="settings-label" id="lSyncToken"></div>
+        <div class="settings-value" id="tokenLabel"></div>
       </div>
-      <button class="settings-btn" onclick="openTokenInput()">설정</button>
+      <button class="settings-btn" id="tokenSetBtn" onclick="openTokenInput()"></button>
     </div>
     <div id="tokenInputArea" style="display:none;padding:10px 0">
-      <input id="tokenInput" class="fi" placeholder="github_pat_... 붙여넣기" style="margin-bottom:8px;font-size:13px">
+      <input id="tokenInput" class="fi" style="margin-bottom:8px;font-size:13px">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-        <button class="data-btn" style="background:#f5f5f5;color:#555" onclick="clearToken()">토큰 삭제</button>
-        <button class="data-btn" style="background:#1a73e8;color:white" onclick="saveToken()">저장</button>
+        <button class="data-btn" id="tokenDeleteBtn" style="background:#f5f5f5;color:#555" onclick="clearToken()"></button>
+        <button class="data-btn" id="tokenSaveBtn2" style="background:#1a73e8;color:white" onclick="saveToken()"></button>
       </div>
     </div>
     <div class="settings-row">
       <div style="flex:1;padding-right:12px">
-        <div class="settings-label">제한 네트워크 모드</div>
-        <div style="font-size:12px;color:#aaa;line-height:1.5;margin-top:3px">중국 등 GitHub 접근이 차단된 국가에서 사용할 때 켜세요. 동기화를 건너뛰고 기기에만 저장합니다. 귀국 후 끄면 자동으로 동기화됩니다.</div>
+        <div class="settings-label" id="lOfflineMode"></div>
+        <div id="offlineModeDesc" style="font-size:12px;color:#aaa;line-height:1.5;margin-top:3px"></div>
       </div>
       <label class="switch" style="flex-shrink:0">
         <input type="checkbox" id="offlineModeToggle" onchange="toggleOfflineMode(this)">
@@ -294,17 +297,24 @@ textarea.fi { resize: none; }
       </label>
     </div>
     <div class="settings-row">
-      <div class="settings-label">동기화 상태</div>
+      <div class="settings-label" id="lSyncStatus"></div>
       <div class="settings-value" id="syncStatusLabel">-</div>
     </div>
-    <div class="settings-section-title">데이터</div>
+    <div class="settings-row">
+      <div class="settings-label" id="lLang"></div>
+      <div style="display:flex;gap:6px">
+        <button id="langKo" class="lang-btn" onclick="setLang('ko')">한국어</button>
+        <button id="langEn" class="lang-btn" onclick="setLang('en')">English</button>
+      </div>
+    </div>
+    <div class="settings-section-title" id="lDataSection"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-      <button class="data-btn" style="background:#1a73e8;color:white" onclick="exportCSV();closeSettings()">📊 엑셀 내보내기</button>
-      <button class="data-btn" style="background:#f3e5f5;color:#6a1b9a" onclick="exportZip();closeSettings()">📷 사진 ZIP</button>
+      <button class="data-btn" id="btnExcelExport" style="background:#1a73e8;color:white" onclick="exportCSV();closeSettings()"></button>
+      <button class="data-btn" id="btnZipExport" style="background:#f3e5f5;color:#6a1b9a" onclick="exportZip();closeSettings()"></button>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <button class="data-btn" style="background:#f0f4ff;color:#1a73e8" onclick="backupJSON();closeSettings()">💾 전체 백업</button>
-      <label class="data-btn" style="display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:#555;cursor:pointer">📂 가져오기<input type="file" accept=".json" onchange="importData(this)" style="display:none"></label>
+      <button class="data-btn" id="btnBackup" style="background:#f0f4ff;color:#1a73e8" onclick="backupJSON();closeSettings()"></button>
+      <label class="data-btn" id="btnImport" style="display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:#555;cursor:pointer"><input type="file" accept=".json" onchange="importData(this)" style="display:none"></label>
     </div>
   </div>
 </div>
@@ -321,10 +331,207 @@ textarea.fi { resize: none; }
 
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script>
-if (!localStorage.getItem('cf_user') || !localStorage.getItem('cf_pin')) {
-  document.getElementById('nameOverlay').classList.add('open');
+// ─── i18n ─────────────────────────────────────────────────
+const STRINGS = {
+  ko: {
+    defaultEvent: '내 행사',
+    searchPlaceholder: '제품명, 부스, 가격 검색...',
+    filterBtn: '필터',
+    sortNewest: '최신순', sortOldest: '오래된순', sortBooth: '부스순', sortName: '이름순',
+    filterOemOnly: 'OEM만', filterPhotoOnly: '사진있음',
+    firstVisit: '👋 처음 오셨군요',
+    firstVisitDesc: '이름과 비밀번호(숫자 4자리)를 설정하세요.\n같은 이름+비밀번호를 입력한 기기끼리만 데이터가 공유됩니다.',
+    namePlaceholder: '이름', pinPlaceholder: '비밀번호 숫자 4자리', startBtn: '시작하기',
+    addProduct: '새 상품 추가', editProduct: '상품 수정',
+    boothLabel: '부스 위치 *', boothPh: '예: 11.1 A01',
+    nameLabel: '제품명 *', namePh: '제품명을 입력하세요',
+    priceLabel: '가격', pricePh: '예: $5.50 / 3,500원',
+    boxQtyLabel: '박스 입수', cbmLabel: 'CBM (m³)',
+    moqLabel: 'MOQ', leadTimeLabel: '납기 (Lead Time)', leadTimePh: '예: 30일',
+    oemLabel: 'OEM 가능 여부', oemYes: 'OEM 가능', oemNo: '불가',
+    contactLabel: '담당자 연락처', contactPh: '위챗 ID, 전화번호 등',
+    notesLabel: '비고', notesPh: '특이사항, 메모 등',
+    customFieldsLabel: '추가 항목', addFieldBtn: '+ 항목 추가',
+    cfLabelPh: '항목명', cfValuePh: '내용',
+    photosLabel: '상품 사진', captureBtn: '📸 카메라 촬영', galleryBtn: '🖼️ 갤러리 선택', noPhoto: '사진 없음',
+    saveBtn: '저장하기', editBtn: '수정 완료', savingBtn: '저장 중...',
+    editCard: '✏️ 수정', deleteCard: '🗑️ 삭제', contactIcon: '📞 ',
+    settingsTitle: '⚙️ 설정',
+    eventNameLabel: '행사명', eventNamePh: '예: 광저우 캔톤페어 2026',
+    currentUserLabel: '현재 사용자', changeBtn: '변경',
+    syncTokenLabel: 'GitHub 동기화 토큰', tokenSetBtn: '설정',
+    tokenPh: 'github_pat_... 붙여넣기', tokenDeleteBtn: '토큰 삭제', tokenSaveBtn: '저장',
+    tokenNotSet: '미설정', tokenSet: '설정됨 ✓',
+    offlineModeLabel: '제한 네트워크 모드',
+    offlineModeDesc: '중국 등 GitHub 접근이 차단된 국가에서 사용할 때 켜세요. 동기화를 건너뛰고 기기에만 저장합니다. 귀국 후 끄면 자동으로 동기화됩니다.',
+    syncStatusLabel: '동기화 상태', syncWaiting: '대기 중', syncOffline: '제한 네트워크 모드', syncNoToken: '토큰 없음',
+    langLabel: '언어',
+    dataSection: '데이터',
+    excelBtn: '📊 엑셀 내보내기', zipBtn: '📷 사진 ZIP', backupBtn: '💾 전체 백업', importBtn: '📂 가져오기',
+    emptyText: '기록된 상품이 없습니다', emptyHint: '+ 버튼을 눌러 추가하세요', noResult: '검색 결과 없음',
+    tokenSavedToast: '✅ 토큰 저장됨', tokenDeletedToast: '토큰 삭제됨',
+    savedToast: '✅ 저장됐습니다', editedToast: '✅ 수정됐습니다',
+    ok: '확인', cancel: '취소',
+    alertEnterToken: '토큰을 입력해주세요.',
+    alertClearToken: '토큰을 삭제하면 동기화가 중단됩니다.',
+    alertEnterName: '이름을 입력해주세요.',
+    alertEnterPin: '비밀번호는 숫자 4자리로 입력해주세요.',
+    alertEnterBooth: '부스 위치를 입력해주세요.',
+    alertEnterNameProduct: '제품명을 입력해주세요.',
+    alertNoData: '내보낼 데이터가 없습니다.',
+    alertNoPhoto: '저장된 사진이 없습니다.',
+    alertFileError: '파일을 읽을 수 없습니다.',
+    confirmChangeUser: '사용자를 변경하시겠습니까?\n기존 데이터는 이 기기에 보존됩니다.',
+    confirmDelete: '이 상품을 삭제할까요?',
+    confirmImport: n => `${n}개 상품을 가져옵니다.\n기존 데이터는 유지됩니다.`,
+    importDone: n => `✅ ${n}개 가져오기 완료`,
+    dbError: m => 'DB 오류: ' + m, saveError: m => '저장 오류: ' + m,
+    syncSyncing: '⏫ 동기화 중...', syncSaved: '✅ 저장됨', syncFail: '⚠️ 동기화 실패',
+    syncLoading: '🔄 불러오는 중...', syncConnFail: '⚠️ 연결 실패', syncDone: '✅ 동기화 완료',
+    csvHeaders: ['번호','부스위치','제품명','가격','박스입수','CBM','MOQ','납기','OEM','담당자연락처','비고','사진수','등록일시'],
+    tagMoq: v => `MOQ ${Number(v).toLocaleString()}`, tagCbm: v => `CBM ${v}`,
+    tagBoxQty: v => `입수 ${v}`, tagLeadTime: v => `납기 ${v}`, tagOem: 'OEM가능',
+  },
+  en: {
+    defaultEvent: 'My Event',
+    searchPlaceholder: 'Search product, booth, price...',
+    filterBtn: 'Filter',
+    sortNewest: 'Newest', sortOldest: 'Oldest', sortBooth: 'Booth', sortName: 'Name',
+    filterOemOnly: 'OEM only', filterPhotoOnly: 'Has photo',
+    firstVisit: '👋 Welcome!',
+    firstVisitDesc: 'Set your name and a 4-digit PIN.\nDevices with the same name + PIN will share data.',
+    namePlaceholder: 'Your name', pinPlaceholder: '4-digit PIN', startBtn: 'Get Started',
+    addProduct: 'Add Product', editProduct: 'Edit Product',
+    boothLabel: 'Booth *', boothPh: 'e.g. 11.1 A01',
+    nameLabel: 'Product Name *', namePh: 'Enter product name',
+    priceLabel: 'Price', pricePh: 'e.g. $5.50',
+    boxQtyLabel: 'Box Qty', cbmLabel: 'CBM (m³)',
+    moqLabel: 'MOQ', leadTimeLabel: 'Lead Time', leadTimePh: 'e.g. 30 days',
+    oemLabel: 'OEM Available', oemYes: 'OEM Available', oemNo: 'Not Available',
+    contactLabel: 'Contact', contactPh: 'WeChat ID, phone, etc.',
+    notesLabel: 'Notes', notesPh: 'Remarks, memo, etc.',
+    customFieldsLabel: 'Custom Fields', addFieldBtn: '+ Add Field',
+    cfLabelPh: 'Field name', cfValuePh: 'Value',
+    photosLabel: 'Photos', captureBtn: '📸 Camera', galleryBtn: '🖼️ Gallery', noPhoto: 'No photos',
+    saveBtn: 'Save', editBtn: 'Update', savingBtn: 'Saving...',
+    editCard: '✏️ Edit', deleteCard: '🗑️ Delete', contactIcon: '📞 ',
+    settingsTitle: '⚙️ Settings',
+    eventNameLabel: 'Event Name', eventNamePh: 'e.g. Canton Fair 2026',
+    currentUserLabel: 'Current User', changeBtn: 'Change',
+    syncTokenLabel: 'GitHub Sync Token', tokenSetBtn: 'Set',
+    tokenPh: 'Paste github_pat_...', tokenDeleteBtn: 'Delete Token', tokenSaveBtn: 'Save',
+    tokenNotSet: 'Not set', tokenSet: 'Set ✓',
+    offlineModeLabel: 'Restricted Network Mode',
+    offlineModeDesc: 'Enable in countries where GitHub is blocked (e.g. China). Skips sync and saves locally only. Disable after returning home to auto-sync.',
+    syncStatusLabel: 'Sync Status', syncWaiting: 'Ready', syncOffline: 'Restricted Network Mode', syncNoToken: 'No token',
+    langLabel: 'Language',
+    dataSection: 'Data',
+    excelBtn: '📊 Export CSV', zipBtn: '📷 Photo ZIP', backupBtn: '💾 Backup (JSON)', importBtn: '📂 Import',
+    emptyText: 'No products recorded', emptyHint: 'Tap + to add your first product', noResult: 'No results found',
+    tokenSavedToast: '✅ Token saved', tokenDeletedToast: 'Token deleted',
+    savedToast: '✅ Saved', editedToast: '✅ Updated',
+    ok: 'OK', cancel: 'Cancel',
+    alertEnterToken: 'Please enter your token.',
+    alertClearToken: 'Deleting the token will stop sync.',
+    alertEnterName: 'Please enter your name.',
+    alertEnterPin: 'PIN must be 4 digits.',
+    alertEnterBooth: 'Please enter the booth location.',
+    alertEnterNameProduct: 'Please enter the product name.',
+    alertNoData: 'No data to export.',
+    alertNoPhoto: 'No photos saved.',
+    alertFileError: 'Could not read the file.',
+    confirmChangeUser: 'Change user?\nYour data on this device will be kept.',
+    confirmDelete: 'Delete this product?',
+    confirmImport: n => `Import ${n} products?\nExisting data will be kept.`,
+    importDone: n => `✅ ${n} items imported`,
+    dbError: m => 'DB error: ' + m, saveError: m => 'Save error: ' + m,
+    syncSyncing: '⏫ Syncing...', syncSaved: '✅ Saved', syncFail: '⚠️ Sync failed',
+    syncLoading: '🔄 Loading...', syncConnFail: '⚠️ Connection failed', syncDone: '✅ Sync complete',
+    csvHeaders: ['No.','Booth','Product','Price','Box Qty','CBM','MOQ','Lead Time','OEM','Contact','Notes','Photos','Date'],
+    tagMoq: v => `MOQ ${Number(v).toLocaleString()}`, tagCbm: v => `CBM ${v}`,
+    tagBoxQty: v => `Qty ${v}`, tagLeadTime: v => `Lead ${v}`, tagOem: 'OEM',
+  }
+};
+
+function lang() { return localStorage.getItem('cf_lang') || 'ko'; }
+function t(key, ...args) {
+  const val = STRINGS[lang()][key];
+  return typeof val === 'function' ? val(...args) : (val ?? key);
+}
+function setLang(l) {
+  localStorage.setItem('cf_lang', l);
+  applyLang();
+  render();
+}
+function applyLang() {
+  const l = lang();
+  document.documentElement.lang = l;
+  // Toolbar
+  document.getElementById('searchInput').placeholder = t('searchPlaceholder');
+  document.getElementById('filterBtnText').textContent = t('filterBtn');
+  // Chips
+  ['newest','oldest','booth','name'].forEach(k => document.getElementById(`chip-${k}`).textContent = t(`sort${k.charAt(0).toUpperCase()+k.slice(1)}`));
+  document.getElementById('chip-oem').textContent = t('filterOemOnly');
+  document.getElementById('chip-photo').textContent = t('filterPhotoOnly');
+  // Name overlay
+  document.getElementById('nameTitle').textContent = t('firstVisit');
+  document.getElementById('nameDesc').textContent = t('firstVisitDesc');
+  document.getElementById('nameInput').placeholder = t('namePlaceholder');
+  document.getElementById('pinInput').placeholder = t('pinPlaceholder');
+  document.getElementById('nameStartBtn').textContent = t('startBtn');
+  // Product form
+  document.getElementById('lBooth').textContent = t('boothLabel');
+  document.getElementById('fBooth').placeholder = t('boothPh');
+  document.getElementById('lName').textContent = t('nameLabel');
+  document.getElementById('fName').placeholder = t('namePh');
+  document.getElementById('lPrice').textContent = t('priceLabel');
+  document.getElementById('fPrice').placeholder = t('pricePh');
+  document.getElementById('lBoxQty').textContent = t('boxQtyLabel');
+  document.getElementById('lCbm').textContent = t('cbmLabel');
+  document.getElementById('lMoq').textContent = t('moqLabel');
+  document.getElementById('lLeadTime').textContent = t('leadTimeLabel');
+  document.getElementById('fLeadTime').placeholder = t('leadTimePh');
+  document.getElementById('lOem').textContent = t('oemLabel');
+  document.getElementById('lContact').textContent = t('contactLabel');
+  document.getElementById('fContact').placeholder = t('contactPh');
+  document.getElementById('lNotes').textContent = t('notesLabel');
+  document.getElementById('fNotes').placeholder = t('notesPh');
+  document.getElementById('lCustomFields').textContent = t('customFieldsLabel');
+  document.getElementById('addFieldBtn').textContent = t('addFieldBtn');
+  document.getElementById('lPhotos').textContent = t('photosLabel');
+  document.getElementById('btnCam').childNodes[0].textContent = t('captureBtn');
+  document.getElementById('btnGal').childNodes[0].textContent = t('galleryBtn');
+  document.getElementById('photoHint').textContent = t('noPhoto');
+  updateOemLabel();
+  // Settings
+  document.getElementById('settingsTitle').textContent = t('settingsTitle');
+  document.getElementById('lEventName').textContent = t('eventNameLabel');
+  document.getElementById('eventNameInput').placeholder = t('eventNamePh');
+  document.getElementById('lCurrentUser').textContent = t('currentUserLabel');
+  document.getElementById('changeUserBtn').textContent = t('changeBtn');
+  document.getElementById('lSyncToken').textContent = t('syncTokenLabel');
+  document.getElementById('tokenSetBtn').textContent = t('tokenSetBtn');
+  document.getElementById('tokenInput').placeholder = t('tokenPh');
+  document.getElementById('tokenDeleteBtn').textContent = t('tokenDeleteBtn');
+  document.getElementById('tokenSaveBtn2').textContent = t('tokenSaveBtn');
+  document.getElementById('lOfflineMode').textContent = t('offlineModeLabel');
+  document.getElementById('offlineModeDesc').textContent = t('offlineModeDesc');
+  document.getElementById('lSyncStatus').textContent = t('syncStatusLabel');
+  document.getElementById('lLang').textContent = t('langLabel');
+  document.getElementById('lDataSection').textContent = t('dataSection');
+  document.getElementById('btnExcelExport').textContent = t('excelBtn');
+  document.getElementById('btnZipExport').textContent = t('zipBtn');
+  document.getElementById('btnBackup').textContent = t('backupBtn');
+  document.getElementById('btnImport').childNodes[1].textContent = t('importBtn');
+  document.getElementById('tokenLabel').textContent = ghToken() ? t('tokenSet') : t('tokenNotSet');
+  // Lang buttons
+  document.getElementById('langKo').classList.toggle('active', l === 'ko');
+  document.getElementById('langEn').classList.toggle('active', l === 'en');
+  // Header count suffix
+  updateTotalCount();
 }
 
+// ─── GitHub 설정 ─────────────────────────────────────────
 const GH_OWNER = 'harich1';
 const GH_REPO  = 'canton-fair-data';
 
@@ -339,7 +546,7 @@ function offlineMode() { return localStorage.getItem('cf_offline_mode') === '1';
 function saveEventName() {
   const v = document.getElementById('eventNameInput').value.trim();
   localStorage.setItem('cf_event_name', v);
-  document.getElementById('headerEventName').textContent = v || 'FairNote';
+  document.getElementById('headerEventName').textContent = v || t('defaultEvent');
 }
 function toggleOfflineMode(el) {
   localStorage.setItem('cf_offline_mode', el.checked ? '1' : '0');
@@ -353,7 +560,7 @@ function showAlert(msg, onOk) {
   btns.innerHTML = '';
   const b = document.createElement('button');
   b.className = 'dialog-btn dialog-btn-ok';
-  b.textContent = '확인';
+  b.textContent = t('ok');
   b.onclick = () => { closeDialog(); onOk && onOk(); };
   btns.appendChild(b);
   document.getElementById('dialogBg').classList.add('open');
@@ -364,11 +571,11 @@ function showConfirm(msg, onOk) {
   btns.innerHTML = '';
   const cancel = document.createElement('button');
   cancel.className = 'dialog-btn dialog-btn-cancel';
-  cancel.textContent = '취소';
+  cancel.textContent = t('cancel');
   cancel.onclick = closeDialog;
   const ok = document.createElement('button');
   ok.className = 'dialog-btn dialog-btn-ok';
-  ok.textContent = '확인';
+  ok.textContent = t('ok');
   ok.onclick = () => { closeDialog(); onOk && onOk(); };
   btns.appendChild(cancel);
   btns.appendChild(ok);
@@ -412,7 +619,7 @@ async function ghGet() {
 async function ghPush(products) {
   if (!userName() || !ghToken() || offlineMode()) return;
   try {
-    setSync('⏫ 동기화 중...');
+    setSync(t('syncSyncing'));
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(products))));
     const body = { message: `sync ${new Date().toISOString().slice(0,16)}`, content };
     if (ghSha) body.sha = ghSha;
@@ -423,24 +630,24 @@ async function ghPush(products) {
     });
     if (res.ok) {
       ghSha = (await res.json()).content.sha;
-      setSync('✅ 저장됨'); setTimeout(() => setSync(''), 2000);
+      setSync(t('syncSaved')); setTimeout(() => setSync(''), 2000);
     } else if (res.status === 409) {
       const fresh = await ghGet();
       if (fresh) { ghSha = fresh.sha; await ghPush(products); }
-    } else { setSync('⚠️ 동기화 실패'); setTimeout(()=>setSync(''),3000); }
-  } catch { setSync('⚠️ 동기화 실패'); setTimeout(()=>setSync(''),3000); }
+    } else { setSync(t('syncFail')); setTimeout(()=>setSync(''),3000); }
+  } catch { setSync(t('syncFail')); setTimeout(()=>setSync(''),3000); }
 }
 async function ghPull() {
   if (!userName() || !ghToken() || offlineMode()) return;
-  setSync('🔄 불러오는 중...');
+  setSync(t('syncLoading'));
   const result = await ghGet();
-  if (!result) { setSync('⚠️ 연결 실패'); setTimeout(()=>setSync(''),3000); return; }
+  if (!result) { setSync(t('syncConnFail')); setTimeout(()=>setSync(''),3000); return; }
   ghSha = result.sha;
   if (result.data.length) {
     await dbClear();
     for (const p of result.data) await dbPut(p);
     await render();
-    setSync('✅ 동기화 완료'); setTimeout(()=>setSync(''),2000);
+    setSync(t('syncDone')); setTimeout(()=>setSync(''),2000);
   } else {
     await render();
     const local = await getAll();
@@ -455,24 +662,31 @@ function updateHeaderUser() {
   if (userName()) { el.textContent = userName(); el.style.display = ''; }
   else { el.style.display = 'none'; }
 }
+function updateTotalCount() {
+  const el = document.getElementById('totalCount');
+  const n = parseInt(el.textContent) || 0;
+  el.textContent = lang() === 'ko' ? `${n}건` : `${n}`;
+}
 function openTokenInput() {
   const area = document.getElementById('tokenInputArea');
   area.style.display = area.style.display === 'none' ? 'block' : 'none';
   document.getElementById('tokenInput').value = ghToken();
 }
 function saveToken() {
-  const t = document.getElementById('tokenInput').value.trim();
-  if (!t) { showAlert('토큰을 입력해주세요.'); return; }
-  localStorage.setItem('cf_gh_token', t);
+  const tk = document.getElementById('tokenInput').value.trim();
+  if (!tk) { showAlert(t('alertEnterToken')); return; }
+  localStorage.setItem('cf_gh_token', tk);
   document.getElementById('tokenInputArea').style.display = 'none';
-  showToast('✅ 토큰 저장됨');
+  document.getElementById('tokenLabel').textContent = t('tokenSet');
+  showToast(t('tokenSavedToast'));
   ghSha = null; ghPull();
 }
 function clearToken() {
-  showConfirm('토큰을 삭제하면 동기화가 중단됩니다.', () => {
+  showConfirm(t('alertClearToken'), () => {
     localStorage.removeItem('cf_gh_token');
     document.getElementById('tokenInputArea').style.display = 'none';
-    showToast('토큰 삭제됨');
+    document.getElementById('tokenLabel').textContent = t('tokenNotSet');
+    showToast(t('tokenDeletedToast'));
   });
 }
 
@@ -480,8 +694,7 @@ function clearToken() {
 let toastTimer;
 function showToast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
+  el.textContent = msg; el.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 2000);
 }
@@ -493,25 +706,24 @@ function checkName() {
 async function confirmName() {
   const name = document.getElementById('nameInput').value.trim();
   const pin  = document.getElementById('pinInput').value.trim();
-  if (!name) { showAlert('이름을 입력해주세요.'); return; }
-  if (!/^\d{4}$/.test(pin)) { showAlert('비밀번호는 숫자 4자리로 입력해주세요.'); return; }
+  if (!name) { showAlert(t('alertEnterName')); return; }
+  if (!/^\d{4}$/.test(pin)) { showAlert(t('alertEnterPin')); return; }
   localStorage.setItem('cf_user', name);
   localStorage.setItem('cf_pin', pin);
   document.getElementById('nameOverlay').classList.remove('open');
   updateHeaderUser();
   if (db) { db.close(); db = null; }
   try { db = await openDB(); await render(); }
-  catch(e) { showAlert('DB 오류: ' + e.message); return; }
+  catch(e) { showAlert(t('dbError', e.message)); return; }
   ghSha = null; ghPull();
 }
 async function changeName() {
-  showConfirm('사용자를 변경하시겠습니까?\n기존 데이터는 이 기기에 보존됩니다.', async () => {
+  showConfirm(t('confirmChangeUser'), async () => {
     localStorage.removeItem('cf_user'); localStorage.removeItem('cf_pin');
     ghSha = null;
     document.getElementById('nameInput').value = '';
     document.getElementById('pinInput').value = '';
-    closeSettings();
-    updateHeaderUser();
+    closeSettings(); updateHeaderUser();
     if (db) { db.close(); db = null; }
     db = await openDB(); await render(); checkName();
   });
@@ -599,8 +811,8 @@ function updateCF(i, key, val) { curCustomFields[i][key] = val; }
 function renderCustomFields() {
   document.getElementById('customFieldList').innerHTML = curCustomFields.map((f,i)=>`
     <div class="cf-row">
-      <input class="fi cf-label-input" placeholder="항목명" value="${esc(f.label)}" oninput="updateCF(${i},'label',this.value)">
-      <input class="fi cf-value-input" placeholder="내용" value="${esc(f.value)}" oninput="updateCF(${i},'value',this.value)">
+      <input class="fi cf-label-input" placeholder="${t('cfLabelPh')}" value="${esc(f.label)}" oninput="updateCF(${i},'label',this.value)">
+      <input class="fi cf-value-input" placeholder="${t('cfValuePh')}" value="${esc(f.value)}" oninput="updateCF(${i},'value',this.value)">
       <button type="button" class="cf-remove" onclick="removeCustomField(${i})">✕</button>
     </div>`).join('');
 }
@@ -612,8 +824,8 @@ let cache = {};
 function openAdd() { openModal(null); }
 function openModal(p) {
   editId = p?.id || null;
-  document.getElementById('modalTitle').textContent = p ? '상품 수정' : '새 상품 추가';
-  document.getElementById('saveBtn').textContent = p ? '수정 완료' : '저장하기';
+  document.getElementById('modalTitle').textContent = p ? t('editProduct') : t('addProduct');
+  document.getElementById('saveBtn').textContent = p ? t('editBtn') : t('saveBtn');
   const map = {fBooth:'booth',fName:'name',fPrice:'price',fBoxQty:'boxQty',fCbm:'cbm',fMoq:'moq',fLeadTime:'leadTime',fContact:'contact',fNotes:'notes'};
   Object.entries(map).forEach(([id,key]) => document.getElementById(id).value = p ? (p[key]||'') : '');
   document.getElementById('fId').value = p?.id||'';
@@ -633,7 +845,7 @@ function closeModal(fromPop=false) {
 function onOverlayClick(e) { if(e.target===document.getElementById('overlay')) closeModal(); }
 function updateOemLabel() {
   const v = document.getElementById('fOem').checked;
-  document.getElementById('oemLabel').textContent = v ? 'OEM 가능' : '불가';
+  document.getElementById('oemLabel').textContent = v ? t('oemYes') : t('oemNo');
   document.getElementById('oemLabel').style.color = v ? '#2e7d32' : '#888';
 }
 
@@ -642,10 +854,10 @@ async function saveProduct() {
   if (!userName() || !userPin()) { checkName(); return; }
   const booth = document.getElementById('fBooth').value.trim();
   const name  = document.getElementById('fName').value.trim();
-  if (!booth) { showAlert('부스 위치를 입력해주세요.'); document.getElementById('fBooth').focus(); return; }
-  if (!name)  { showAlert('제품명을 입력해주세요.');   document.getElementById('fName').focus();  return; }
+  if (!booth) { showAlert(t('alertEnterBooth')); document.getElementById('fBooth').focus(); return; }
+  if (!name)  { showAlert(t('alertEnterNameProduct')); document.getElementById('fName').focus(); return; }
   const btn = document.getElementById('saveBtn');
-  btn.disabled = true; btn.textContent = '저장 중...';
+  btn.disabled = true; btn.textContent = t('savingBtn');
   try {
     const now = new Date().toISOString();
     const p = {
@@ -667,16 +879,16 @@ async function saveProduct() {
     await dbPut(p);
     closeModal();
     await render();
-    showToast(editId ? '✅ 수정됐습니다' : '✅ 저장됐습니다');
+    showToast(editId ? t('editedToast') : t('savedToast'));
     ghPush(await getAll());
   } catch(err) {
     btn.disabled = false;
-    btn.textContent = editId ? '수정 완료' : '저장하기';
-    showAlert('저장 오류: ' + err.message);
+    btn.textContent = editId ? t('editBtn') : t('saveBtn');
+    showAlert(t('saveError', err.message));
   }
 }
 async function deleteProduct(id) {
-  showConfirm('이 상품을 삭제할까요?', async () => {
+  showConfirm(t('confirmDelete'), async () => {
     await dbDel(id); render(); ghPush(await getAll());
   });
 }
@@ -688,8 +900,8 @@ async function render() {
 
   if(sortBy==='newest') list.sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
   else if(sortBy==='oldest') list.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
-  else if(sortBy==='booth') list.sort((a,b)=>(a.booth||'').localeCompare(b.booth||'','ko'));
-  else if(sortBy==='name') list.sort((a,b)=>(a.name||'').localeCompare(b.name||'','ko'));
+  else if(sortBy==='booth') list.sort((a,b)=>(a.booth||'').localeCompare(b.booth||''));
+  else if(sortBy==='name') list.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
 
   cache={}; list.forEach(p=>cache[p.id]=p);
 
@@ -703,15 +915,19 @@ async function render() {
   if(filterOem) list=list.filter(p=>p.oem);
   if(filterPhoto) list=list.filter(p=>(p.photos||[]).length>0);
 
-  document.getElementById('totalCount').textContent=`${list.length}건`;
+  const count = list.length;
+  document.getElementById('totalCount').textContent = lang()==='ko' ? `${count}건` : `${count}`;
   const el=document.getElementById('list');
   if(!list.length){
-    el.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">${q||filterOem||filterPhoto?'검색 결과 없음':'기록된 상품이 없습니다'}</div><div class="empty-hint">+ 버튼을 눌러 추가하세요</div></div>`;
+    el.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-text">${q||filterOem||filterPhoto?t('noResult'):t('emptyText')}</div><div class="empty-hint">${t('emptyHint')}</div></div>`;
     return;
   }
   el.innerHTML=list.map(p=>{
     const thumb=p.photos?.length?`<img class="card-thumb" src="${p.photos[0]}" onclick="openViewer(${p.id},0)">`:`<div class="card-thumb-empty">📷</div>`;
-    const tags=[p.moq?`MOQ ${Number(p.moq).toLocaleString()}`:null,p.cbm?`CBM ${p.cbm}`:null,p.boxQty?`입수 ${p.boxQty}`:null,p.leadTime?`납기 ${p.leadTime}`:null].filter(Boolean).map(t=>`<span class="tag">${t}</span>`).join('');
+    const tags=[
+      p.moq?t('tagMoq',p.moq):null, p.cbm?t('tagCbm',p.cbm):null,
+      p.boxQty?t('tagBoxQty',p.boxQty):null, p.leadTime?t('tagLeadTime',p.leadTime):null
+    ].filter(Boolean).map(tx=>`<span class="tag">${tx}</span>`).join('');
     const customTags=(p.customFields||[]).filter(f=>f.label).map(f=>`<span class="tag tag-custom">${esc(f.label)}: ${esc(f.value)}</span>`).join('');
     return `<div class="card">
       <div class="card-body">${thumb}
@@ -719,14 +935,14 @@ async function render() {
           <div class="card-booth">${esc(p.booth||'-')}</div>
           <div class="card-name">${esc(p.name)}</div>
           ${p.price?`<div class="card-price">${esc(p.price)}</div>`:''}
-          <div class="card-tags">${tags}${p.oem?'<span class="tag tag-oem">OEM가능</span>':''}${(p.photos||[]).length>1?`<span class="tag tag-photo">📷${p.photos.length}</span>`:''}${customTags}</div>
+          <div class="card-tags">${tags}${p.oem?`<span class="tag tag-oem">${t('tagOem')}</span>`:''}${(p.photos||[]).length>1?`<span class="tag tag-photo">📷${p.photos.length}</span>`:''}${customTags}</div>
           ${p.notes?`<div class="card-notes">${esc(p.notes)}</div>`:''}
-          ${p.contact?`<div class="card-contact">📞 ${esc(p.contact)}</div>`:''}
+          ${p.contact?`<div class="card-contact">${t('contactIcon')}${esc(p.contact)}</div>`:''}
         </div>
       </div>
       <div class="card-footer">
-        <button class="card-btn" onclick="openModal(cache[${p.id}])">✏️ 수정</button>
-        <button class="card-btn card-btn-del" onclick="deleteProduct(${p.id})">🗑️ 삭제</button>
+        <button class="card-btn" onclick="openModal(cache[${p.id}])">${t('editCard')}</button>
+        <button class="card-btn card-btn-del" onclick="deleteProduct(${p.id})">${t('deleteCard')}</button>
       </div>
     </div>`;
   }).join('');
@@ -735,11 +951,11 @@ async function render() {
 // ─── 설정 ────────────────────────────────────────────────
 function openSettings() {
   document.getElementById('eventNameInput').value = eventName();
-  document.getElementById('currentUserLabel').textContent = userName() ? `${userName()} (●●●●)` : '(없음)';
-  document.getElementById('tokenLabel').textContent = ghToken() ? '설정됨 ✓' : '미설정';
+  document.getElementById('currentUserLabel').textContent = userName() ? `${userName()} (●●●●)` : '-';
+  document.getElementById('tokenLabel').textContent = ghToken() ? t('tokenSet') : t('tokenNotSet');
   document.getElementById('offlineModeToggle').checked = offlineMode();
   const syncMsg = document.getElementById('syncMsg').textContent;
-  document.getElementById('syncStatusLabel').textContent = syncMsg||(offlineMode()?'제한 네트워크 모드':ghToken()?'대기 중':'토큰 없음');
+  document.getElementById('syncStatusLabel').textContent = syncMsg||(offlineMode()?t('syncOffline'):ghToken()?t('syncWaiting'):t('syncNoToken'));
   document.getElementById('tokenInputArea').style.display = 'none';
   document.getElementById('settingsOverlay').classList.add('open');
   history.pushState({modal:'settings'}, '');
@@ -782,13 +998,13 @@ window.addEventListener('popstate', () => {
 // ─── 내보내기 ─────────────────────────────────────────────
 async function exportCSV() {
   const list=await getAll();
-  if(!list.length){showAlert('내보낼 데이터가 없습니다.');return;}
+  if(!list.length){showAlert(t('alertNoData'));return;}
   list.sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
   const allCfLabels=[...new Set(list.flatMap(p=>(p.customFields||[]).map(f=>f.label).filter(Boolean)))];
-  const h=['번호','부스위치','제품명','가격','박스입수','CBM','MOQ','납기','OEM','담당자연락처','비고','사진수','등록일시',...allCfLabels];
+  const h=[...t('csvHeaders'),...allCfLabels];
   const rows=list.map((p,i)=>{
     const cfVals=allCfLabels.map(label=>(p.customFields||[]).find(f=>f.label===label)?.value||'');
-    return [i+1,p.booth||'',p.name||'',p.price||'',p.boxQty||'',p.cbm||'',p.moq||'',p.leadTime||'',p.oem?'O':'X',p.contact||'',p.notes||'',(p.photos||[]).length,p.createdAt?new Date(p.createdAt).toLocaleString('ko-KR'):'',...cfVals];
+    return [i+1,p.booth||'',p.name||'',p.price||'',p.boxQty||'',p.cbm||'',p.moq||'',p.leadTime||'',p.oem?'O':'X',p.contact||'',p.notes||'',(p.photos||[]).length,p.createdAt?new Date(p.createdAt).toLocaleString():'', ...cfVals];
   });
   const csv='﻿'+[h,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
   dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}),`FairNote_${userName()}_${today()}.csv`);
@@ -796,25 +1012,25 @@ async function exportCSV() {
 async function exportZip() {
   const list=await getAll(); const items=[];
   list.forEach(p=>(p.photos||[]).forEach((b,i)=>items.push({name:`${safe(p.booth)}_${safe(p.name)}_${i+1}.jpg`,b64:b.split(',')[1]})));
-  if(!items.length){showAlert('저장된 사진이 없습니다.');return;}
+  if(!items.length){showAlert(t('alertNoPhoto'));return;}
   const zip=new JSZip();
   items.forEach(({name,b64})=>zip.file(name,b64,{base64:true}));
-  dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`FairNote_사진_${userName()}_${today()}.zip`);
+  dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`FairNote_photos_${userName()}_${today()}.zip`);
 }
 async function backupJSON() {
   const list=await getAll();
-  dl(new Blob([JSON.stringify({version:2,app:'FairNote',event:eventName(),user:userName(),exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/json'}),`FairNote_백업_${userName()}_${today()}.json`);
+  dl(new Blob([JSON.stringify({version:2,app:'FairNote',event:eventName(),user:userName(),exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/json'}),`FairNote_backup_${userName()}_${today()}.json`);
 }
 async function importData(input) {
   const f=input.files[0]; if(!f) return;
   try {
     const d=JSON.parse(await f.text());
     const list=d.products||d;
-    showConfirm(`${list.length}개 상품을 가져옵니다.\n기존 데이터는 유지됩니다.`, async () => {
+    showConfirm(t('confirmImport', list.length), async () => {
       for(const p of list){const{id,...r}=p;await dbPut(r);}
-      render(); ghPush(await getAll()); showToast(`✅ ${list.length}개 가져오기 완료`);
+      render(); ghPush(await getAll()); showToast(t('importDone', list.length));
     });
-  } catch { showAlert('파일을 읽을 수 없습니다.'); }
+  } catch { showAlert(t('alertFileError')); }
   input.value='';
 }
 
@@ -823,7 +1039,12 @@ function today(){return new Date().toISOString().slice(0,10);}
 function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
 
 // ─── 시작 ────────────────────────────────────────────────
+if (!localStorage.getItem('cf_user') || !localStorage.getItem('cf_pin')) {
+  document.getElementById('nameOverlay').classList.add('open');
+}
+
 (async () => {
+  applyLang();
   try {
     db = await openDB();
     document.getElementById('fab').disabled = false;
@@ -831,9 +1052,9 @@ function dl(blob,name){const a=document.createElement('a');a.href=URL.createObje
     await render();
   } catch(e) {
     document.getElementById('list').innerHTML =
-      `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">저장소 초기화 실패</div><div class="empty-hint">${e.message||'새로고침해주세요'}</div></div>`;
+      `<div class="empty"><div class="empty-icon">⚠️</div><div class="empty-text">${t('dbError',e.message||'')}</div></div>`;
   } finally {
-    document.getElementById('headerEventName').textContent = eventName() || 'FairNote';
+    document.getElementById('headerEventName').textContent = eventName() || t('defaultEvent');
     updateHeaderUser();
     checkName();
     if (userName()) ghPull();
