@@ -295,8 +295,8 @@ textarea.fi { resize: none; }
       <div class="fg">
         <label class="fl" id="lPhotos"></label>
         <div class="photo-btns">
-          <label class="btn-cam" id="btnCam"><input type="file" accept="image/*" capture="environment" onchange="capturePhoto(this)"></label>
-          <label class="btn-gal" id="btnGal"><input type="file" accept="image/*" multiple onchange="addPhotos(this)"></label>
+          <label class="btn-cam" id="btnCam"><input type="file" accept="image/*" capture="environment" onchange="capturePhoto(this)"><span id="btnCamText"></span></label>
+          <label class="btn-gal" id="btnGal"><input type="file" accept="image/*" multiple onchange="addPhotos(this)"><span id="btnGalText"></span></label>
         </div>
         <div class="photo-grid" id="photoGrid"></div>
         <div class="photo-empty" id="photoHint"></div>
@@ -366,7 +366,7 @@ textarea.fi { resize: none; }
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
       <button class="data-btn" id="btnBackup" style="background:#f0f4ff;color:#1a73e8" onclick="backupJSON();closeSettings()"></button>
-      <label class="data-btn" id="btnImport" style="display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:#555;cursor:pointer"><input type="file" accept=".json" onchange="importData(this)" style="display:none"></label>
+      <label class="data-btn" id="btnImport" style="display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:#555;cursor:pointer"><input type="file" accept=".json" onchange="importData(this)" style="display:none"><span id="btnImportText"></span></label>
     </div>
     <div style="padding-top:8px;text-align:center">
       <a id="privacyLink" href="privacy.html" style="font-size:12px;color:#aaa;text-decoration:none"></a>
@@ -581,8 +581,8 @@ function applyLang() {
   document.getElementById('lCustomFields').textContent = t('customFieldsLabel');
   document.getElementById('addFieldBtn').textContent = t('addFieldBtn');
   document.getElementById('lPhotos').textContent = t('photosLabel');
-  document.getElementById('btnCam').childNodes[0].textContent = t('captureBtn');
-  document.getElementById('btnGal').childNodes[0].textContent = t('galleryBtn');
+  document.getElementById('btnCamText').textContent = t('captureBtn');
+  document.getElementById('btnGalText').textContent = t('galleryBtn');
   document.getElementById('photoHint').textContent = t('noPhoto');
   updateOemLabel();
   document.getElementById('settingsTitle').textContent = t('settingsTitle');
@@ -603,7 +603,7 @@ function applyLang() {
   document.getElementById('btnExcelExport').textContent = t('excelBtn');
   document.getElementById('btnZipExport').textContent = t('zipBtn');
   document.getElementById('btnBackup').textContent = t('backupBtn');
-  document.getElementById('btnImport').childNodes[1].textContent = t('importBtn');
+  document.getElementById('btnImportText').textContent = t('importBtn');
   document.getElementById('privacyLink').textContent = t('privacyLink');
   document.getElementById('tokenLabel').textContent = ghToken() ? t('tokenSet') : t('tokenNotSet');
   document.getElementById('langKo').classList.toggle('active', l === 'ko');
@@ -799,7 +799,7 @@ function animateClose(el, cb) {
   if (!el.classList.contains('open')) return;
   el.classList.remove('open');
   el.classList.add('closing');
-  const done = () => { el.classList.remove('closing'); el.removeEventListener('animationend', done); cb && cb(); };
+  const done = (e) => { if (e.target !== el) return; el.classList.remove('closing'); el.removeEventListener('animationend', done); cb && cb(); };
   el.addEventListener('animationend', done);
   // 안전장치: 애니메이션 없으면 즉시 처리
   setTimeout(() => { if (el.classList.contains('closing')) { el.classList.remove('closing'); cb && cb(); } }, 400);
