@@ -1,4 +1,4 @@
-const CACHE = 'fairnote-v3.5';
+const CACHE = 'fairnote-v4';
 const ASSETS = [
   '/canton-fair-app/',
   '/canton-fair-app/index.html',
@@ -9,7 +9,7 @@ const ASSETS = [
   '/canton-fair-app/icon-512.png',
   '/canton-fair-app/icon-maskable.png',
   '/canton-fair-app/logo.png',
-  'https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js'
+  '/canton-fair-app/assets/index.js'
 ];
 
 self.addEventListener('install', e => {

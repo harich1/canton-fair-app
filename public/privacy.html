@@ -27,24 +27,23 @@ ul { padding-left: 20px; margin-bottom: 8px; }
 
   <div id="ko">
     <h1>개인정보처리방침</h1>
-    <div class="updated">최종 수정일: 2026년 5월 26일</div>
+    <div class="updated">최종 수정일: 2026년 6월 28일</div>
 
     <p><strong>FairNote</strong> 앱(이하 "앱")은 박람회 현장에서 상품 정보를 기록·관리하기 위한 개인 생산성 도구입니다.</p>
 
     <h2>1. 수집하는 정보</h2>
     <p>앱은 사용자가 직접 입력한 다음 정보를 처리합니다.</p>
     <ul>
-      <li>사용자 이름 및 4자리 비밀번호 (기기 내 로컬 저장)</li>
-      <li>상품 정보: 부스 위치, 제품명, 가격, MOQ, CBM, 납기, 메모 등 (기기 내 로컬 저장)</li>
-      <li>상품 사진 (기기 내 로컬 저장, JPEG 압축 후 IndexedDB 보관)</li>
-      <li>GitHub 개인 액세스 토큰 (선택 사항, 기기 로컬 저장만, 서버에 전송하지 않음)</li>
+      <li>박람회와 상품 정보: 행사명, 부스 위치, 제품명, 가격, 배송, 포장, MOQ, 납기, 메모 등</li>
+      <li>상품 및 명함 사진 (JPEG 압축 후 기기 내 IndexedDB 보관)</li>
+      <li>언어와 현재 행사 등 앱 사용 설정 (기기 내 localStorage 보관)</li>
     </ul>
 
     <h2>2. 정보 저장 방식</h2>
     <ul>
       <li>모든 데이터는 <strong>사용자의 기기 내 브라우저(IndexedDB, localStorage)</strong>에만 저장됩니다.</li>
       <li>앱 개발자는 어떠한 서버도 운영하지 않으며, 데이터를 수신·저장·처리하지 않습니다.</li>
-      <li>GitHub 동기화 기능을 사용할 경우, 사용자가 직접 설정한 GitHub 계정의 비공개 레포지토리에 데이터가 저장됩니다. 이는 사용자-GitHub 간 직접 통신이며, 앱 개발자를 경유하지 않습니다.</li>
+      <li>현재 버전은 계정이나 클라우드 동기화를 사용하지 않습니다.</li>
     </ul>
 
     <h2>3. 제3자 공유</h2>
@@ -52,7 +51,6 @@ ul { padding-left: 20px; margin-bottom: 8px; }
 
     <h2>4. 외부 서비스</h2>
     <ul>
-      <li><strong>GitHub API</strong> (선택 사항): 사용자가 동기화를 설정할 경우 GitHub 서버와 직접 통신합니다. GitHub의 개인정보처리방침이 별도로 적용됩니다.</li>
       <li><strong>jsDelivr CDN</strong>: JSZip 라이브러리를 불러오는 데 사용됩니다. jsDelivr의 개인정보처리방침이 적용됩니다.</li>
       <li><strong>GitHub Pages</strong>: 앱 호스팅에 사용됩니다. GitHub의 개인정보처리방침이 적용됩니다.</li>
     </ul>
@@ -61,7 +59,7 @@ ul { padding-left: 20px; margin-bottom: 8px; }
     <p>앱은 상품 사진 촬영 및 갤러리 선택을 위해 카메라 및 파일 접근 권한을 요청할 수 있습니다. 촬영된 사진은 기기 내에만 저장되며, 외부로 전송되지 않습니다.</p>
 
     <h2>6. 데이터 삭제</h2>
-    <p>앱의 설정 메뉴에서 데이터 내보내기 및 삭제가 가능합니다. 또한 브라우저의 사이트 데이터 삭제 기능을 통해 앱의 모든 데이터를 완전히 제거할 수 있습니다.</p>
+    <p>앱의 설정 메뉴에서 데이터를 내보낼 수 있습니다. 모든 데이터를 삭제하려면 브라우저 또는 운영체제의 FairNote 사이트 데이터 삭제 기능을 사용할 수 있습니다.</p>
 
     <h2>7. 미성년자</h2>
     <p>앱은 13세 미만 아동을 대상으로 하지 않으며, 의도적으로 미성년자의 개인 정보를 수집하지 않습니다.</p>
@@ -78,24 +76,23 @@ ul { padding-left: 20px; margin-bottom: 8px; }
 
   <div id="en" style="display:none">
     <h1>Privacy Policy</h1>
-    <div class="updated">Last updated: May 26, 2026</div>
+    <div class="updated">Last updated: June 28, 2026</div>
 
     <p><strong>FairNote</strong> is a personal productivity app for recording and managing product information at trade fairs and exhibitions.</p>
 
     <h2>1. Information We Collect</h2>
     <p>The app processes only information that users directly enter:</p>
     <ul>
-      <li>Username and 4-digit PIN (stored locally on device only)</li>
-      <li>Product data: booth location, product name, price, MOQ, CBM, lead time, notes, etc. (stored locally on device)</li>
-      <li>Product photos (stored locally, compressed to JPEG in IndexedDB)</li>
-      <li>GitHub personal access token (optional, stored locally on device only, never transmitted to our servers)</li>
+      <li>Fair and item data: event name, booth, product name, price, delivery, packaging, MOQ, lead time, notes, and similar details</li>
+      <li>Product and business-card photos (compressed to JPEG and stored in on-device IndexedDB)</li>
+      <li>App preferences such as language and current event (stored in on-device localStorage)</li>
     </ul>
 
     <h2>2. How We Store Information</h2>
     <ul>
       <li>All data is stored exclusively in <strong>the user's browser on-device</strong> (IndexedDB, localStorage).</li>
       <li>The developer operates no servers and does not receive, store, or process any user data.</li>
-      <li>If GitHub sync is enabled, data is stored directly in the user's own private GitHub repository. This is a direct user-to-GitHub communication with no developer involvement.</li>
+      <li>The current version does not use accounts or cloud sync.</li>
     </ul>
 
     <h2>3. Third-Party Sharing</h2>
@@ -103,7 +100,6 @@ ul { padding-left: 20px; margin-bottom: 8px; }
 
     <h2>4. Third-Party Services</h2>
     <ul>
-      <li><strong>GitHub API</strong> (optional): Used for data sync if configured by the user. GitHub's Privacy Policy applies.</li>
       <li><strong>jsDelivr CDN</strong>: Used to load the JSZip library. jsDelivr's Privacy Policy applies.</li>
       <li><strong>GitHub Pages</strong>: Used to host the app. GitHub's Privacy Policy applies.</li>
     </ul>
@@ -112,7 +108,7 @@ ul { padding-left: 20px; margin-bottom: 8px; }
     <p>The app may request camera and file access to take and select product photos. Photos are stored on-device only and are never transmitted externally.</p>
 
     <h2>6. Data Deletion</h2>
-    <p>You can export or delete your data at any time via the app's Settings menu. You can also clear all app data using your browser's site data deletion feature.</p>
+    <p>You can export data from the app's Settings menu. To delete all data, use the browser or operating system control for clearing FairNote site data.</p>
 
     <h2>7. Children</h2>
     <p>The app is not directed at children under 13 and does not knowingly collect personal information from minors.</p>

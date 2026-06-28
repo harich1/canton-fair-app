@@ -13,6 +13,7 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a1a; }
+.legacy-account, .legacy-onboarding-field { display: none !important; }
 
 .header { background: #c62828; color: white; padding: 14px 16px; position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
 .header-left { display: flex; flex-direction: column; flex: 1; }
@@ -211,6 +212,107 @@ textarea.fi { resize: none; }
 .card-contact:active { opacity: 0.7; }
 .install-banner { display: none; position: fixed; bottom: 90px; left: 12px; right: 12px; background: white; border-radius: 14px; padding: 14px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.18); z-index: 150; align-items: center; gap: 12px; animation: boxIn 0.32s cubic-bezier(0.34,1.56,0.64,1); }
 .install-banner.show { display: flex; }
+
+/* Field Ledger — warm paper, deep ink, vermilion */
+:root {
+  --paper: #f6f0e5;
+  --paper-card: #fffdf7;
+  --ink: #1f1d19;
+  --muted: #706a60;
+  --line: #d9d0c1;
+  --accent: #c52b1d;
+  --accent-soft: #f7ded7;
+}
+body {
+  font-family: "Source Sans 3", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    repeating-linear-gradient(0deg, rgba(103, 88, 65, 0.025) 0, rgba(103, 88, 65, 0.025) 1px, transparent 1px, transparent 24px),
+    var(--paper);
+  color: var(--ink);
+}
+.header {
+  background: rgba(255, 253, 247, 0.96);
+  color: var(--ink);
+  padding: 12px 16px 11px;
+  border-bottom: 1px solid var(--line);
+  box-shadow: none;
+  backdrop-filter: blur(12px);
+}
+.header-sub { color: var(--ink); font-size: 21px; font-weight: 800; letter-spacing: -0.5px; opacity: 1; }
+.header-title { color: var(--ink); font-size: 14px; font-weight: 650; margin-top: 4px; }
+.sync-indicator { color: var(--muted); }
+.header-count {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid rgba(197, 43, 29, 0.32);
+  border-radius: 6px;
+  padding: 5px 9px;
+  font-size: 12px;
+}
+.icon-btn { background: transparent; color: var(--ink); border-radius: 8px; font-size: 18px; }
+.toolbar, .chip-bar { background: rgba(255, 253, 247, 0.9); border-color: var(--line); }
+.toolbar { padding: 10px 12px; }
+.search-box, .fi {
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--ink);
+  border-color: var(--line);
+  border-radius: 8px;
+}
+.search-box:focus, .fi:focus { border-color: var(--accent); background: var(--paper-card); }
+.filter-toggle-btn, .chip {
+  background: var(--paper-card);
+  color: var(--muted);
+  border-color: var(--line);
+  border-radius: 7px;
+}
+.filter-toggle-btn.active, .chip.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.filter-dot, .fab, .btn-save, .name-btn { background: var(--accent); }
+.list { padding: 12px 12px 112px; }
+.card {
+  background:
+    repeating-linear-gradient(0deg, transparent 0, transparent 23px, rgba(109, 91, 65, 0.055) 23px, rgba(109, 91, 65, 0.055) 24px),
+    var(--paper-card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(70, 54, 33, 0.07);
+}
+.card-body { padding: 11px; }
+.card-thumb, .card-thumb-empty { border-radius: 8px; }
+.card-booth { color: var(--muted); letter-spacing: 0.2px; }
+.card-name { color: var(--ink); }
+.card-price { color: var(--accent); }
+.tag { background: #eee8dc; color: #554f46; border-radius: 5px; }
+.tag-oem { background: #e4ece0; color: #43563d; }
+.tag-photo { background: var(--accent-soft); color: var(--accent); }
+.card-footer { border-color: rgba(112, 106, 96, 0.14); }
+.fab {
+  left: 12px;
+  right: 12px;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  width: auto;
+  height: 58px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 800;
+  box-shadow: 0 5px 18px rgba(145, 36, 24, 0.3);
+}
+.modal, .dialog-box, .name-box { background: var(--paper-card); color: var(--ink); }
+.modal-head, .settings-row { border-color: var(--line); }
+.btn-save { border-radius: 9px; box-shadow: none; }
+.settings-section-title, .fl { color: var(--muted); }
+.lang-btn.active { background: var(--accent); border-color: var(--accent); }
+.empty-icon { filter: sepia(0.25); }
+.empty-text { color: var(--muted); }
+.install-banner { background: var(--paper-card); border: 1px solid var(--line); }
+@media (min-width: 768px) {
+  .header, .toolbar, .chip-bar, .list { max-width: 640px; margin-left: auto; margin-right: auto; }
+  .fab { left: 50%; right: auto; width: 616px; transform: translateX(-50%); }
+  .fab:active { transform: translateX(-50%) scale(0.98); }
+}
 </style>
 </head>
 <body>
@@ -269,13 +371,13 @@ textarea.fi { resize: none; }
     <hr class="onboard-divider">
     <h2 id="nameTitle" style="font-size:17px;margin-bottom:6px"></h2>
     <p id="nameDesc" style="font-size:13px;color:#777;line-height:1.6;margin-bottom:16px;white-space:pre-line"></p>
-    <label class="onboard-label" id="nameInputLabel"></label>
-    <input class="name-input" id="nameInput" maxlength="20" style="margin-bottom:14px">
-    <label class="onboard-label" id="pinInputLabel"></label>
-    <input class="name-input" id="pinInput" type="tel" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="off">
-    <button class="name-btn" id="nameStartBtn" onclick="confirmName()" style="margin-top:16px"></button>
-    <div class="pin-warning" id="pinWarningText"></div>
-    <p id="nameHintText" style="font-size:12px;color:#bbb;text-align:center;margin-top:12px;line-height:1.6"></p>
+    <label class="onboard-label legacy-onboarding-field" id="nameInputLabel"></label>
+    <input class="name-input legacy-onboarding-field" id="nameInput" maxlength="20" style="margin-bottom:14px">
+    <label class="onboard-label legacy-onboarding-field" id="pinInputLabel"></label>
+    <input class="name-input legacy-onboarding-field" id="pinInput" type="tel" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="off">
+    <button class="name-btn" id="nameStartBtn" onclick="completeOnboarding()" style="margin-top:16px"></button>
+    <div class="pin-warning legacy-onboarding-field" id="pinWarningText"></div>
+    <p class="legacy-onboarding-field" id="nameHintText" style="font-size:12px;color:#bbb;text-align:center;margin-top:12px;line-height:1.6"></p>
   </div>
 </div>
 
@@ -293,20 +395,42 @@ textarea.fi { resize: none; }
       <div class="fg"><label class="fl" id="lName"></label><input class="fi" id="fName"></div>
       <div class="fg"><label class="fl" id="lPrice"></label><input class="fi" id="fPrice"></div>
       <div class="frow">
+        <div class="fg"><label class="fl" id="lDelivery"></label><input class="fi" id="fDelivery"></div>
+        <div class="fg"><label class="fl" id="lPackaging"></label><input class="fi" id="fPackaging"></div>
+      </div>
+      <div class="frow template-section" data-templates="sourcing">
         <div class="fg"><label class="fl" id="lBoxQty"></label><input class="fi" id="fBoxQty" type="number" min="0" placeholder=""></div>
         <div class="fg"><label class="fl" id="lCbm"></label><input class="fi" id="fCbm" type="number" step="0.0001" min="0" placeholder="0.000"></div>
       </div>
-      <div class="frow">
+      <div class="frow template-section" data-templates="sourcing">
         <div class="fg"><label class="fl" id="lMoq"></label><input class="fi" id="fMoq" type="number" min="0" placeholder=""></div>
         <div class="fg"><label class="fl" id="lLeadTime"></label><input class="fi" id="fLeadTime"></div>
       </div>
-      <div class="fg">
+      <div class="frow template-section" data-templates="sourcing">
+        <div class="fg"><label class="fl" id="lCurrency"></label><input class="fi" id="fCurrency"></div>
+        <div class="fg"><label class="fl" id="lShippingTerms"></label><input class="fi" id="fShippingTerms"></div>
+      </div>
+      <div class="fg template-section" data-templates="sourcing"><label class="fl" id="lContainerTerms"></label><input class="fi" id="fContainerTerms"></div>
+      <div class="fg template-section" data-templates="sourcing">
         <label class="fl" id="lOem"></label>
         <div class="oem-row">
           <label class="switch"><input type="checkbox" id="fOem" onchange="updateOemLabel()"><span class="slider"></span></label>
           <span class="oem-label" id="oemLabel"></span>
         </div>
       </div>
+      <div class="frow template-section" data-templates="consumer">
+        <div class="fg"><label class="fl" id="lDomesticDeliveryFee"></label><input class="fi" id="fDomesticDeliveryFee"></div>
+        <div class="fg"><label class="fl" id="lMinimumOrder"></label><input class="fi" id="fMinimumOrder" type="number" min="0"></div>
+      </div>
+      <div class="fg template-section" data-templates="consumer">
+        <label class="fl" id="lVatIncluded"></label>
+        <div class="oem-row">
+          <label class="switch"><input type="checkbox" id="fVatIncluded"><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="fg template-section" data-templates="industrial"><label class="fl" id="lSpecification"></label><textarea class="fi" id="fSpecification" rows="2"></textarea></div>
+      <div class="fg template-section" data-templates="industrial"><label class="fl" id="lCertification"></label><input class="fi" id="fCertification"></div>
+      <div class="fg template-section" data-templates="industrial"><label class="fl" id="lAdoptionTerms"></label><textarea class="fi" id="fAdoptionTerms" rows="2"></textarea></div>
       <div class="fg"><label class="fl" id="lContact"></label><input class="fi" id="fContact"></div>
       <div class="fg"><label class="fl" id="lNotes"></label><textarea class="fi" id="fNotes" rows="2"></textarea></div>
       <div class="fg">
@@ -322,6 +446,15 @@ textarea.fi { resize: none; }
         </div>
         <div class="photo-grid" id="photoGrid"></div>
         <div class="photo-empty" id="photoHint"></div>
+      </div>
+      <div class="fg">
+        <label class="fl" id="lBusinessCards"></label>
+        <div class="photo-btns">
+          <label class="btn-cam" id="btnCardCam"><input id="fBusinessCardCamera" type="file" accept="image/*" capture="environment" onchange="captureBusinessCard(this)"><span id="btnCardCamText"></span></label>
+          <label class="btn-gal" id="btnCardGal"><input id="fBusinessCardGallery" type="file" accept="image/*" multiple onchange="addBusinessCards(this)"><span id="btnCardGalText"></span></label>
+        </div>
+        <div class="photo-grid" id="businessCardGrid"></div>
+        <div class="photo-empty" id="businessCardHint"></div>
       </div>
       <button type="button" class="btn-save" id="saveBtn" onclick="saveProduct()"></button>
     </form>
@@ -340,20 +473,31 @@ textarea.fi { resize: none; }
       </div>
     </div>
     <div class="settings-row">
+      <div style="flex:1">
+        <div class="settings-label" id="lEventTemplate"></div>
+        <select class="fi" id="eventTemplateSelect" style="margin-top:6px;font-size:14px" onchange="saveEventTemplate(this.value)">
+          <option value="general" id="templateGeneral"></option>
+          <option value="sourcing" id="templateSourcing"></option>
+          <option value="consumer" id="templateConsumer"></option>
+          <option value="industrial" id="templateIndustrial"></option>
+        </select>
+      </div>
+    </div>
+    <div class="settings-row legacy-account">
       <div>
         <div class="settings-label" id="lCurrentUser"></div>
         <div class="settings-value" id="currentUserLabel"></div>
       </div>
       <button class="settings-btn" id="changeUserBtn" onclick="changeName()"></button>
     </div>
-    <div class="settings-row">
+    <div class="settings-row legacy-account">
       <div>
         <div class="settings-label" id="lSyncToken"></div>
         <div class="settings-value" id="tokenLabel"></div>
       </div>
       <button class="settings-btn" id="tokenSetBtn" onclick="openTokenInput()"></button>
     </div>
-    <div id="tokenInputArea" style="display:none;padding:10px 0">
+    <div id="tokenInputArea" class="legacy-account" style="display:none;padding:10px 0">
       <div id="tokenHintText" style="font-size:12px;color:#888;line-height:1.6;margin-bottom:8px;background:#f8f8f8;border-radius:8px;padding:10px 12px;white-space:pre-line"></div>
       <a id="tokenLinkEl" href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener" style="font-size:12px;color:#1a73e8;display:inline-block;margin-bottom:10px;text-decoration:none"></a>
       <input id="tokenInput" class="fi" style="margin-bottom:8px;font-size:13px">
@@ -362,7 +506,7 @@ textarea.fi { resize: none; }
         <button class="data-btn" id="tokenSaveBtn2" style="background:#1a73e8;color:white" onclick="saveToken()"></button>
       </div>
     </div>
-    <div class="settings-row">
+    <div class="settings-row legacy-account">
       <div style="flex:1;padding-right:12px">
         <div class="settings-label" id="lOfflineMode"></div>
         <div id="offlineModeDesc" style="font-size:12px;color:#aaa;line-height:1.5;margin-top:3px"></div>
@@ -372,7 +516,7 @@ textarea.fi { resize: none; }
         <span class="slider"></span>
       </label>
     </div>
-    <div class="settings-row">
+    <div class="settings-row legacy-account">
       <div class="settings-label" id="lSyncStatus"></div>
       <div class="settings-value" id="syncStatusLabel">-</div>
     </div>
@@ -381,6 +525,7 @@ textarea.fi { resize: none; }
       <div style="display:flex;gap:6px">
         <button id="langKo" class="lang-btn" onclick="setLang('ko')">한국어</button>
         <button id="langEn" class="lang-btn" onclick="setLang('en')">English</button>
+        <button id="langZh" class="lang-btn" onclick="setLang('zh')">简体中文</button>
       </div>
     </div>
     <div class="settings-section-title" id="lDataSection"></div>
@@ -430,7 +575,7 @@ textarea.fi { resize: none; }
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script type="module" src="/src/vendor.ts"></script>
 <script>
 // ─── i18n ─────────────────────────────────────────────────
 const STRINGS = {
@@ -440,28 +585,38 @@ const STRINGS = {
     filterBtn: '필터',
     sortNewest: '최신순', sortOldest: '오래된순', sortBooth: '부스순', sortName: '이름순',
     filterOemOnly: 'OEM만', filterPhotoOnly: '사진있음',
-    firstVisit: '👋 시작하기',
-    firstVisitDesc: '이름과 4자리 PIN을 설정하면 바로 사용할 수 있습니다.\nPIN은 데이터 접근 키로 사용됩니다.',
-    namePlaceholder: '예: 홍길동', pinPlaceholder: '숫자 4자리 입력', startBtn: '시작하기',
+    firstVisit: '👋 바로 기록해보세요',
+    firstVisitDesc: '로그인 없이 시작합니다.\n기록은 먼저 이 기기에 안전하게 저장됩니다.',
+    namePlaceholder: '예: 홍길동', pinPlaceholder: '숫자 4자리 입력', startBtn: '로그인 없이 시작',
     nameInputLabel: '이름', pinInputLabel: 'PIN (숫자 4자리)',
-    features: ['부스 위치, 가격, MOQ, 납기를 한 곳에 기록', '사진 촬영·저장, 현장에서 즉시 확인', '인터넷 없는 중국 현장에서도 오프라인 동작', '여러 기기 간 자동 동기화 (GitHub 토큰 설정 시)'],
+    features: ['사진부터 빠르게 찍고 나중에 내용을 보완', '가격·배송·포장·명함 정보를 한 곳에 기록', '인터넷이 없어도 현장에서 바로 저장', '필요할 때 엑셀과 사진으로 내보내기'],
     pinWarning: '⚠️ PIN을 잊으면 데이터를 복구하기 어렵습니다. 기억하기 쉬운 번호로 설정하고 메모해 두세요.',
     addProduct: '새 상품 추가', editProduct: '상품 수정',
-    boothLabel: '부스 위치 *', boothPh: '예: 11.1 A01',
-    nameLabel: '제품명 *', namePh: '제품명을 입력하세요',
+    boothLabel: '부스 위치', boothPh: '예: 11.1 A01',
+    nameLabel: '제품명', namePh: '제품명을 입력하세요',
     priceLabel: '가격', pricePh: '예: $5.50 / 3,500원',
+    deliveryLabel: '배송', deliveryPh: '예: 택배, 직접 수령',
+    packagingLabel: '포장', packagingPh: '예: 개별 박스, 12개입',
     boxQtyLabel: '박스 입수', cbmLabel: 'CBM (m³)',
     moqLabel: 'MOQ', leadTimeLabel: '납기 (Lead Time)', leadTimePh: '예: 30일',
+    currencyLabel: '통화', currencyPh: '예: USD, CNY, KRW',
+    shippingTermsLabel: '선적 조건', shippingTermsPh: '예: FOB, CIF',
+    containerTermsLabel: '컨테이너 조건', containerTermsPh: '예: 20FT 혼적 가능',
+    domesticDeliveryFeeLabel: '국내 배송비', minimumOrderLabel: '최소 주문량', vatIncludedLabel: '부가세 포함',
+    specificationLabel: '제품 사양', certificationLabel: '인증', adoptionTermsLabel: '도입 조건',
     oemLabel: 'OEM 가능 여부', oemYes: 'OEM 가능', oemNo: '불가',
     contactLabel: '담당자 연락처', contactPh: '위챗 ID, 전화번호 등',
     notesLabel: '비고', notesPh: '특이사항, 메모 등',
     customFieldsLabel: '추가 항목', addFieldBtn: '+ 항목 추가',
     cfLabelPh: '항목명', cfValuePh: '내용',
     photosLabel: '상품 사진', captureBtn: '📸 카메라 촬영', galleryBtn: '🖼️ 갤러리 선택', noPhoto: '사진 없음',
+    businessCardsLabel: '명함 사진', captureCardBtn: '📇 명함 촬영', galleryCardBtn: '🖼️ 명함 선택', noBusinessCard: '명함 사진 없음',
     saveBtn: '저장하기', editBtn: '수정 완료', savingBtn: '저장 중...',
     editCard: '✏️ 수정', deleteCard: '🗑️ 삭제', contactIcon: '📞 ',
     settingsTitle: '⚙️ 설정',
     eventNameLabel: '현재 행사명', eventNamePh: '예: 광저우 캔톤페어 2026',
+    eventTemplateLabel: '박람회 유형',
+    templateGeneral: '일반 박람회', templateSourcing: '해외 소싱', templateConsumer: '국내 소비재', templateIndustrial: '산업·기술',
     currentUserLabel: '현재 사용자', changeBtn: '변경',
     syncTokenLabel: 'GitHub 동기화 토큰', tokenSetBtn: '설정',
     tokenPh: 'github_pat_... 붙여넣기', tokenDeleteBtn: '토큰 삭제', tokenSaveBtn: '저장',
@@ -473,7 +628,7 @@ const STRINGS = {
     dataSection: '데이터',
     excelBtn: '📊 엑셀 내보내기', zipBtn: '📷 사진 ZIP', backupBtn: '💾 전체 백업', importBtn: '📂 가져오기',
     privacyLink: '개인정보처리방침',
-    emptyText: '기록된 상품이 없습니다', emptyHint: '+ 버튼을 눌러 추가하세요', noResult: '검색 결과 없음',
+    emptyText: '기록된 상품이 없습니다', emptyHint: '+ 버튼을 눌러 추가하세요', noResult: '검색 결과 없음', untitledItem: '이름 없는 상품',
     tokenSavedToast: '✅ 토큰 저장됨', tokenDeletedToast: '토큰 삭제됨',
     savedToast: '✅ 저장됐습니다', editedToast: '✅ 수정됐습니다',
     ok: '확인', cancel: '취소',
@@ -493,9 +648,10 @@ const STRINGS = {
     dbError: m => 'DB 오류: ' + m, saveError: m => '저장 오류: ' + m,
     syncSyncing: '⏫ 동기화 중...', syncSaved: '✅ 저장됨', syncFail: '⚠️ 동기화 실패',
     syncLoading: '🔄 불러오는 중...', syncConnFail: '⚠️ 연결 실패', syncDone: '✅ 동기화 완료',
-    csvHeaders: ['번호','부스위치','제품명','가격','박스입수','CBM','MOQ','납기','OEM','담당자연락처','비고','사진수','등록일시'],
+    csvHeaders: ['번호','부스위치','제품명','가격','배송','포장','통화','선적조건','컨테이너조건','박스입수','CBM','MOQ','납기','OEM','부가세포함','국내배송비','최소주문량','제품사양','인증','도입조건','담당자연락처','비고','상품사진수','명함사진수','등록일시'],
     tagMoq: v => `MOQ ${Number(v).toLocaleString()}`, tagCbm: v => `CBM ${v}`,
     tagBoxQty: v => `입수 ${v}`, tagLeadTime: v => `납기 ${v}`, tagOem: 'OEM가능',
+    tagDelivery: v => `배송 ${v}`, tagPackaging: v => `포장 ${v}`, tagBusinessCard: n => `명함 ${n}`,
     eventPickerTitle: '행사 선택',
     newEventBtn: '+ 새 행사 추가',
     newEventTitle: '새 행사',
@@ -509,7 +665,7 @@ const STRINGS = {
     tokenHint: '토큰 없이도 이 기기에서 저장·조회는 정상 동작합니다.\n여러 기기 간 데이터를 동기화하려는 경우에만 설정하세요.',
     tokenLinkText: '→ GitHub에서 토큰 발급하는 방법',
     contactCopied: '📋 복사됨',
-    addFirstBtn: '첫 번째 상품 추가하기',
+    addFirstBtn: '첫 번째 상품 추가하기', quickAdd: '＋ 빠른 기록',
     installBannerTitle: '홈 화면에 추가하기',
     installBannerDesc: '설치하면 인터넷 없이도 사용 가능합니다',
     installBannerBtn: '설치',
@@ -520,28 +676,38 @@ const STRINGS = {
     filterBtn: 'Filter',
     sortNewest: 'Newest', sortOldest: 'Oldest', sortBooth: 'Booth', sortName: 'Name',
     filterOemOnly: 'OEM only', filterPhotoOnly: 'Has photo',
-    firstVisit: '👋 Get Started',
-    firstVisitDesc: 'Set your name and a 4-digit PIN to begin.\nYour PIN acts as a key to access your data.',
-    namePlaceholder: 'e.g. John', pinPlaceholder: 'Enter 4 digits', startBtn: 'Get Started',
+    firstVisit: '👋 Start capturing',
+    firstVisitDesc: 'Start without an account.\nYour records are saved on this device first.',
+    namePlaceholder: 'e.g. John', pinPlaceholder: 'Enter 4 digits', startBtn: 'Start without signing in',
     nameInputLabel: 'Name', pinInputLabel: 'PIN (4 digits)',
-    features: ['Record booth, price, MOQ & lead time in one place', 'Capture & view product photos on the spot', 'Works offline — no internet needed on the show floor', 'Auto-sync across devices (requires GitHub token)'],
+    features: ['Capture a photo first and add details later', 'Keep price, delivery, packaging and cards together', 'Save instantly even without internet', 'Export records and photos when you need them'],
     pinWarning: '⚠️ If you forget your PIN, data recovery is not possible. Use a number you can remember and write it down.',
     addProduct: 'Add Product', editProduct: 'Edit Product',
-    boothLabel: 'Booth *', boothPh: 'e.g. 11.1 A01',
-    nameLabel: 'Product Name *', namePh: 'Enter product name',
+    boothLabel: 'Booth', boothPh: 'e.g. 11.1 A01',
+    nameLabel: 'Product Name', namePh: 'Enter product name',
     priceLabel: 'Price', pricePh: 'e.g. $5.50',
+    deliveryLabel: 'Delivery', deliveryPh: 'e.g. courier, pickup',
+    packagingLabel: 'Packaging', packagingPh: 'e.g. individual box, 12/carton',
     boxQtyLabel: 'Box Qty', cbmLabel: 'CBM (m³)',
     moqLabel: 'MOQ', leadTimeLabel: 'Lead Time', leadTimePh: 'e.g. 30 days',
+    currencyLabel: 'Currency', currencyPh: 'e.g. USD, CNY, KRW',
+    shippingTermsLabel: 'Shipping terms', shippingTermsPh: 'e.g. FOB, CIF',
+    containerTermsLabel: 'Container terms', containerTermsPh: 'e.g. mixed 20FT accepted',
+    domesticDeliveryFeeLabel: 'Domestic delivery fee', minimumOrderLabel: 'Minimum order', vatIncludedLabel: 'VAT included',
+    specificationLabel: 'Specification', certificationLabel: 'Certification', adoptionTermsLabel: 'Adoption terms',
     oemLabel: 'OEM Available', oemYes: 'OEM Available', oemNo: 'Not Available',
     contactLabel: 'Contact', contactPh: 'WeChat ID, phone, etc.',
     notesLabel: 'Notes', notesPh: 'Remarks, memo, etc.',
     customFieldsLabel: 'Custom Fields', addFieldBtn: '+ Add Field',
     cfLabelPh: 'Field name', cfValuePh: 'Value',
     photosLabel: 'Photos', captureBtn: '📸 Camera', galleryBtn: '🖼️ Gallery', noPhoto: 'No photos',
+    businessCardsLabel: 'Business card photos', captureCardBtn: '📇 Scan card', galleryCardBtn: '🖼️ Choose cards', noBusinessCard: 'No business card photos',
     saveBtn: 'Save', editBtn: 'Update', savingBtn: 'Saving...',
     editCard: '✏️ Edit', deleteCard: '🗑️ Delete', contactIcon: '📞 ',
     settingsTitle: '⚙️ Settings',
     eventNameLabel: 'Current Event Name', eventNamePh: 'e.g. Canton Fair 2026',
+    eventTemplateLabel: 'Fair type',
+    templateGeneral: 'General fair', templateSourcing: 'Overseas sourcing', templateConsumer: 'Domestic consumer', templateIndustrial: 'Industrial & technology',
     currentUserLabel: 'Current User', changeBtn: 'Change',
     syncTokenLabel: 'GitHub Sync Token', tokenSetBtn: 'Set',
     tokenPh: 'Paste github_pat_...', tokenDeleteBtn: 'Delete Token', tokenSaveBtn: 'Save',
@@ -553,7 +719,7 @@ const STRINGS = {
     dataSection: 'Data',
     excelBtn: '📊 Export CSV', zipBtn: '📷 Photo ZIP', backupBtn: '💾 Backup (JSON)', importBtn: '📂 Import',
     privacyLink: 'Privacy Policy',
-    emptyText: 'No products recorded', emptyHint: 'Tap + to add your first product', noResult: 'No results found',
+    emptyText: 'No products recorded', emptyHint: 'Tap + to add your first product', noResult: 'No results found', untitledItem: 'Untitled item',
     tokenSavedToast: '✅ Token saved', tokenDeletedToast: 'Token deleted',
     savedToast: '✅ Saved', editedToast: '✅ Updated',
     ok: 'OK', cancel: 'Cancel',
@@ -573,9 +739,10 @@ const STRINGS = {
     dbError: m => 'DB error: ' + m, saveError: m => 'Save error: ' + m,
     syncSyncing: '⏫ Syncing...', syncSaved: '✅ Saved', syncFail: '⚠️ Sync failed',
     syncLoading: '🔄 Loading...', syncConnFail: '⚠️ Connection failed', syncDone: '✅ Sync complete',
-    csvHeaders: ['No.','Booth','Product','Price','Box Qty','CBM','MOQ','Lead Time','OEM','Contact','Notes','Photos','Date'],
+    csvHeaders: ['No.','Booth','Product','Price','Delivery','Packaging','Currency','Shipping Terms','Container Terms','Box Qty','CBM','MOQ','Lead Time','OEM','VAT Included','Domestic Delivery Fee','Minimum Order','Specification','Certification','Adoption Terms','Contact','Notes','Item Photos','Card Photos','Date'],
     tagMoq: v => `MOQ ${Number(v).toLocaleString()}`, tagCbm: v => `CBM ${v}`,
     tagBoxQty: v => `Qty ${v}`, tagLeadTime: v => `Lead ${v}`, tagOem: 'OEM',
+    tagDelivery: v => `Delivery ${v}`, tagPackaging: v => `Pack ${v}`, tagBusinessCard: n => `Card ${n}`,
     eventPickerTitle: 'Select Event',
     newEventBtn: '+ Add New Event',
     newEventTitle: 'New Event',
@@ -589,14 +756,96 @@ const STRINGS = {
     tokenHint: 'You can save and view products on this device without a token.\nOnly needed if you want to sync data across multiple devices.',
     tokenLinkText: '→ How to create a GitHub token',
     contactCopied: '📋 Copied',
-    addFirstBtn: 'Add your first product',
+    addFirstBtn: 'Add your first product', quickAdd: '＋ Quick capture',
     installBannerTitle: 'Add to Home Screen',
     installBannerDesc: 'Works offline after installation',
     installBannerBtn: 'Install',
   }
 };
 
-function lang() { return localStorage.getItem('cf_lang') || 'ko'; }
+STRINGS.zh = {
+  ...STRINGS.en,
+  defaultEvent: '我的展会',
+  searchPlaceholder: '搜索商品、展位、价格...',
+  filterBtn: '筛选',
+  sortNewest: '最新', sortOldest: '最早', sortBooth: '展位', sortName: '名称',
+  filterOemOnly: '仅OEM', filterPhotoOnly: '有照片',
+  firstVisit: '👋 开始现场记录',
+  firstVisitDesc: '无需登录即可开始。\n记录会优先安全地保存在此设备上。',
+  startBtn: '无需登录，立即开始',
+  features: ['先拍照，之后再补充详细信息', '集中记录价格、配送、包装和名片', '没有网络也能立即保存', '需要时导出记录和照片'],
+  addProduct: '添加商品', editProduct: '编辑商品',
+  boothLabel: '展位', boothPh: '例如：11.1 A01',
+  nameLabel: '商品名称', namePh: '输入商品名称',
+  priceLabel: '价格', pricePh: '例如：¥38 / $5.50',
+  deliveryLabel: '配送', deliveryPh: '例如：快递、自提',
+  packagingLabel: '包装', packagingPh: '例如：独立盒、每箱12个',
+  boxQtyLabel: '装箱数量', cbmLabel: '体积 CBM (m³)',
+  moqLabel: '最小起订量', leadTimeLabel: '交货期', leadTimePh: '例如：30天',
+  currencyLabel: '币种', currencyPh: '例如：USD、CNY、KRW',
+  shippingTermsLabel: '装运条款', shippingTermsPh: '例如：FOB、CIF',
+  containerTermsLabel: '集装箱条件', containerTermsPh: '例如：可拼20尺柜',
+  domesticDeliveryFeeLabel: '国内配送费', minimumOrderLabel: '最低订购量', vatIncludedLabel: '含增值税',
+  specificationLabel: '产品规格', certificationLabel: '认证', adoptionTermsLabel: '采用条件',
+  oemLabel: '是否支持OEM', oemYes: '支持OEM', oemNo: '不支持',
+  contactLabel: '联系人', contactPh: '微信、电话等',
+  notesLabel: '备注', notesPh: '特殊事项、备忘等',
+  customFieldsLabel: '其他项目', addFieldBtn: '+ 添加项目',
+  cfLabelPh: '项目名称', cfValuePh: '内容',
+  photosLabel: '商品照片', captureBtn: '📸 拍照', galleryBtn: '🖼️ 从相册选择', noPhoto: '暂无照片',
+  businessCardsLabel: '名片照片', captureCardBtn: '📇 拍名片', galleryCardBtn: '🖼️ 选择名片', noBusinessCard: '暂无名片照片',
+  saveBtn: '保存', editBtn: '完成修改', savingBtn: '保存中...',
+  editCard: '✏️ 编辑', deleteCard: '🗑️ 删除', contactIcon: '📞 ',
+  settingsTitle: '⚙️ 设置',
+  eventNameLabel: '当前展会', eventNamePh: '例如：2026广州交易会',
+  eventTemplateLabel: '展会类型',
+  templateGeneral: '普通展会', templateSourcing: '海外采购', templateConsumer: '国内消费品', templateIndustrial: '工业与技术',
+  langLabel: '语言', dataSection: '数据',
+  excelBtn: '📊 导出CSV', zipBtn: '📷 照片ZIP', backupBtn: '💾 完整备份', importBtn: '📂 导入',
+  privacyLink: '隐私政策',
+  emptyText: '还没有商品记录', emptyHint: '点击下方按钮添加', noResult: '没有搜索结果', untitledItem: '未命名商品',
+  savedToast: '✅ 已保存', editedToast: '✅ 已更新',
+  ok: '确定', cancel: '取消',
+  alertEnterBooth: '请输入展位位置。',
+  alertEnterNameProduct: '请输入商品名称。',
+  alertNoData: '没有可导出的数据。',
+  alertNoPhoto: '没有保存的照片。',
+  alertFileError: '无法读取文件。',
+  confirmDelete: '删除这个商品吗？',
+  confirmImport: n => `将导入 ${n} 个商品。\n现有数据会保留。`,
+  importDone: n => `✅ 已导入 ${n} 个商品`,
+  dbError: m => '数据库错误：' + m,
+  saveError: m => '保存错误：' + m,
+  csvHeaders: ['序号','展位','商品','价格','配送','包装','币种','装运条款','集装箱条件','装箱数','CBM','MOQ','交货期','OEM','含增值税','国内配送费','最低订购量','产品规格','认证','采用条件','联系人','备注','商品照片数','名片照片数','登记时间'],
+  tagMoq: v => `MOQ ${Number(v).toLocaleString()}`,
+  tagCbm: v => `CBM ${v}`,
+  tagBoxQty: v => `装箱 ${v}`,
+  tagLeadTime: v => `交货 ${v}`,
+  tagOem: '支持OEM',
+  tagDelivery: v => `配送 ${v}`,
+  tagPackaging: v => `包装 ${v}`,
+  tagBusinessCard: n => `名片 ${n}`,
+  eventPickerTitle: '选择展会',
+  newEventBtn: '+ 添加新展会',
+  newEventTitle: '新展会',
+  newEventMsg: '请输入展会名称',
+  newEventPh: '例如：2026广州交易会',
+  confirmDeleteEvent: n => `删除“${n}”及其中的所有商品吗？`,
+  eventSwitched: n => `已切换到“${n}”`,
+  countUnit: n => `${n}条`,
+  appDesc: '在展会现场快速记录商品',
+  contactCopied: '📋 已复制',
+  addFirstBtn: '添加第一个商品',
+  quickAdd: '＋ 快速记录',
+  installBannerTitle: '添加到主屏幕',
+  installBannerDesc: '安装后可离线使用',
+  installBannerBtn: '安装',
+};
+
+function lang() {
+  const saved = localStorage.getItem('cf_lang') || 'ko';
+  return STRINGS[saved] ? saved : 'ko';
+}
 function t(key, ...args) {
   const val = STRINGS[lang()][key];
   return typeof val === 'function' ? val(...args) : (val ?? key);
@@ -608,7 +857,7 @@ function setLang(l) {
 }
 function applyLang() {
   const l = lang();
-  document.documentElement.lang = l;
+  document.documentElement.lang = l === 'zh' ? 'zh-CN' : l;
   document.getElementById('searchInput').placeholder = t('searchPlaceholder');
   document.getElementById('filterBtnText').textContent = t('filterBtn');
   ['newest','oldest','booth','name'].forEach(k => document.getElementById(`chip-${k}`).textContent = t(`sort${k.charAt(0).toUpperCase()+k.slice(1)}`));
@@ -629,11 +878,27 @@ function applyLang() {
   document.getElementById('fName').placeholder = t('namePh');
   document.getElementById('lPrice').textContent = t('priceLabel');
   document.getElementById('fPrice').placeholder = t('pricePh');
+  document.getElementById('lDelivery').textContent = t('deliveryLabel');
+  document.getElementById('fDelivery').placeholder = t('deliveryPh');
+  document.getElementById('lPackaging').textContent = t('packagingLabel');
+  document.getElementById('fPackaging').placeholder = t('packagingPh');
   document.getElementById('lBoxQty').textContent = t('boxQtyLabel');
   document.getElementById('lCbm').textContent = t('cbmLabel');
   document.getElementById('lMoq').textContent = t('moqLabel');
   document.getElementById('lLeadTime').textContent = t('leadTimeLabel');
   document.getElementById('fLeadTime').placeholder = t('leadTimePh');
+  document.getElementById('lCurrency').textContent = t('currencyLabel');
+  document.getElementById('fCurrency').placeholder = t('currencyPh');
+  document.getElementById('lShippingTerms').textContent = t('shippingTermsLabel');
+  document.getElementById('fShippingTerms').placeholder = t('shippingTermsPh');
+  document.getElementById('lContainerTerms').textContent = t('containerTermsLabel');
+  document.getElementById('fContainerTerms').placeholder = t('containerTermsPh');
+  document.getElementById('lDomesticDeliveryFee').textContent = t('domesticDeliveryFeeLabel');
+  document.getElementById('lMinimumOrder').textContent = t('minimumOrderLabel');
+  document.getElementById('lVatIncluded').textContent = t('vatIncludedLabel');
+  document.getElementById('lSpecification').textContent = t('specificationLabel');
+  document.getElementById('lCertification').textContent = t('certificationLabel');
+  document.getElementById('lAdoptionTerms').textContent = t('adoptionTermsLabel');
   document.getElementById('lOem').textContent = t('oemLabel');
   document.getElementById('lContact').textContent = t('contactLabel');
   document.getElementById('fContact').placeholder = t('contactPh');
@@ -645,10 +910,19 @@ function applyLang() {
   document.getElementById('btnCamText').textContent = t('captureBtn');
   document.getElementById('btnGalText').textContent = t('galleryBtn');
   document.getElementById('photoHint').textContent = t('noPhoto');
+  document.getElementById('lBusinessCards').textContent = t('businessCardsLabel');
+  document.getElementById('btnCardCamText').textContent = t('captureCardBtn');
+  document.getElementById('btnCardGalText').textContent = t('galleryCardBtn');
+  document.getElementById('businessCardHint').textContent = t('noBusinessCard');
   updateOemLabel();
   document.getElementById('settingsTitle').textContent = t('settingsTitle');
   document.getElementById('lEventName').textContent = t('eventNameLabel');
   document.getElementById('eventNameInput').placeholder = t('eventNamePh');
+  document.getElementById('lEventTemplate').textContent = t('eventTemplateLabel');
+  document.getElementById('templateGeneral').textContent = t('templateGeneral');
+  document.getElementById('templateSourcing').textContent = t('templateSourcing');
+  document.getElementById('templateConsumer').textContent = t('templateConsumer');
+  document.getElementById('templateIndustrial').textContent = t('templateIndustrial');
   document.getElementById('lCurrentUser').textContent = t('currentUserLabel');
   document.getElementById('changeUserBtn').textContent = t('changeBtn');
   document.getElementById('lSyncToken').textContent = t('syncTokenLabel');
@@ -669,6 +943,7 @@ function applyLang() {
   document.getElementById('tokenLabel').textContent = ghToken() ? t('tokenSet') : t('tokenNotSet');
   document.getElementById('langKo').classList.toggle('active', l === 'ko');
   document.getElementById('langEn').classList.toggle('active', l === 'en');
+  document.getElementById('langZh').classList.toggle('active', l === 'zh');
   document.getElementById('eventPickerTitle').textContent = t('eventPickerTitle');
   document.getElementById('btnNewEvent').textContent = t('newEventBtn');
   document.getElementById('nameHintText').textContent = t('nameHint');
@@ -677,6 +952,7 @@ function applyLang() {
   document.getElementById('installBannerTitle').textContent = t('installBannerTitle');
   document.getElementById('installBannerDesc').textContent = t('installBannerDesc');
   document.getElementById('installBannerBtn').textContent = t('installBannerBtn');
+  document.getElementById('fab').textContent = t('quickAdd');
   updateTotalCount();
 }
 
@@ -686,26 +962,55 @@ function saveEvents(events) { localStorage.setItem('cf_events', JSON.stringify(e
 function currentEventId() { return localStorage.getItem('cf_current_event')||''; }
 function currentEvent() { return getEvents().find(e=>e.id===currentEventId())||null; }
 function eventName() { return currentEvent()?.name||''; }
+function currentTemplateId() { return currentEvent()?.templateId||'sourcing'; }
 
 function ensureDefaultEvent() {
   let events = getEvents();
   if (!events.length) {
     const legacyName = localStorage.getItem('cf_event_name') || '';
     const name = legacyName || t('defaultEvent');
-    const e = {id:'evt_'+Date.now(), name, createdAt:new Date().toISOString()};
+    const e = {id:'evt_'+Date.now(), name, templateId:'general', createdAt:new Date().toISOString()};
     events=[e]; saveEvents(events); localStorage.setItem('cf_current_event', e.id);
-  } else if (!currentEventId() || !events.find(e=>e.id===currentEventId())) {
-    localStorage.setItem('cf_current_event', events[0].id);
+  } else {
+    const needsTemplate = events.some(event=>!event.templateId);
+    if (needsTemplate) {
+      events = events.map(event=>event.templateId ? event : {...event, templateId:'sourcing'});
+      saveEvents(events);
+    }
+    if (!currentEventId() || !events.find(e=>e.id===currentEventId())) {
+      localStorage.setItem('cf_current_event', events[0].id);
+    }
   }
 }
 
 async function migrateProductEvents() {
   const firstId = getEvents()[0]?.id;
   if (!firstId) return;
+  const completed = await metaGet('migration-product-events-v2');
+  if (completed?.value === true) return;
   const all = await getAll();
   const toMigrate = all.filter(p=>!p.eventId);
-  if (!toMigrate.length) return;
+  if (!toMigrate.length) {
+    await metaPut({key:'migration-product-events-v2', value:true, completedAt:new Date().toISOString()});
+    return;
+  }
+  try {
+    const existingBackup = await metaGet('backup-before-product-events-v2');
+    if (!existingBackup) {
+      await metaPut({
+        key:'backup-before-product-events-v2',
+        createdAt:new Date().toISOString(),
+        events:getEvents(),
+        currentEvent:currentEventId(),
+        products:all,
+      });
+    }
+  } catch (error) {
+    console.warn('Migration backup failed; legacy records were left unchanged.', error);
+    return;
+  }
   for (const p of toMigrate) { p.eventId = firstId; await dbPut(p); }
+  await metaPut({key:'migration-product-events-v2', value:true, completedAt:new Date().toISOString()});
 }
 
 function openEventPicker() {
@@ -747,7 +1052,7 @@ function promptNewEvent() {
   showPrompt(t('newEventMsg'), t('newEventPh'), name => {
     if (!name) return;
     const events = getEvents();
-    const e = {id:'evt_'+Date.now(), name, createdAt:new Date().toISOString()};
+    const e = {id:'evt_'+Date.now(), name, templateId:'general', createdAt:new Date().toISOString()};
     events.push(e); saveEvents(events);
     localStorage.setItem('cf_current_event', e.id);
     updateHeaderTitle();
@@ -762,7 +1067,7 @@ function deleteEvent(evt, id, name) {
   showConfirm(t('confirmDeleteEvent', name), async () => {
     const events = getEvents().filter(e=>e.id!==id);
     if (!events.length) {
-      const e = {id:'evt_'+Date.now(), name:t('defaultEvent'), createdAt:new Date().toISOString()};
+      const e = {id:'evt_'+Date.now(), name:t('defaultEvent'), templateId:'general', createdAt:new Date().toISOString()};
       events.push(e);
     }
     saveEvents(events);
@@ -793,6 +1098,7 @@ function updateHeaderTitle() {
 // ─── GitHub 설정 ─────────────────────────────────────────
 const GH_OWNER = 'harich1';
 const GH_REPO  = 'canton-fair-data';
+const LEGACY_GITHUB_SYNC_ENABLED = false;
 
 function ghToken()   { return localStorage.getItem('cf_gh_token') || ''; }
 function ghFile()    { return `data/${userKey()}.json`; }
@@ -877,8 +1183,16 @@ let db;
 function dbName() { return userKey() ? `cf_${userKey()}` : 'cf_guest'; }
 function openDB(name) {
   return new Promise((res, rej) => {
-    const r = indexedDB.open(name || dbName(), 1);
-    r.onupgradeneeded = e => e.target.result.createObjectStore('p', {keyPath:'id', autoIncrement:true});
+    const r = indexedDB.open(name || dbName(), 2);
+    r.onupgradeneeded = e => {
+      const nextDb = e.target.result;
+      if (!nextDb.objectStoreNames.contains('p')) {
+        nextDb.createObjectStore('p', {keyPath:'id', autoIncrement:true});
+      }
+      if (!nextDb.objectStoreNames.contains('meta')) {
+        nextDb.createObjectStore('meta', {keyPath:'key'});
+      }
+    };
     r.onsuccess = e => res(e.target.result);
     r.onerror = e => rej(e.target.error);
     r.onblocked = () => rej(new Error('다른 탭을 닫고 새로고침해주세요'));
@@ -889,12 +1203,22 @@ const getAll = () => new Promise((res,rej) => { const r=st().getAll(); r.onsucce
 const dbPut  = p  => new Promise((res,rej) => { const r=st('readwrite').put(p); r.onsuccess=e=>res(e.target.result); r.onerror=rej; });
 const dbDel  = id => new Promise((res,rej) => { const r=st('readwrite').delete(id); r.onsuccess=()=>res(); r.onerror=rej; });
 const dbClear= () => new Promise((res,rej) => { const r=st('readwrite').clear(); r.onsuccess=()=>res(); r.onerror=rej; });
+const metaGet = key => new Promise((res,rej) => {
+  const r=db.transaction('meta','readonly').objectStore('meta').get(key);
+  r.onsuccess=e=>res(e.target.result);
+  r.onerror=rej;
+});
+const metaPut = value => new Promise((res,rej) => {
+  const r=db.transaction('meta','readwrite').objectStore('meta').put(value);
+  r.onsuccess=e=>res(e.target.result);
+  r.onerror=rej;
+});
 
 // ─── GitHub 동기화 ────────────────────────────────────────
 let ghSha = null;
 
 async function ghGet() {
-  if (!ghToken()) return null;
+  if (!LEGACY_GITHUB_SYNC_ENABLED || !ghToken()) return null;
   try {
     const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${ghFile()}`, {
       headers: { Authorization: `Bearer ${ghToken()}`, Accept: 'application/vnd.github.v3+json' }
@@ -906,7 +1230,7 @@ async function ghGet() {
   } catch { return null; }
 }
 async function ghPush(products) {
-  if (!userName() || !ghToken() || offlineMode()) return;
+  if (!LEGACY_GITHUB_SYNC_ENABLED || !userName() || !ghToken() || offlineMode()) return;
   try {
     setSync(t('syncSyncing'));
     const content = btoa(unescape(encodeURIComponent(JSON.stringify(products))));
@@ -927,7 +1251,7 @@ async function ghPush(products) {
   } catch { setSync(t('syncFail')); setTimeout(()=>setSync(''),3000); }
 }
 async function ghPull() {
-  if (!userName() || !ghToken() || offlineMode()) return;
+  if (!LEGACY_GITHUB_SYNC_ENABLED || !userName() || !ghToken() || offlineMode()) return;
   setSync(t('syncLoading'));
   const result = await ghGet();
   if (!result) { setSync(t('syncConnFail')); setTimeout(()=>setSync(''),3000); return; }
@@ -1016,7 +1340,32 @@ function showToast(msg) {
 
 // ─── 이름 설정 ────────────────────────────────────────────
 function checkName() {
-  if (!userName() || !userPin()) document.getElementById('nameOverlay').classList.add('open');
+  if (localStorage.getItem('cf_onboarding_complete') !== '1') {
+    document.getElementById('nameOverlay').classList.add('open');
+  }
+}
+
+function saveEventTemplate(templateId) {
+  const allowed = ['general','sourcing','consumer','industrial'];
+  if (!allowed.includes(templateId)) return;
+  const events = getEvents();
+  const event = events.find(item=>item.id===currentEventId());
+  if (!event) return;
+  event.templateId = templateId;
+  saveEvents(events);
+  applyTemplateVisibility();
+}
+
+function applyTemplateVisibility() {
+  const templateId = currentTemplateId();
+  document.querySelectorAll('[data-templates]').forEach(section => {
+    const templates = (section.dataset.templates||'').split(',');
+    section.style.display = templates.includes(templateId) ? '' : 'none';
+  });
+}
+function completeOnboarding() {
+  localStorage.setItem('cf_onboarding_complete', '1');
+  document.getElementById('nameOverlay').classList.remove('open');
 }
 async function confirmName() {
   const name = document.getElementById('nameInput').value.trim();
@@ -1070,7 +1419,7 @@ function updateFilterDot() {
 }
 
 // ─── 사진 ────────────────────────────────────────────────
-let curPhotos = [], editId = null;
+let curPhotos = [], curBusinessCards = [], editId = null;
 
 function compress(file) {
   return new Promise(res => {
@@ -1107,6 +1456,23 @@ function renderPhotos() {
       <button class="photo-remove" onclick="removePhoto(${i})" type="button">✕</button>
     </div>`).join('');
 }
+async function captureBusinessCard(input) {
+  const f = input.files[0]; if (!f) return;
+  curBusinessCards.push(await compress(f)); renderBusinessCards(); input.value='';
+}
+async function addBusinessCards(input) {
+  for(const f of Array.from(input.files)) curBusinessCards.push(await compress(f));
+  renderBusinessCards(); input.value='';
+}
+function removeBusinessCard(i) { curBusinessCards.splice(i,1); renderBusinessCards(); }
+function renderBusinessCards() {
+  document.getElementById('businessCardHint').style.display = curBusinessCards.length ? 'none' : 'block';
+  document.getElementById('businessCardGrid').innerHTML = curBusinessCards.map((s,i)=>`
+    <div class="photo-item">
+      <img src="${s}" onclick="openViewer('b',${i})" style="cursor:pointer">
+      <button class="photo-remove" onclick="removeBusinessCard(${i})" type="button">✕</button>
+    </div>`).join('');
+}
 
 // ─── 커스텀 필드 ─────────────────────────────────────────
 let curCustomFields = [];
@@ -1137,14 +1503,24 @@ function openModal(p) {
   editId = p?.id || null;
   document.getElementById('modalTitle').textContent = p ? t('editProduct') : t('addProduct');
   document.getElementById('saveBtn').textContent = p ? t('editBtn') : t('saveBtn');
-  const map = {fBooth:'booth',fName:'name',fPrice:'price',fBoxQty:'boxQty',fCbm:'cbm',fMoq:'moq',fLeadTime:'leadTime',fContact:'contact',fNotes:'notes'};
+  const map = {
+    fBooth:'booth',fName:'name',fPrice:'price',fDelivery:'delivery',fPackaging:'packaging',
+    fBoxQty:'boxQty',fCbm:'cbm',fMoq:'moq',fLeadTime:'leadTime',fCurrency:'currency',
+    fShippingTerms:'shippingTerms',fContainerTerms:'containerTerms',
+    fDomesticDeliveryFee:'domesticDeliveryFee',fMinimumOrder:'minimumOrder',
+    fSpecification:'specification',fCertification:'certification',fAdoptionTerms:'adoptionTerms',
+    fContact:'contact',fNotes:'notes'
+  };
   Object.entries(map).forEach(([id,key]) => document.getElementById(id).value = p ? (p[key]||'') : '');
   document.getElementById('fId').value = p?.id||'';
   document.getElementById('fOem').checked = p?.oem||false;
+  document.getElementById('fVatIncluded').checked = p?.vatIncluded||false;
   updateOemLabel();
   curPhotos = p ? [...(p.photos||[])] : [];
+  curBusinessCards = p ? [...(p.businessCards||[])] : [];
   curCustomFields = p ? JSON.parse(JSON.stringify(p.customFields||[])) : [];
-  renderPhotos(); renderCustomFields();
+  renderPhotos(); renderBusinessCards(); renderCustomFields();
+  applyTemplateVisibility();
   document.getElementById('overlay').classList.add('open');
   history.pushState({modal:'product'}, '');
   setTimeout(()=>document.getElementById('fBooth').focus(),150);
@@ -1162,11 +1538,8 @@ function updateOemLabel() {
 
 // ─── CRUD ────────────────────────────────────────────────
 async function saveProduct() {
-  if (!userName() || !userPin()) { checkName(); return; }
   const booth = document.getElementById('fBooth').value.trim();
   const name  = document.getElementById('fName').value.trim();
-  if (!booth) { showAlert(t('alertEnterBooth')); document.getElementById('fBooth').focus(); return; }
-  if (!name)  { showAlert(t('alertEnterNameProduct')); document.getElementById('fName').focus(); return; }
   const btn = document.getElementById('saveBtn');
   btn.disabled = true; btn.textContent = t('savingBtn');
   try {
@@ -1174,15 +1547,27 @@ async function saveProduct() {
     const p = {
       booth, name,
       price:    document.getElementById('fPrice').value.trim(),
+      delivery: document.getElementById('fDelivery').value.trim(),
+      packaging:document.getElementById('fPackaging').value.trim(),
       boxQty:   document.getElementById('fBoxQty').value||null,
       cbm:      document.getElementById('fCbm').value||null,
       moq:      document.getElementById('fMoq').value||null,
       leadTime: document.getElementById('fLeadTime').value.trim(),
+      currency: document.getElementById('fCurrency').value.trim(),
+      shippingTerms: document.getElementById('fShippingTerms').value.trim(),
+      containerTerms: document.getElementById('fContainerTerms').value.trim(),
       oem:      document.getElementById('fOem').checked,
+      vatIncluded: document.getElementById('fVatIncluded').checked,
+      domesticDeliveryFee: document.getElementById('fDomesticDeliveryFee').value.trim(),
+      minimumOrder: document.getElementById('fMinimumOrder').value||null,
+      specification: document.getElementById('fSpecification').value.trim(),
+      certification: document.getElementById('fCertification').value.trim(),
+      adoptionTerms: document.getElementById('fAdoptionTerms').value.trim(),
       contact:  document.getElementById('fContact').value.trim(),
       notes:    document.getElementById('fNotes').value.trim(),
       customFields: curCustomFields.filter(f=>f.label||f.value),
       photos:   [...curPhotos],
+      businessCards: [...curBusinessCards],
       eventId:  currentEventId(),
       updatedAt: now,
       createdAt: editId ? (cache[editId]?.createdAt||now) : now,
@@ -1228,7 +1613,9 @@ async function render(doAnim=false) {
     (p.booth||'').toLowerCase().includes(q)||
     (p.notes||'').toLowerCase().includes(q)||
     (p.price||'').toLowerCase().includes(q)||
-    (p.contact||'').toLowerCase().includes(q)
+    (p.contact||'').toLowerCase().includes(q)||
+    (p.delivery||'').toLowerCase().includes(q)||
+    (p.packaging||'').toLowerCase().includes(q)
   );
   if(filterOem) list=list.filter(p=>p.oem);
   if(filterPhoto) list=list.filter(p=>(p.photos||[]).length>0);
@@ -1247,6 +1634,7 @@ async function render(doAnim=false) {
     const animStyle = doAnim ? `style="animation:cardIn 0.22s ${Math.min(i*30,150)}ms ease both"` : '';
     const thumb=p.photos?.length?`<img class="card-thumb" src="${p.photos[0]}" onclick="openViewer(${p.id},0)">`:`<div class="card-thumb-empty">📷</div>`;
     const tags=[
+      p.delivery?t('tagDelivery',p.delivery):null, p.packaging?t('tagPackaging',p.packaging):null,
       p.moq?t('tagMoq',p.moq):null, p.cbm?t('tagCbm',p.cbm):null,
       p.boxQty?t('tagBoxQty',p.boxQty):null, p.leadTime?t('tagLeadTime',p.leadTime):null
     ].filter(Boolean).map(tx=>`<span class="tag">${tx}</span>`).join('');
@@ -1255,9 +1643,9 @@ async function render(doAnim=false) {
       <div class="card-body">${thumb}
         <div class="card-info">
           <div class="card-booth">${esc(p.booth||'-')}</div>
-          <div class="card-name">${esc(p.name)}</div>
+          <div class="card-name">${esc(p.name||t('untitledItem'))}</div>
           ${p.price?`<div class="card-price">${esc(p.price)}</div>`:''}
-          <div class="card-tags">${tags}${p.oem?`<span class="tag tag-oem">${t('tagOem')}</span>`:''}${(p.photos||[]).length>1?`<span class="tag tag-photo">📷${p.photos.length}</span>`:''}${customTags}</div>
+          <div class="card-tags">${tags}${p.oem?`<span class="tag tag-oem">${t('tagOem')}</span>`:''}${(p.photos||[]).length>1?`<span class="tag tag-photo">📷${p.photos.length}</span>`:''}${(p.businessCards||[]).length?`<span class="tag tag-photo">${t('tagBusinessCard',p.businessCards.length)}</span>`:''}${customTags}</div>
           ${p.notes?`<div class="card-notes">${esc(p.notes)}</div>`:''}
           ${p.contact?`<div class="card-contact" onclick="copyContact(cache[${p.id}]?.contact)">${t('contactIcon')}${esc(p.contact)}</div>`:''}
         </div>
@@ -1273,6 +1661,7 @@ async function render(doAnim=false) {
 // ─── 설정 ────────────────────────────────────────────────
 function openSettings() {
   document.getElementById('eventNameInput').value = eventName();
+  document.getElementById('eventTemplateSelect').value = currentTemplateId();
   document.getElementById('currentUserLabel').textContent = userName() ? `${userName()} (●●●●)` : '-';
   document.getElementById('tokenLabel').textContent = ghToken() ? t('tokenSet') : t('tokenNotSet');
   document.getElementById('offlineModeToggle').checked = offlineMode();
@@ -1291,7 +1680,7 @@ function onSettingsClick(e) { if(e.target===document.getElementById('settingsOve
 // ─── 뷰어 ────────────────────────────────────────────────
 let vPhotos=[], vIdx=0;
 function openViewer(src,idx) {
-  vPhotos = src==='m' ? [...curPhotos] : (cache[src]?.photos||[]);
+  vPhotos = src==='m' ? [...curPhotos] : src==='b' ? [...curBusinessCards] : (cache[src]?.photos||[]);
   vIdx=idx||0; showV();
   document.getElementById('viewer').classList.add('open');
   history.pushState({modal:'viewer'}, '');
@@ -1364,26 +1753,38 @@ async function exportCSV() {
   const h=[...t('csvHeaders'),...allCfLabels];
   const rows=list.map((p,i)=>{
     const cfVals=allCfLabels.map(label=>(p.customFields||[]).find(f=>f.label===label)?.value||'');
-    return [i+1,p.booth||'',p.name||'',p.price||'',p.boxQty||'',p.cbm||'',p.moq||'',p.leadTime||'',p.oem?'O':'X',p.contact||'',p.notes||'',(p.photos||[]).length,p.createdAt?new Date(p.createdAt).toLocaleString():'', ...cfVals];
+    return [
+      i+1,p.booth||'',p.name||'',p.price||'',p.delivery||'',p.packaging||'',
+      p.currency||'',p.shippingTerms||'',p.containerTerms||'',p.boxQty||'',p.cbm||'',
+      p.moq||'',p.leadTime||'',p.oem?'O':'X',p.vatIncluded?'O':'X',
+      p.domesticDeliveryFee||'',p.minimumOrder||'',p.specification||'',
+      p.certification||'',p.adoptionTerms||'',p.contact||'',p.notes||'',
+      (p.photos||[]).length,(p.businessCards||[]).length,
+      p.createdAt?new Date(p.createdAt).toLocaleString():'', ...cfVals
+    ];
   });
   const csv='﻿'+[h,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
-  dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}),`FairNote_${userName()}_${safe(eventName())}_${today()}.csv`);
+  dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}),`FairNote_${safe(userName()||'local')}_${safe(eventName())}_${today()}.csv`);
 }
 async function exportZip() {
   const evtId = currentEventId();
   let list = await getAll();
   list = list.filter(p=>p.eventId===evtId||(!p.eventId&&evtId===getEvents()[0]?.id));
   const items=[];
-  list.forEach(p=>(p.photos||[]).forEach((b,i)=>items.push({name:`${safe(p.booth)}_${safe(p.name)}_${i+1}.jpg`,b64:b.split(',')[1]})));
+  list.forEach(p=>{
+    const base=`${safe(p.booth||'booth')}_${safe(p.name||'item')}`;
+    (p.photos||[]).forEach((b,i)=>items.push({name:`${base}_item_${i+1}.jpg`,b64:b.split(',')[1]}));
+    (p.businessCards||[]).forEach((b,i)=>items.push({name:`${base}_card_${i+1}.jpg`,b64:b.split(',')[1]}));
+  });
   if(!items.length){showAlert(t('alertNoPhoto'));return;}
   const zip=new JSZip();
   items.forEach(({name,b64})=>zip.file(name,b64,{base64:true}));
-  dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`FairNote_photos_${userName()}_${safe(eventName())}_${today()}.zip`);
+  dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`FairNote_photos_${safe(userName()||'local')}_${safe(eventName())}_${today()}.zip`);
 }
 async function backupJSON() {
   const list=await getAll();
   const events=getEvents();
-  dl(new Blob([JSON.stringify({version:3,app:'FairNote',events,currentEvent:currentEventId(),user:userName(),exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/json'}),`FairNote_backup_${userName()}_${today()}.json`);
+  dl(new Blob([JSON.stringify({version:4,app:'FairNote',mode:'local-first',events,currentEvent:currentEventId(),user:userName()||null,exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/json'}),`FairNote_backup_${safe(userName()||'local')}_${today()}.json`);
 }
 async function importData(input) {
   const f=input.files[0]; if(!f) return;
@@ -1391,7 +1792,7 @@ async function importData(input) {
     const d=JSON.parse(await f.text());
     const list=d.products||d;
     // v3: restore events if present
-    if (d.version===3 && d.events?.length) {
+    if (d.version>=3 && d.events?.length) {
       const existing=getEvents();
       const existingIds=new Set(existing.map(e=>e.id));
       const toAdd=d.events.filter(e=>!existingIds.has(e.id));
@@ -1410,7 +1811,7 @@ function today(){return new Date().toISOString().slice(0,10);}
 function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
 
 // ─── 시작 ────────────────────────────────────────────────
-if (!localStorage.getItem('cf_user') || !localStorage.getItem('cf_pin')) {
+if (localStorage.getItem('cf_onboarding_complete') !== '1') {
   document.getElementById('nameOverlay').classList.add('open');
 }
 
