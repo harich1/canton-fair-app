@@ -54,3 +54,19 @@ npm run build
 ```
 
 결과물은 `dist/`에 생성됩니다. GitHub Pages 기본 경로는 `/canton-fair-app/`입니다.
+
+## Android
+
+Android 패키지명은 `com.harich1.fairnote`이며 Capacitor 8을 사용합니다.
+
+```bash
+npm run android:debug
+npm run android:bundle
+```
+
+- 디버그 APK: `android/app/build/outputs/apk/debug/app-debug.apk`
+- Play 업로드 AAB: `android/app/build/outputs/bundle/release/app-release.aab`
+
+릴리스 빌드는 `FAIRNOTE_KEYSTORE_PROPERTIES` 환경 변수가 가리키는 외부 설정 파일을 사용한다. 업로드키와 비밀번호를 저장소에 커밋하지 않는다.
+
+Play Console 입력 내용은 [docs/play-store-submission.md](docs/play-store-submission.md)를 따른다.

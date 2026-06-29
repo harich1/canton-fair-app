@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">FairNote</string>
+    <string name="title_activity_main">FairNote</string>
+    <string name="package_name">com.harich1.fairnote</string>
+    <string name="custom_url_scheme">com.harich1.fairnote</string>
+</resources>

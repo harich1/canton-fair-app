@@ -26,3 +26,34 @@ jobs:
       - run: npx playwright install --with-deps chromium
 
       - run: npm run check
+
+  android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - uses: android-actions/setup-android@v3
+
+      - run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;36.0.0"
+
+      - run: npm ci
+
+      - run: npm run cap:sync
+
+      - run: chmod +x android/gradlew
+
+      - run: ./gradlew assembleDebug
+        working-directory: android

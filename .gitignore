@@ -1,6 +1,13 @@
 node_modules/
 dist/
+dist-native/
 playwright-report/
 test-results/
+.gradle/
+android/.gradle/
+android/local.properties
+android/keystore.properties
+*.jks
+*.keystore
 .DS_Store
 .gstack/
