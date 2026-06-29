@@ -6,129 +6,111 @@
 <title>개인정보처리방침 – FairNote</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f9f9f9; color: #222; line-height: 1.7; }
-.wrap { max-width: 680px; margin: 0 auto; padding: 40px 24px 80px; }
-h1 { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
-.updated { font-size: 13px; color: #888; margin-bottom: 36px; }
-h2 { font-size: 16px; font-weight: 700; margin: 28px 0 8px; color: #c62828; }
-p, li { font-size: 14px; color: #444; margin-bottom: 6px; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #fffdf7; color: #241f1c; line-height: 1.7; }
+.wrap { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+h1 { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+.updated { font-size: 13px; color: #81746d; margin-bottom: 36px; }
+h2 { font-size: 17px; font-weight: 800; margin: 30px 0 8px; color: #b53f2d; }
+p, li { font-size: 14px; color: #4d443f; margin-bottom: 7px; }
 ul { padding-left: 20px; margin-bottom: 8px; }
 .lang-switch { text-align: right; margin-bottom: 24px; }
-.lang-switch a { font-size: 13px; color: #c62828; text-decoration: none; margin-left: 12px; }
-.contact-box { background: white; border: 1px solid #e0e0e0; border-radius: 12px; padding: 16px 20px; margin-top: 32px; font-size: 13px; color: #555; }
+.lang-switch button { border: 0; background: transparent; color: #b53f2d; font-size: 13px; font-weight: 700; cursor: pointer; margin-left: 12px; }
+.contact-box { background: #fff; border: 1px solid #ded3c6; border-radius: 12px; padding: 16px 20px; margin-top: 32px; font-size: 13px; color: #554c46; }
+a { color: #b53f2d; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="lang-switch">
-    <a href="#ko" onclick="showLang('ko')">한국어</a>
-    <a href="#en" onclick="showLang('en')">English</a>
-  </div>
+<main class="wrap">
+  <nav class="lang-switch" aria-label="Language">
+    <button type="button" onclick="showLang('ko')">한국어</button>
+    <button type="button" onclick="showLang('en')">English</button>
+    <button type="button" onclick="showLang('zh')">简体中文</button>
+  </nav>
 
-  <div id="ko">
-    <h1>개인정보처리방침</h1>
-    <div class="updated">최종 수정일: 2026년 6월 28일</div>
-
-    <p><strong>FairNote</strong> 앱(이하 "앱")은 박람회 현장에서 상품 정보를 기록·관리하기 위한 개인 생산성 도구입니다.</p>
-
-    <h2>1. 수집하는 정보</h2>
-    <p>앱은 사용자가 직접 입력한 다음 정보를 처리합니다.</p>
+  <article id="ko">
+    <h1>FairNote 개인정보처리방침</h1>
+    <div class="updated">최종 수정일: 2026년 6월 30일</div>
+    <p>FairNote는 박람회 현장에서 상품과 업체 정보를 기록하고 관리하는 생산성 앱입니다.</p>
+    <h2>1. 사용자가 입력하는 정보</h2>
+    <p>앱은 행사명, 부스, 제품명, 가격, 배송, 포장, 연락처, 메모, 상품 사진과 명함 사진 등 사용자가 직접 입력하거나 선택한 정보를 기기에서 처리합니다.</p>
+    <h2>2. 저장 및 전송</h2>
     <ul>
-      <li>박람회와 상품 정보: 행사명, 부스 위치, 제품명, 가격, 배송, 포장, MOQ, 납기, 메모 등</li>
-      <li>상품 및 명함 사진 (JPEG 압축 후 기기 내 IndexedDB 보관)</li>
-      <li>언어와 현재 행사 등 앱 사용 설정 (기기 내 localStorage 보관)</li>
+      <li>모든 기록과 설정은 사용자의 기기 내 앱 저장소(IndexedDB, localStorage)에만 저장됩니다.</li>
+      <li>개발자는 서버를 통해 사용자 기록이나 사진을 수신, 저장 또는 처리하지 않습니다.</li>
+      <li>현재 버전은 계정, 클라우드 동기화, 광고 또는 분석 SDK를 사용하지 않습니다.</li>
     </ul>
+    <h2>3. 제3자 제공</h2>
+    <p>FairNote는 사용자 데이터를 제3자에게 판매하거나 공유하지 않습니다. 사용자가 직접 실행하는 CSV, ZIP 또는 JSON 내보내기는 사용자가 선택한 위치로만 저장됩니다.</p>
+    <h2>4. 사진 선택</h2>
+    <p>상품과 명함 사진을 추가할 때 Android의 시스템 카메라 또는 사진 선택 화면을 사용합니다. 선택한 사진은 앱의 기기 내 저장소에만 보관되며 외부 서버로 전송되지 않습니다.</p>
+    <h2>5. 데이터 삭제</h2>
+    <p>기록은 앱에서 개별 삭제할 수 있습니다. 모든 데이터를 삭제하려면 Android 설정에서 FairNote의 저장공간 또는 앱 데이터를 삭제하거나 앱을 제거하면 됩니다. 삭제 전 설정 메뉴에서 JSON 백업을 내보낼 수 있습니다.</p>
+    <h2>6. 아동</h2>
+    <p>FairNote는 만 13세 미만 아동을 대상으로 하지 않으며 아동의 개인정보를 의도적으로 수집하지 않습니다.</p>
+    <h2>7. 방침 변경</h2>
+    <p>본 방침이 변경되면 이 페이지의 수정일과 내용을 갱신합니다.</p>
+    <div class="contact-box"><strong>문의</strong><br>이메일: rewardless@gmail.com<br>GitHub: <a href="https://github.com/harich1/canton-fair-app">harich1/canton-fair-app</a></div>
+  </article>
 
-    <h2>2. 정보 저장 방식</h2>
+  <article id="en" hidden>
+    <h1>FairNote Privacy Policy</h1>
+    <div class="updated">Last updated: June 30, 2026</div>
+    <p>FairNote is a productivity app for recording and managing product and supplier information at trade fairs.</p>
+    <h2>1. Information You Enter</h2>
+    <p>The app processes information you enter or select, including fair names, booths, product names, prices, delivery, packaging, contacts, notes, product photos and business-card photos.</p>
+    <h2>2. Storage and Transmission</h2>
     <ul>
-      <li>모든 데이터는 <strong>사용자의 기기 내 브라우저(IndexedDB, localStorage)</strong>에만 저장됩니다.</li>
-      <li>앱 개발자는 어떠한 서버도 운영하지 않으며, 데이터를 수신·저장·처리하지 않습니다.</li>
-      <li>현재 버전은 계정이나 클라우드 동기화를 사용하지 않습니다.</li>
+      <li>All records and preferences are stored only in the app storage on your device using IndexedDB and localStorage.</li>
+      <li>The developer does not receive, store or process your records or photos through a server.</li>
+      <li>The current version uses no accounts, cloud sync, advertising or analytics SDKs.</li>
     </ul>
-
-    <h2>3. 제3자 공유</h2>
-    <p>앱은 사용자 데이터를 제3자에게 공유하거나 판매하지 않습니다.</p>
-
-    <h2>4. 외부 서비스</h2>
-    <ul>
-      <li><strong>jsDelivr CDN</strong>: JSZip 라이브러리를 불러오는 데 사용됩니다. jsDelivr의 개인정보처리방침이 적용됩니다.</li>
-      <li><strong>GitHub Pages</strong>: 앱 호스팅에 사용됩니다. GitHub의 개인정보처리방침이 적용됩니다.</li>
-    </ul>
-
-    <h2>5. 카메라 및 저장소 권한</h2>
-    <p>앱은 상품 사진 촬영 및 갤러리 선택을 위해 카메라 및 파일 접근 권한을 요청할 수 있습니다. 촬영된 사진은 기기 내에만 저장되며, 외부로 전송되지 않습니다.</p>
-
-    <h2>6. 데이터 삭제</h2>
-    <p>앱의 설정 메뉴에서 데이터를 내보낼 수 있습니다. 모든 데이터를 삭제하려면 브라우저 또는 운영체제의 FairNote 사이트 데이터 삭제 기능을 사용할 수 있습니다.</p>
-
-    <h2>7. 미성년자</h2>
-    <p>앱은 13세 미만 아동을 대상으로 하지 않으며, 의도적으로 미성년자의 개인 정보를 수집하지 않습니다.</p>
-
-    <h2>8. 방침 변경</h2>
-    <p>본 방침이 변경될 경우 앱 내 또는 GitHub 레포지토리를 통해 공지합니다.</p>
-
-    <div class="contact-box">
-      <strong>문의</strong><br>
-      이메일: rewardless@gmail.com<br>
-      GitHub: <a href="https://github.com/harich1/canton-fair-app" style="color:#c62828">harich1/canton-fair-app</a>
-    </div>
-  </div>
-
-  <div id="en" style="display:none">
-    <h1>Privacy Policy</h1>
-    <div class="updated">Last updated: June 28, 2026</div>
-
-    <p><strong>FairNote</strong> is a personal productivity app for recording and managing product information at trade fairs and exhibitions.</p>
-
-    <h2>1. Information We Collect</h2>
-    <p>The app processes only information that users directly enter:</p>
-    <ul>
-      <li>Fair and item data: event name, booth, product name, price, delivery, packaging, MOQ, lead time, notes, and similar details</li>
-      <li>Product and business-card photos (compressed to JPEG and stored in on-device IndexedDB)</li>
-      <li>App preferences such as language and current event (stored in on-device localStorage)</li>
-    </ul>
-
-    <h2>2. How We Store Information</h2>
-    <ul>
-      <li>All data is stored exclusively in <strong>the user's browser on-device</strong> (IndexedDB, localStorage).</li>
-      <li>The developer operates no servers and does not receive, store, or process any user data.</li>
-      <li>The current version does not use accounts or cloud sync.</li>
-    </ul>
-
     <h2>3. Third-Party Sharing</h2>
-    <p>We do not share or sell user data to any third parties.</p>
+    <p>FairNote does not sell or share user data with third parties. CSV, ZIP and JSON exports are created only when you request them and are saved to a location you choose.</p>
+    <h2>4. Photo Selection</h2>
+    <p>FairNote uses the Android system camera or photo picker when you add product or business-card photos. Selected photos remain in on-device app storage and are not sent to an external server.</p>
+    <h2>5. Data Deletion</h2>
+    <p>You can delete individual records in the app. To remove all data, clear FairNote storage or app data in Android Settings, or uninstall the app. You can export a JSON backup from Settings before deletion.</p>
+    <h2>6. Children</h2>
+    <p>FairNote is not directed at children under 13 and does not knowingly collect children's personal information.</p>
+    <h2>7. Policy Changes</h2>
+    <p>Changes to this policy will be reflected on this page with an updated revision date.</p>
+    <div class="contact-box"><strong>Contact</strong><br>Email: rewardless@gmail.com<br>GitHub: <a href="https://github.com/harich1/canton-fair-app">harich1/canton-fair-app</a></div>
+  </article>
 
-    <h2>4. Third-Party Services</h2>
+  <article id="zh" hidden>
+    <h1>FairNote 隐私政策</h1>
+    <div class="updated">最后更新：2026年6月30日</div>
+    <p>FairNote 是一款用于在展会现场记录和管理产品及供应商信息的效率工具。</p>
+    <h2>1. 您输入的信息</h2>
+    <p>应用会在设备上处理您输入或选择的信息，包括展会名称、展位、产品名称、价格、交付、包装、联系方式、备注、产品照片和名片照片。</p>
+    <h2>2. 存储与传输</h2>
     <ul>
-      <li><strong>jsDelivr CDN</strong>: Used to load the JSZip library. jsDelivr's Privacy Policy applies.</li>
-      <li><strong>GitHub Pages</strong>: Used to host the app. GitHub's Privacy Policy applies.</li>
+      <li>所有记录和设置仅保存在您设备上的应用存储空间（IndexedDB 和 localStorage）中。</li>
+      <li>开发者不会通过服务器接收、保存或处理您的记录和照片。</li>
+      <li>当前版本不使用账号、云同步、广告或分析 SDK。</li>
     </ul>
-
-    <h2>5. Camera and Storage Permissions</h2>
-    <p>The app may request camera and file access to take and select product photos. Photos are stored on-device only and are never transmitted externally.</p>
-
-    <h2>6. Data Deletion</h2>
-    <p>You can export data from the app's Settings menu. To delete all data, use the browser or operating system control for clearing FairNote site data.</p>
-
-    <h2>7. Children</h2>
-    <p>The app is not directed at children under 13 and does not knowingly collect personal information from minors.</p>
-
-    <h2>8. Changes to This Policy</h2>
-    <p>We will notify users of any changes via the app or the GitHub repository.</p>
-
-    <div class="contact-box">
-      <strong>Contact</strong><br>
-      Email: rewardless@gmail.com<br>
-      GitHub: <a href="https://github.com/harich1/canton-fair-app" style="color:#c62828">harich1/canton-fair-app</a>
-    </div>
-  </div>
-</div>
+    <h2>3. 第三方共享</h2>
+    <p>FairNote 不会出售或向第三方共享用户数据。CSV、ZIP 和 JSON 文件仅在您主动导出时生成，并保存到您选择的位置。</p>
+    <h2>4. 照片选择</h2>
+    <p>添加产品或名片照片时，FairNote 会调用 Android 系统相机或照片选择器。所选照片只保存在设备上的应用存储空间中，不会发送至外部服务器。</p>
+    <h2>5. 删除数据</h2>
+    <p>您可以在应用中删除单条记录。如需删除全部数据，请在 Android 设置中清除 FairNote 的存储空间或应用数据，或卸载应用。删除前可在设置中导出 JSON 备份。</p>
+    <h2>6. 儿童</h2>
+    <p>FairNote 不面向 13 岁以下儿童，也不会故意收集儿童的个人信息。</p>
+    <h2>7. 政策变更</h2>
+    <p>如本政策发生变更，我们会更新本页面的内容和修订日期。</p>
+    <div class="contact-box"><strong>联系方式</strong><br>电子邮箱：rewardless@gmail.com<br>GitHub：<a href="https://github.com/harich1/canton-fair-app">harich1/canton-fair-app</a></div>
+  </article>
+</main>
 <script>
-function showLang(l) {
-  document.getElementById('ko').style.display = l==='ko' ? '' : 'none';
-  document.getElementById('en').style.display = l==='en' ? '' : 'none';
-  document.documentElement.lang = l;
+function showLang(language) {
+  for (const id of ["ko", "en", "zh"]) {
+    document.getElementById(id).hidden = id !== language;
+  }
+  document.documentElement.lang = language === "zh" ? "zh-CN" : language;
 }
+const requestedLanguage = location.hash.slice(1);
+if (["ko", "en", "zh"].includes(requestedLanguage)) showLang(requestedLanguage);
 </script>
 </body>
 </html>
