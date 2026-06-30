@@ -315,6 +315,16 @@ body:not(.has-records) .chip-bar { display: none; }
 .modal-close { width: 44px; height: 44px; background: var(--surface-soft); color: var(--ink); }
 .modal-handle { margin-bottom: 8px; background: #cdd8dc; }
 .modal-head, .settings-row { border-color: var(--line); }
+.modal form { display: flex; flex-direction: column; }
+.capture-photo-section {
+  order: -1;
+  margin: 0 -18px 22px;
+  padding: 16px 18px 18px;
+  background: var(--surface-soft);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.capture-photo-section .fl { color: var(--ink); font-size: 15px; font-weight: 750; }
 .fl { color: #4c626b; font-size: 13px; text-transform: none; letter-spacing: 0; margin-bottom: 8px; }
 .fg { margin-bottom: 18px; }
 .frow { gap: 12px; }
@@ -323,6 +333,17 @@ body:not(.has-records) .chip-bar { display: none; }
 .btn-gal { background: var(--surface); color: var(--ink); border-color: var(--line); }
 .photo-empty { color: var(--muted); font-size: 13px; }
 .btn-save { min-height: 56px; border-radius: 14px; box-shadow: none; font-size: 16px; }
+#overlay .modal form { padding-bottom: 76px; }
+#overlay .btn-save {
+  position: fixed;
+  z-index: 420;
+  left: 18px;
+  right: 18px;
+  bottom: max(14px, env(safe-area-inset-bottom));
+  width: calc(100% - 36px);
+  margin: 0;
+  box-shadow: 0 8px 24px rgba(13, 82, 98, 0.24);
+}
 .settings-section-title, .fl { color: var(--muted); }
 .lang-btn.active { background: var(--accent); border-color: var(--accent); }
 .empty { padding: 72px 24px 40px; }
@@ -356,6 +377,7 @@ body:not(.has-records) .chip-bar { display: none; }
   .header, .toolbar, .chip-bar, .list { max-width: 640px; margin-left: auto; margin-right: auto; }
   .fab { left: 50%; right: auto; width: 612px; transform: translateX(-50%); }
   .fab:active { transform: translateX(-50%) scale(0.98); }
+  #overlay .btn-save { left: 50%; right: auto; width: 604px; transform: translateX(-50%); }
 }
 </style>
 </head>
@@ -485,7 +507,7 @@ body:not(.has-records) .chip-bar { display: none; }
         <div id="customFieldList"></div>
         <button type="button" class="btn-add-field" id="addFieldBtn" onclick="addCustomField()"></button>
       </div>
-      <div class="fg">
+      <div class="fg capture-photo-section">
         <label class="fl" id="lPhotos"></label>
         <div class="photo-btns">
           <label class="btn-cam" id="btnCam"><input type="file" accept="image/*" capture="environment" onchange="capturePhoto(this)"><span id="btnCamText"></span></label>
