@@ -1,5 +1,34 @@
 import { expect, test } from "@playwright/test";
 
+test("loads the native bridge from a production-safe JavaScript path", async ({
+  page,
+}) => {
+  await page.goto("./");
+
+  const nativeBridgeSources = await page
+    .locator('script[src*="native-export"]')
+    .evaluateAll((scripts) =>
+      scripts.map((script) => script.getAttribute("src") ?? ""),
+    );
+
+  expect(nativeBridgeSources).toHaveLength(1);
+  expect(nativeBridgeSources[0]).toMatch(
+    /\/canton-fair-app\/native-export\.js$/,
+  );
+  await expect
+    .poll(() =>
+      page.evaluate(
+        () =>
+          typeof (
+            window as typeof window & {
+              FairNoteNative?: unknown;
+            }
+          ).FairNoteNative,
+      ),
+    )
+    .toBe("object");
+});
+
 test("uses the Android share bridge for FairNote backup files", async ({
   page,
 }) => {
