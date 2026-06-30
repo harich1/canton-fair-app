@@ -12,8 +12,8 @@ test("loads the native bridge from a production-safe JavaScript path", async ({
     );
 
   expect(nativeBridgeSources).toHaveLength(1);
-  expect(nativeBridgeSources[0]).toMatch(
-    /\/canton-fair-app\/native-export\.js$/,
+  expect(new URL(nativeBridgeSources[0], page.url()).pathname).toBe(
+    "/canton-fair-app/native-export.js",
   );
   await expect
     .poll(() =>
