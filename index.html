@@ -534,8 +534,8 @@ body {
       <button class="data-btn" id="btnZipExport" style="background:#f3e5f5;color:#6a1b9a" onclick="exportZip();closeSettings()"></button>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-      <button class="data-btn" id="btnBackup" style="background:#f0f4ff;color:#1a73e8" onclick="backupJSON();closeSettings()"></button>
-      <label class="data-btn" id="btnImport" style="display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:#555;cursor:pointer"><input type="file" accept=".json" onchange="importData(this)" style="display:none"><span id="btnImportText"></span></label>
+      <button class="data-btn" id="btnBackup" style="background:#f0f4ff;color:#1a73e8" onclick="createBackupFile();closeSettings()"></button>
+      <label class="data-btn" id="btnImport" style="display:flex;align-items:center;justify-content:center;background:#f5f5f5;color:#555;cursor:pointer"><input type="file" accept=".fairnote,.json,application/json" onchange="importData(this)" style="display:none"><span id="btnImportText"></span></label>
     </div>
     <div style="padding-top:8px;text-align:center">
       <a id="privacyLink" href="privacy.html" style="font-size:12px;color:#aaa;text-decoration:none"></a>
@@ -626,7 +626,7 @@ const STRINGS = {
     syncStatusLabel: '동기화 상태', syncWaiting: '대기 중', syncOffline: '제한 네트워크 모드', syncNoToken: '토큰 없음',
     langLabel: '언어',
     dataSection: '데이터',
-    excelBtn: '📊 엑셀 내보내기', zipBtn: '📷 사진 ZIP', backupBtn: '💾 전체 백업', importBtn: '📂 가져오기',
+    excelBtn: '📊 엑셀 내보내기', zipBtn: '📷 사진 ZIP', backupBtn: '💾 백업 파일 만들기', importBtn: '📂 백업에서 복원',
     privacyLink: '개인정보처리방침',
     emptyText: '기록된 상품이 없습니다', emptyHint: '+ 버튼을 눌러 추가하세요', noResult: '검색 결과 없음', untitledItem: '이름 없는 상품',
     tokenSavedToast: '✅ 토큰 저장됨', tokenDeletedToast: '토큰 삭제됨',
@@ -717,7 +717,7 @@ const STRINGS = {
     syncStatusLabel: 'Sync Status', syncWaiting: 'Ready', syncOffline: 'Restricted Network Mode', syncNoToken: 'No token',
     langLabel: 'Language',
     dataSection: 'Data',
-    excelBtn: '📊 Export CSV', zipBtn: '📷 Photo ZIP', backupBtn: '💾 Backup (JSON)', importBtn: '📂 Import',
+    excelBtn: '📊 Export CSV', zipBtn: '📷 Photo ZIP', backupBtn: '💾 Create backup file', importBtn: '📂 Restore from backup',
     privacyLink: 'Privacy Policy',
     emptyText: 'No products recorded', emptyHint: 'Tap + to add your first product', noResult: 'No results found', untitledItem: 'Untitled item',
     tokenSavedToast: '✅ Token saved', tokenDeletedToast: 'Token deleted',
@@ -801,7 +801,7 @@ STRINGS.zh = {
   eventTemplateLabel: '展会类型',
   templateGeneral: '普通展会', templateSourcing: '海外采购', templateConsumer: '国内消费品', templateIndustrial: '工业与技术',
   langLabel: '语言', dataSection: '数据',
-  excelBtn: '📊 导出CSV', zipBtn: '📷 照片ZIP', backupBtn: '💾 完整备份', importBtn: '📂 导入',
+  excelBtn: '📊 导出CSV', zipBtn: '📷 照片ZIP', backupBtn: '💾 创建备份文件', importBtn: '📂 从备份恢复',
   privacyLink: '隐私政策',
   emptyText: '还没有商品记录', emptyHint: '点击下方按钮添加', noResult: '没有搜索结果', untitledItem: '未命名商品',
   savedToast: '✅ 已保存', editedToast: '✅ 已更新',
@@ -1781,10 +1781,10 @@ async function exportZip() {
   items.forEach(({name,b64})=>zip.file(name,b64,{base64:true}));
   dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`FairNote_photos_${safe(userName()||'local')}_${safe(eventName())}_${today()}.zip`);
 }
-async function backupJSON() {
+async function createBackupFile() {
   const list=await getAll();
   const events=getEvents();
-  dl(new Blob([JSON.stringify({version:4,app:'FairNote',mode:'local-first',events,currentEvent:currentEventId(),user:userName()||null,exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/json'}),`FairNote_backup_${safe(userName()||'local')}_${today()}.json`);
+  dl(new Blob([JSON.stringify({version:4,app:'FairNote',mode:'local-first',events,currentEvent:currentEventId(),user:userName()||null,exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/x-fairnote-backup'}),`FairNote_backup_${safe(userName()||'local')}_${today()}.fairnote`);
 }
 async function importData(input) {
   const f=input.files[0]; if(!f) return;

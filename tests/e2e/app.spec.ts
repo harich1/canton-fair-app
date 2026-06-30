@@ -18,6 +18,29 @@ test("starts locally without asking for an account or PIN", async ({ page }) => 
   expect(credentials).toEqual({ user: null, pin: null });
 });
 
+test("presents backup and restore without exposing JSON", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("cf_onboarding_complete", "1");
+    localStorage.setItem("cf_lang", "en");
+    localStorage.setItem("pwa_dismissed", "1");
+  });
+
+  await page.goto("./");
+  await page.locator('button[onclick="openSettings()"]').click();
+
+  await expect(page.locator("#btnBackup")).toContainText("Create backup file");
+  await expect(page.locator("#btnImportText")).toContainText("Restore from backup");
+  await expect(page.locator("#btnImport input")).toHaveAttribute(
+    "accept",
+    ".fairnote,.json,application/json",
+  );
+
+  const downloadPromise = page.waitForEvent("download");
+  await page.locator("#btnBackup").click();
+  const download = await downloadPromise;
+  expect(download.suggestedFilename()).toMatch(/^FairNote_backup_.*\.fairnote$/);
+});
+
 test("saves a product locally and restores it after reload", async ({ page }) => {
   await page.addInitScript(() => {
     const event = {

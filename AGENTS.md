@@ -35,4 +35,5 @@ These rules apply to Codex, Claude Code, and other coding agents working in this
 
 - Visual system: Field Ledger — warm ivory paper, deep ink, vermilion accent.
 - Runtime: Vite PWA, later packaged with Capacitor for Android and iOS.
-- Planned sync: optional account connection using Firebase Auth, Firestore, and Cloud Storage.
+- MVP sync: deferred. Ship with local-first storage and a user-triggered FairNote backup file so the public release has no server operating cost.
+- Future sync: optional account connection may use Firebase Auth, Firestore, and Cloud Storage only after the local MVP is validated and billing safeguards are defined.
