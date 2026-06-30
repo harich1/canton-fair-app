@@ -22,7 +22,7 @@ Upload `FairNote-1.0.aab` from `D:\FairNote-Releases\1.0` to an internal testing
 - Version code: `1`
 - Minimum SDK: 24
 - Target SDK: 36
-- AAB SHA-256: `F6CF764BEE5B0CD9691389125EFA19FDAF5C97341F9175D95A1F85611384D200`
+- AAB SHA-256: `61ED7D708ED674846BB1677BD5A1A6F1D5F22E96F97DC8502DC35E87BEE4E8EF`
 
 The release bundle is signed with the FairNote upload certificate and was verified with `jarsigner`.
 
