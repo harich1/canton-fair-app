@@ -1,4 +1,4 @@
-const CACHE = 'fairnote-v4';
+const CACHE = 'fairnote-v5';
 const ASSETS = [
   '/canton-fair-app/',
   '/canton-fair-app/index.html',

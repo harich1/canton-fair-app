@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#c62828">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ffffff">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -213,57 +213,64 @@ textarea.fi { resize: none; }
 .install-banner { display: none; position: fixed; bottom: 90px; left: 12px; right: 12px; background: white; border-radius: 14px; padding: 14px 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.18); z-index: 150; align-items: center; gap: 12px; animation: boxIn 0.32s cubic-bezier(0.34,1.56,0.64,1); }
 .install-banner.show { display: flex; }
 
-/* Field Ledger — warm paper, deep ink, vermilion */
+/* FairNote — calm professional field tool */
 :root {
-  --paper: #f6f0e5;
-  --paper-card: #fffdf7;
-  --ink: #1f1d19;
-  --muted: #706a60;
-  --line: #d9d0c1;
-  --accent: #c52b1d;
-  --accent-soft: #f7ded7;
+  --canvas: #f4f7f8;
+  --surface: #ffffff;
+  --surface-soft: #edf3f5;
+  --ink: #102a35;
+  --muted: #60737b;
+  --line: #d8e2e6;
+  --accent: #146b7d;
+  --accent-strong: #0d5262;
+  --accent-soft: #e0f0f3;
+  --danger: #b42318;
 }
 body {
-  font-family: "Source Sans 3", "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background:
-    repeating-linear-gradient(0deg, rgba(103, 88, 65, 0.025) 0, rgba(103, 88, 65, 0.025) 1px, transparent 1px, transparent 24px),
-    var(--paper);
+  min-height: 100vh;
+  font-family: "Pretendard", "SUIT", "Noto Sans KR", sans-serif;
+  background: var(--canvas);
   color: var(--ink);
 }
 .header {
-  background: rgba(255, 253, 247, 0.96);
+  background: rgba(255, 255, 255, 0.96);
   color: var(--ink);
-  padding: 12px 16px 11px;
+  padding: max(12px, env(safe-area-inset-top)) 18px 12px;
   border-bottom: 1px solid var(--line);
   box-shadow: none;
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
 }
-.header-sub { color: var(--ink); font-size: 21px; font-weight: 800; letter-spacing: -0.5px; opacity: 1; }
-.header-title { color: var(--ink); font-size: 14px; font-weight: 650; margin-top: 4px; }
+.brand-lockup { display: flex; align-items: center; gap: 9px; }
+.brand-mark { width: 30px; height: 30px; border-radius: 9px; display: block; }
+.header-sub { color: var(--ink); font-size: 19px; font-weight: 800; letter-spacing: -0.45px; opacity: 1; }
+.header-title { color: var(--muted); font-size: 13px; font-weight: 650; margin: 3px 0 0 39px; }
 .sync-indicator { color: var(--muted); }
 .header-count {
   background: var(--accent-soft);
   color: var(--accent);
-  border: 1px solid rgba(197, 43, 29, 0.32);
-  border-radius: 6px;
-  padding: 5px 9px;
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 10px;
   font-size: 12px;
 }
-.icon-btn { background: transparent; color: var(--ink); border-radius: 8px; font-size: 18px; }
-.toolbar, .chip-bar { background: rgba(255, 253, 247, 0.9); border-color: var(--line); }
-.toolbar { padding: 10px 12px; }
+.icon-btn { background: var(--surface-soft); color: var(--ink); border-radius: 10px; font-size: 16px; min-width: 44px; min-height: 44px; }
+.toolbar, .chip-bar { background: var(--surface); border-color: var(--line); }
+.toolbar { padding: 10px 14px 12px; }
 .search-box, .fi {
-  background: rgba(255, 255, 255, 0.68);
+  background: var(--surface);
   color: var(--ink);
   border-color: var(--line);
-  border-radius: 8px;
+  border-radius: 12px;
+  min-height: 48px;
+  font-size: 16px;
 }
-.search-box:focus, .fi:focus { border-color: var(--accent); background: var(--paper-card); }
+.search-box:focus, .fi:focus { border-color: var(--accent); background: var(--surface); box-shadow: 0 0 0 3px rgba(20,107,125,0.12); }
 .filter-toggle-btn, .chip {
-  background: var(--paper-card);
+  background: var(--surface);
   color: var(--muted);
   border-color: var(--line);
-  border-radius: 7px;
+  border-radius: 10px;
+  min-height: 44px;
 }
 .filter-toggle-btn.active, .chip.active {
   background: var(--accent-soft);
@@ -271,46 +278,81 @@ body {
   border-color: var(--accent);
 }
 .filter-dot, .fab, .btn-save, .name-btn { background: var(--accent); }
-.list { padding: 12px 12px 112px; }
+.list { padding: 16px 14px 112px; }
 .card {
-  background:
-    repeating-linear-gradient(0deg, transparent 0, transparent 23px, rgba(109, 91, 65, 0.055) 23px, rgba(109, 91, 65, 0.055) 24px),
-    var(--paper-card);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(70, 54, 33, 0.07);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(16, 42, 53, 0.04);
 }
-.card-body { padding: 11px; }
-.card-thumb, .card-thumb-empty { border-radius: 8px; }
-.card-booth { color: var(--muted); letter-spacing: 0.2px; }
+.card-body { padding: 14px; }
+.card-thumb, .card-thumb-empty { width: 88px; height: 88px; border-radius: 12px; }
+.card-thumb-empty { background: var(--surface-soft); font-size: 0; }
+.card-thumb-empty::after { content: ""; width: 28px; height: 22px; border: 2px solid #9aabb2; border-radius: 6px; background: linear-gradient(140deg, transparent 46%, #9aabb2 47% 53%, transparent 54%); }
+.card-booth { color: var(--accent); letter-spacing: 0.2px; font-size: 12px; }
 .card-name { color: var(--ink); }
 .card-price { color: var(--accent); }
-.tag { background: #eee8dc; color: #554f46; border-radius: 5px; }
-.tag-oem { background: #e4ece0; color: #43563d; }
-.tag-photo { background: var(--accent-soft); color: var(--accent); }
-.card-footer { border-color: rgba(112, 106, 96, 0.14); }
+.tag { background: var(--surface-soft); color: #445c65; border-radius: 6px; }
+.tag-oem, .tag-photo { background: var(--accent-soft); color: var(--accent); }
+.card-footer { border-color: var(--line); }
 .fab {
-  left: 12px;
-  right: 12px;
+  left: 14px;
+  right: 14px;
   bottom: max(16px, env(safe-area-inset-bottom));
   width: auto;
-  height: 58px;
-  border-radius: 10px;
-  font-size: 17px;
-  font-weight: 800;
-  box-shadow: 0 5px 18px rgba(145, 36, 24, 0.3);
+  height: 56px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 750;
+  box-shadow: 0 8px 22px rgba(13, 82, 98, 0.24);
 }
-.modal, .dialog-box, .name-box { background: var(--paper-card); color: var(--ink); }
+.modal, .dialog-box, .name-box { background: var(--surface); color: var(--ink); }
+.modal { border-radius: 24px 24px 0 0; padding: 12px 18px calc(32px + env(safe-area-inset-bottom)); }
+.modal-head { position: sticky; top: -12px; z-index: 3; background: var(--surface); padding: 10px 0 12px; margin-bottom: 16px; }
+.modal-head h2 { font-size: 21px; letter-spacing: -0.4px; }
+.modal-close { width: 44px; height: 44px; background: var(--surface-soft); color: var(--ink); }
+.modal-handle { margin-bottom: 8px; background: #cdd8dc; }
 .modal-head, .settings-row { border-color: var(--line); }
-.btn-save { border-radius: 9px; box-shadow: none; }
+.fl { color: #4c626b; font-size: 13px; text-transform: none; letter-spacing: 0; margin-bottom: 8px; }
+.fg { margin-bottom: 18px; }
+.frow { gap: 12px; }
+.btn-cam, .btn-gal { min-height: 52px; border-radius: 12px; font-size: 15px; }
+.btn-cam { background: var(--accent); }
+.btn-gal { background: var(--surface); color: var(--ink); border-color: var(--line); }
+.photo-empty { color: var(--muted); font-size: 13px; }
+.btn-save { min-height: 56px; border-radius: 14px; box-shadow: none; font-size: 16px; }
 .settings-section-title, .fl { color: var(--muted); }
 .lang-btn.active { background: var(--accent); border-color: var(--accent); }
-.empty-icon { filter: sepia(0.25); }
-.empty-text { color: var(--muted); }
-.install-banner { background: var(--paper-card); border: 1px solid var(--line); }
+.empty { padding: 72px 24px 40px; }
+.empty-icon { width: 64px; height: 64px; margin: 0 auto 22px; border: 1px solid var(--line); border-radius: 18px; background: var(--surface); position: relative; font-size: 0; }
+.empty-icon::before { content: ""; position: absolute; inset: 17px 18px; border: 2px solid var(--accent); border-radius: 6px; }
+.empty-icon::after { content: ""; position: absolute; width: 12px; height: 2px; left: 26px; top: 26px; background: var(--accent); box-shadow: 0 7px 0 var(--accent), 0 14px 0 var(--accent); }
+.empty-text { color: var(--ink); font-size: 20px; font-weight: 750; letter-spacing: -0.4px; }
+.empty-hint { color: var(--muted); font-size: 15px; line-height: 1.55; margin-top: 8px; }
+.empty-add-btn { background: var(--surface); color: var(--accent); border: 1px solid var(--accent); border-radius: 12px; min-height: 48px; padding: 12px 22px; }
+.name-overlay.open { background: var(--surface); align-items: stretch; padding: 0; animation: fadeIn 0.2s ease-out forwards; }
+.name-overlay.open .name-box { animation: none; }
+.name-box { max-width: 420px; min-height: 100svh; margin: 0 auto; border-radius: 0; padding: max(52px, calc(env(safe-area-inset-top) + 32px)) 28px max(30px, env(safe-area-inset-bottom)); display: flex; flex-direction: column; overflow-y: auto; }
+.onboard-brand { display: flex; align-items: center; gap: 11px; }
+.onboard-brand img { width: 42px; height: 42px; border-radius: 12px; }
+.onboard-wordmark { font-size: 24px; font-weight: 850; letter-spacing: -0.7px; }
+.onboard-copy { margin-top: 72px; }
+.onboard-kicker { color: var(--accent); font-size: 14px; font-weight: 750; margin-bottom: 12px; }
+.name-box h2 { font-size: 34px; line-height: 1.2; letter-spacing: -1.4px; margin-bottom: 16px; white-space: pre-line; }
+.name-box p { color: var(--muted); font-size: 16px; line-height: 1.65; margin: 0; white-space: pre-line; }
+.feature-list, .onboard-divider { display: none; }
+.onboard-trust { margin-top: 28px; display: flex; gap: 8px; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.onboard-trust::before { content: ""; width: 18px; height: 18px; flex: 0 0 auto; border-radius: 50%; background: var(--accent-soft); box-shadow: inset 0 0 0 5px var(--accent-soft); border: 5px solid var(--accent); }
+.name-btn { margin-top: auto !important; min-height: 58px; border-radius: 14px; font-size: 17px; box-shadow: 0 8px 22px rgba(13,82,98,0.2); }
+.onboard-data-note { text-align: center; font-size: 13px !important; margin-top: 14px !important; color: var(--muted) !important; }
+.install-banner { background: var(--surface); border: 1px solid var(--line); }
+:focus-visible { outline: 3px solid rgba(20,107,125,0.28); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
 @media (min-width: 768px) {
   .header, .toolbar, .chip-bar, .list { max-width: 640px; margin-left: auto; margin-right: auto; }
-  .fab { left: 50%; right: auto; width: 616px; transform: translateX(-50%); }
+  .fab { left: 50%; right: auto; width: 612px; transform: translateX(-50%); }
   .fab:active { transform: translateX(-50%) scale(0.98); }
 }
 </style>
@@ -319,14 +361,14 @@ body {
 
 <div class="header">
   <div class="header-left">
-    <span class="header-sub">FairNote</span>
+    <div class="brand-lockup"><img class="brand-mark" src="icon.svg?v=2" alt=""><span class="header-sub">FairNote</span></div>
     <span class="header-title" id="headerEventName" onclick="openEventPicker()">-</span>
     <span class="sync-indicator" id="syncMsg"></span>
   </div>
   <div class="header-right">
     <span id="headerUser" style="font-size:12px;opacity:0.9;background:rgba(255,255,255,0.2);padding:3px 10px;border-radius:12px;display:none"></span>
     <span class="header-count" id="totalCount">0</span>
-    <button class="icon-btn" onclick="openSettings()">⚙️</button>
+    <button class="icon-btn" onclick="openSettings()" aria-label="설정">•••</button>
   </div>
 </div>
 
@@ -364,18 +406,21 @@ body {
 <!-- 이름 입력 -->
 <div class="name-overlay" id="nameOverlay">
   <div class="name-box">
-    <div style="text-align:center;margin-bottom:4px">
-      <img src="logo.png" alt="FairNote" style="width:160px;height:auto;display:block;margin:0 auto 4px">
+    <div class="onboard-brand"><img src="icon.svg?v=2" alt=""><span class="onboard-wordmark">FairNote</span></div>
+    <div class="onboard-copy">
+      <div class="onboard-kicker" id="onboardKicker"></div>
+      <h2 id="nameTitle"></h2>
+      <p id="nameDesc"></p>
     </div>
     <ul class="feature-list" id="featureList"></ul>
     <hr class="onboard-divider">
-    <h2 id="nameTitle" style="font-size:17px;margin-bottom:6px"></h2>
-    <p id="nameDesc" style="font-size:13px;color:#777;line-height:1.6;margin-bottom:16px;white-space:pre-line"></p>
+    <div class="onboard-trust" id="onboardTrust"></div>
     <label class="onboard-label legacy-onboarding-field" id="nameInputLabel"></label>
     <input class="name-input legacy-onboarding-field" id="nameInput" maxlength="20" style="margin-bottom:14px">
     <label class="onboard-label legacy-onboarding-field" id="pinInputLabel"></label>
     <input class="name-input legacy-onboarding-field" id="pinInput" type="tel" inputmode="numeric" maxlength="4" pattern="[0-9]{4}" autocomplete="off">
     <button class="name-btn" id="nameStartBtn" onclick="completeOnboarding()" style="margin-top:16px"></button>
+    <p class="onboard-data-note" id="onboardDataNote"></p>
     <div class="pin-warning legacy-onboarding-field" id="pinWarningText"></div>
     <p class="legacy-onboarding-field" id="nameHintText" style="font-size:12px;color:#bbb;text-align:center;margin-top:12px;line-height:1.6"></p>
   </div>
@@ -585,9 +630,12 @@ const STRINGS = {
     filterBtn: '필터',
     sortNewest: '최신순', sortOldest: '오래된순', sortBooth: '부스순', sortName: '이름순',
     filterOemOnly: 'OEM만', filterPhotoOnly: '사진있음',
-    firstVisit: '👋 바로 기록해보세요',
-    firstVisitDesc: '로그인 없이 시작합니다.\n기록은 먼저 이 기기에 안전하게 저장됩니다.',
-    namePlaceholder: '예: 홍길동', pinPlaceholder: '숫자 4자리 입력', startBtn: '로그인 없이 시작',
+    firstVisit: '박람회 기록을\n한곳에 모으세요',
+    firstVisitDesc: '사진, 가격, 배송, 명함을 빠르게 기록하고\n돌아온 뒤 다시 검토하세요.',
+    onboardingKicker: '현장에서 바로 쓰는 박람회 노트',
+    onboardingTrust: '계정 없이 시작하고 인터넷이 없어도 기록할 수 있습니다.',
+    onboardingDataNote: '기록은 이 기기에 저장됩니다.',
+    namePlaceholder: '예: 홍길동', pinPlaceholder: '숫자 4자리 입력', startBtn: '첫 박람회 시작하기',
     nameInputLabel: '이름', pinInputLabel: 'PIN (숫자 4자리)',
     features: ['사진부터 빠르게 찍고 나중에 내용을 보완', '가격·배송·포장·명함 정보를 한 곳에 기록', '인터넷이 없어도 현장에서 바로 저장', '필요할 때 엑셀과 사진으로 내보내기'],
     pinWarning: '⚠️ PIN을 잊으면 데이터를 복구하기 어렵습니다. 기억하기 쉬운 번호로 설정하고 메모해 두세요.',
@@ -628,7 +676,7 @@ const STRINGS = {
     dataSection: '데이터',
     excelBtn: '📊 엑셀 내보내기', zipBtn: '📷 사진 ZIP', backupBtn: '💾 백업 파일 만들기', importBtn: '📂 백업에서 복원',
     privacyLink: '개인정보처리방침',
-    emptyText: '기록된 상품이 없습니다', emptyHint: '+ 버튼을 눌러 추가하세요', noResult: '검색 결과 없음', untitledItem: '이름 없는 상품',
+    emptyText: '아직 기록이 없어요', emptyHint: '현장에서는 사진 한 장부터 시작해도 됩니다.', noResult: '검색 결과 없음', untitledItem: '이름 없는 상품',
     tokenSavedToast: '✅ 토큰 저장됨', tokenDeletedToast: '토큰 삭제됨',
     savedToast: '✅ 저장됐습니다', editedToast: '✅ 수정됐습니다',
     ok: '확인', cancel: '취소',
@@ -665,7 +713,7 @@ const STRINGS = {
     tokenHint: '토큰 없이도 이 기기에서 저장·조회는 정상 동작합니다.\n여러 기기 간 데이터를 동기화하려는 경우에만 설정하세요.',
     tokenLinkText: '→ GitHub에서 토큰 발급하는 방법',
     contactCopied: '📋 복사됨',
-    addFirstBtn: '첫 번째 상품 추가하기', quickAdd: '＋ 빠른 기록',
+    addFirstBtn: '첫 상품 기록하기', quickAdd: '＋ 새 기록',
     installBannerTitle: '홈 화면에 추가하기',
     installBannerDesc: '설치하면 인터넷 없이도 사용 가능합니다',
     installBannerBtn: '설치',
@@ -676,9 +724,12 @@ const STRINGS = {
     filterBtn: 'Filter',
     sortNewest: 'Newest', sortOldest: 'Oldest', sortBooth: 'Booth', sortName: 'Name',
     filterOemOnly: 'OEM only', filterPhotoOnly: 'Has photo',
-    firstVisit: '👋 Start capturing',
-    firstVisitDesc: 'Start without an account.\nYour records are saved on this device first.',
-    namePlaceholder: 'e.g. John', pinPlaceholder: 'Enter 4 digits', startBtn: 'Start without signing in',
+    firstVisit: 'Keep every fair find\nin one place',
+    firstVisitDesc: 'Capture photos, prices, delivery and business cards,\nthen review them when you are back.',
+    onboardingKicker: 'The field note for every trade fair',
+    onboardingTrust: 'Start without an account and keep recording offline.',
+    onboardingDataNote: 'Your records are saved on this device.',
+    namePlaceholder: 'e.g. John', pinPlaceholder: 'Enter 4 digits', startBtn: 'Start my first fair',
     nameInputLabel: 'Name', pinInputLabel: 'PIN (4 digits)',
     features: ['Capture a photo first and add details later', 'Keep price, delivery, packaging and cards together', 'Save instantly even without internet', 'Export records and photos when you need them'],
     pinWarning: '⚠️ If you forget your PIN, data recovery is not possible. Use a number you can remember and write it down.',
@@ -719,7 +770,7 @@ const STRINGS = {
     dataSection: 'Data',
     excelBtn: '📊 Export CSV', zipBtn: '📷 Photo ZIP', backupBtn: '💾 Create backup file', importBtn: '📂 Restore from backup',
     privacyLink: 'Privacy Policy',
-    emptyText: 'No products recorded', emptyHint: 'Tap + to add your first product', noResult: 'No results found', untitledItem: 'Untitled item',
+    emptyText: 'No records yet', emptyHint: 'At the fair, one photo is enough to get started.', noResult: 'No results found', untitledItem: 'Untitled item',
     tokenSavedToast: '✅ Token saved', tokenDeletedToast: 'Token deleted',
     savedToast: '✅ Saved', editedToast: '✅ Updated',
     ok: 'OK', cancel: 'Cancel',
@@ -756,7 +807,7 @@ const STRINGS = {
     tokenHint: 'You can save and view products on this device without a token.\nOnly needed if you want to sync data across multiple devices.',
     tokenLinkText: '→ How to create a GitHub token',
     contactCopied: '📋 Copied',
-    addFirstBtn: 'Add your first product', quickAdd: '＋ Quick capture',
+    addFirstBtn: 'Record first item', quickAdd: '＋ New record',
     installBannerTitle: 'Add to Home Screen',
     installBannerDesc: 'Works offline after installation',
     installBannerBtn: 'Install',
@@ -770,9 +821,12 @@ STRINGS.zh = {
   filterBtn: '筛选',
   sortNewest: '最新', sortOldest: '最早', sortBooth: '展位', sortName: '名称',
   filterOemOnly: '仅OEM', filterPhotoOnly: '有照片',
-  firstVisit: '👋 开始现场记录',
-  firstVisitDesc: '无需登录即可开始。\n记录会优先安全地保存在此设备上。',
-  startBtn: '无需登录，立即开始',
+  firstVisit: '把展会记录\n集中在一个地方',
+  firstVisitDesc: '快速记录照片、价格、配送和名片，\n回程后再统一复盘。',
+  onboardingKicker: '展会现场记录工具',
+  onboardingTrust: '无需账户即可开始，离线时也能继续记录。',
+  onboardingDataNote: '记录保存在此设备上。',
+  startBtn: '开始第一个展会',
   features: ['先拍照，之后再补充详细信息', '集中记录价格、配送、包装和名片', '没有网络也能立即保存', '需要时导出记录和照片'],
   addProduct: '添加商品', editProduct: '编辑商品',
   boothLabel: '展位', boothPh: '例如：11.1 A01',
@@ -803,7 +857,7 @@ STRINGS.zh = {
   langLabel: '语言', dataSection: '数据',
   excelBtn: '📊 导出CSV', zipBtn: '📷 照片ZIP', backupBtn: '💾 创建备份文件', importBtn: '📂 从备份恢复',
   privacyLink: '隐私政策',
-  emptyText: '还没有商品记录', emptyHint: '点击下方按钮添加', noResult: '没有搜索结果', untitledItem: '未命名商品',
+  emptyText: '还没有记录', emptyHint: '在展会现场，先拍一张照片就可以开始。', noResult: '没有搜索结果', untitledItem: '未命名商品',
   savedToast: '✅ 已保存', editedToast: '✅ 已更新',
   ok: '确定', cancel: '取消',
   alertEnterBooth: '请输入展位位置。',
@@ -835,8 +889,8 @@ STRINGS.zh = {
   countUnit: n => `${n}条`,
   appDesc: '在展会现场快速记录商品',
   contactCopied: '📋 已复制',
-  addFirstBtn: '添加第一个商品',
-  quickAdd: '＋ 快速记录',
+  addFirstBtn: '记录第一个商品',
+  quickAdd: '＋ 新建记录',
   installBannerTitle: '添加到主屏幕',
   installBannerDesc: '安装后可离线使用',
   installBannerBtn: '安装',
@@ -865,6 +919,9 @@ function applyLang() {
   document.getElementById('chip-photo').textContent = t('filterPhotoOnly');
   document.getElementById('nameTitle').textContent = t('firstVisit');
   document.getElementById('nameDesc').textContent = t('firstVisitDesc');
+  document.getElementById('onboardKicker').textContent = t('onboardingKicker');
+  document.getElementById('onboardTrust').textContent = t('onboardingTrust');
+  document.getElementById('onboardDataNote').textContent = t('onboardingDataNote');
   document.getElementById('nameInputLabel').textContent = t('nameInputLabel');
   document.getElementById('pinInputLabel').textContent = t('pinInputLabel');
   document.getElementById('nameInput').placeholder = t('namePlaceholder');

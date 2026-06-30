@@ -1,4 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
-  <rect width="192" height="192" rx="32" fill="#c62828"/>
-  <text x="96" y="140" font-size="96" text-anchor="middle" fill="white" font-family="sans-serif">📦</text>
+  <rect width="192" height="192" rx="48" fill="#146B7D"/>
+  <path d="M53 42h86v108H53z" fill="none" stroke="#fff" stroke-width="14" stroke-linejoin="round"/>
+  <path d="M75 74h48M75 100h36M75 126h25" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round"/>
+  <circle cx="137" cy="137" r="24" fill="#DDF1F4"/>
+  <path d="M137 124v26M124 137h26" stroke="#146B7D" stroke-width="9" stroke-linecap="round"/>
 </svg>
