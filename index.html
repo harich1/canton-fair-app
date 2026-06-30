@@ -460,48 +460,48 @@ body:not(.has-records) .chip-bar { display: none; }
     </div>
     <form>
       <input type="hidden" id="fId">
-      <div class="fg"><label class="fl" id="lBooth"></label><input class="fi" id="fBooth"></div>
-      <div class="fg"><label class="fl" id="lName"></label><input class="fi" id="fName"></div>
-      <div class="fg"><label class="fl" id="lPrice"></label><input class="fi" id="fPrice"></div>
+      <div class="fg"><label class="fl" id="lBooth" for="fBooth"></label><input class="fi" id="fBooth"></div>
+      <div class="fg"><label class="fl" id="lName" for="fName"></label><input class="fi" id="fName"></div>
+      <div class="fg"><label class="fl" id="lPrice" for="fPrice"></label><input class="fi" id="fPrice"></div>
       <div class="frow">
-        <div class="fg"><label class="fl" id="lDelivery"></label><input class="fi" id="fDelivery"></div>
-        <div class="fg"><label class="fl" id="lPackaging"></label><input class="fi" id="fPackaging"></div>
+        <div class="fg"><label class="fl" id="lDelivery" for="fDelivery"></label><input class="fi" id="fDelivery"></div>
+        <div class="fg"><label class="fl" id="lPackaging" for="fPackaging"></label><input class="fi" id="fPackaging"></div>
       </div>
       <div class="frow template-section" data-templates="sourcing">
-        <div class="fg"><label class="fl" id="lBoxQty"></label><input class="fi" id="fBoxQty" type="number" min="0" placeholder=""></div>
-        <div class="fg"><label class="fl" id="lCbm"></label><input class="fi" id="fCbm" type="number" step="0.0001" min="0" placeholder="0.000"></div>
+        <div class="fg"><label class="fl" id="lBoxQty" for="fBoxQty"></label><input class="fi" id="fBoxQty" type="number" min="0" placeholder=""></div>
+        <div class="fg"><label class="fl" id="lCbm" for="fCbm"></label><input class="fi" id="fCbm" type="number" step="0.0001" min="0" placeholder="0.000"></div>
       </div>
       <div class="frow template-section" data-templates="sourcing">
-        <div class="fg"><label class="fl" id="lMoq"></label><input class="fi" id="fMoq" type="number" min="0" placeholder=""></div>
-        <div class="fg"><label class="fl" id="lLeadTime"></label><input class="fi" id="fLeadTime"></div>
+        <div class="fg"><label class="fl" id="lMoq" for="fMoq"></label><input class="fi" id="fMoq" type="number" min="0" placeholder=""></div>
+        <div class="fg"><label class="fl" id="lLeadTime" for="fLeadTime"></label><input class="fi" id="fLeadTime"></div>
       </div>
       <div class="frow template-section" data-templates="sourcing">
-        <div class="fg"><label class="fl" id="lCurrency"></label><input class="fi" id="fCurrency"></div>
-        <div class="fg"><label class="fl" id="lShippingTerms"></label><input class="fi" id="fShippingTerms"></div>
+        <div class="fg"><label class="fl" id="lCurrency" for="fCurrency"></label><input class="fi" id="fCurrency"></div>
+        <div class="fg"><label class="fl" id="lShippingTerms" for="fShippingTerms"></label><input class="fi" id="fShippingTerms"></div>
       </div>
-      <div class="fg template-section" data-templates="sourcing"><label class="fl" id="lContainerTerms"></label><input class="fi" id="fContainerTerms"></div>
+      <div class="fg template-section" data-templates="sourcing"><label class="fl" id="lContainerTerms" for="fContainerTerms"></label><input class="fi" id="fContainerTerms"></div>
       <div class="fg template-section" data-templates="sourcing">
-        <label class="fl" id="lOem"></label>
+        <label class="fl" id="lOem" for="fOem"></label>
         <div class="oem-row">
           <label class="switch"><input type="checkbox" id="fOem" onchange="updateOemLabel()"><span class="slider"></span></label>
           <span class="oem-label" id="oemLabel"></span>
         </div>
       </div>
       <div class="frow template-section" data-templates="consumer">
-        <div class="fg"><label class="fl" id="lDomesticDeliveryFee"></label><input class="fi" id="fDomesticDeliveryFee"></div>
-        <div class="fg"><label class="fl" id="lMinimumOrder"></label><input class="fi" id="fMinimumOrder" type="number" min="0"></div>
+        <div class="fg"><label class="fl" id="lDomesticDeliveryFee" for="fDomesticDeliveryFee"></label><input class="fi" id="fDomesticDeliveryFee"></div>
+        <div class="fg"><label class="fl" id="lMinimumOrder" for="fMinimumOrder"></label><input class="fi" id="fMinimumOrder" type="number" min="0"></div>
       </div>
       <div class="fg template-section" data-templates="consumer">
-        <label class="fl" id="lVatIncluded"></label>
+        <label class="fl" id="lVatIncluded" for="fVatIncluded"></label>
         <div class="oem-row">
           <label class="switch"><input type="checkbox" id="fVatIncluded"><span class="slider"></span></label>
         </div>
       </div>
-      <div class="fg template-section" data-templates="industrial"><label class="fl" id="lSpecification"></label><textarea class="fi" id="fSpecification" rows="2"></textarea></div>
-      <div class="fg template-section" data-templates="industrial"><label class="fl" id="lCertification"></label><input class="fi" id="fCertification"></div>
-      <div class="fg template-section" data-templates="industrial"><label class="fl" id="lAdoptionTerms"></label><textarea class="fi" id="fAdoptionTerms" rows="2"></textarea></div>
-      <div class="fg"><label class="fl" id="lContact"></label><input class="fi" id="fContact"></div>
-      <div class="fg"><label class="fl" id="lNotes"></label><textarea class="fi" id="fNotes" rows="2"></textarea></div>
+      <div class="fg template-section" data-templates="industrial"><label class="fl" id="lSpecification" for="fSpecification"></label><textarea class="fi" id="fSpecification" rows="2"></textarea></div>
+      <div class="fg template-section" data-templates="industrial"><label class="fl" id="lCertification" for="fCertification"></label><input class="fi" id="fCertification"></div>
+      <div class="fg template-section" data-templates="industrial"><label class="fl" id="lAdoptionTerms" for="fAdoptionTerms"></label><textarea class="fi" id="fAdoptionTerms" rows="2"></textarea></div>
+      <div class="fg"><label class="fl" id="lContact" for="fContact"></label><input class="fi" id="fContact"></div>
+      <div class="fg"><label class="fl" id="lNotes" for="fNotes"></label><textarea class="fi" id="fNotes" rows="2"></textarea></div>
       <div class="fg">
         <label class="fl" id="lCustomFields"></label>
         <div id="customFieldList"></div>
