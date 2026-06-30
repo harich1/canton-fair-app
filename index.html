@@ -645,6 +645,7 @@ body:not(.has-records) .chip-bar { display: none; }
 </div>
 
 <script src="vendor/jszip.min.js"></script>
+<script type="module" src="/src/native-export.ts"></script>
 <script>
 // ─── i18n ─────────────────────────────────────────────────
 const STRINGS = {
@@ -713,6 +714,7 @@ const STRINGS = {
     alertNoData: '내보낼 데이터가 없습니다.',
     alertNoPhoto: '저장된 사진이 없습니다.',
     alertFileError: '파일을 읽을 수 없습니다.',
+    alertExportError: '공유 화면을 열 수 없습니다. 다시 시도해주세요.',
     confirmChangeUser: '사용자를 변경하시겠습니까?\n기존 데이터는 이 기기에 보존됩니다.',
     confirmDelete: '이 상품을 삭제할까요?',
     confirmImport: n => `${n}개 상품을 가져옵니다.\n기존 데이터는 유지됩니다.`,
@@ -807,6 +809,7 @@ const STRINGS = {
     alertNoData: 'No data to export.',
     alertNoPhoto: 'No photos saved.',
     alertFileError: 'Could not read the file.',
+    alertExportError: 'Could not open the share sheet. Please try again.',
     confirmChangeUser: 'Change user?\nYour data on this device will be kept.',
     confirmDelete: 'Delete this product?',
     confirmImport: n => `Import ${n} products?\nExisting data will be kept.`,
@@ -889,6 +892,7 @@ STRINGS.zh = {
   alertNoData: '没有可导出的数据。',
   alertNoPhoto: '没有保存的照片。',
   alertFileError: '无法读取文件。',
+  alertExportError: '无法打开分享页面，请重试。',
   confirmDelete: '删除这个商品吗？',
   confirmImport: n => `将导入 ${n} 个商品。\n现有数据会保留。`,
   importDone: n => `✅ 已导入 ${n} 个商品`,
@@ -1848,7 +1852,7 @@ async function exportCSV() {
     ];
   });
   const csv='﻿'+[h,...rows].map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\r\n');
-  dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}),`FairNote_${safe(userName()||'local')}_${safe(eventName())}_${today()}.csv`);
+  await dl(new Blob([csv],{type:'text/csv;charset=utf-8;'}),`FairNote_${safe(userName()||'local')}_${safe(eventName())}_${today()}.csv`);
 }
 async function exportZip() {
   const evtId = currentEventId();
@@ -1863,12 +1867,12 @@ async function exportZip() {
   if(!items.length){showAlert(t('alertNoPhoto'));return;}
   const zip=new JSZip();
   items.forEach(({name,b64})=>zip.file(name,b64,{base64:true}));
-  dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`FairNote_photos_${safe(userName()||'local')}_${safe(eventName())}_${today()}.zip`);
+  await dl(await zip.generateAsync({type:'blob',compression:'STORE'}),`FairNote_photos_${safe(userName()||'local')}_${safe(eventName())}_${today()}.zip`);
 }
 async function createBackupFile() {
   const list=await getAll();
   const events=getEvents();
-  dl(new Blob([JSON.stringify({version:4,app:'FairNote',mode:'local-first',events,currentEvent:currentEventId(),user:userName()||null,exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/x-fairnote-backup'}),`FairNote_backup_${safe(userName()||'local')}_${today()}.fairnote`);
+  await dl(new Blob([JSON.stringify({version:4,app:'FairNote',mode:'local-first',events,currentEvent:currentEventId(),user:userName()||null,exportedAt:new Date().toISOString(),products:list},null,2)],{type:'application/x-fairnote-backup'}),`FairNote_backup_${safe(userName()||'local')}_${today()}.fairnote`);
 }
 async function importData(input) {
   const f=input.files[0]; if(!f) return;
@@ -1892,7 +1896,18 @@ async function importData(input) {
 
 function safe(s){return(s||'').replace(/[\\/:*?"<>|]/g,'_').slice(0,20);}
 function today(){return new Date().toISOString().slice(0,10);}
-function dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);}
+async function dl(blob,name){
+  if(window.FairNoteNative?.isNative){
+    try { await window.FairNoteNative.exportBlob(blob,name); }
+    catch { showAlert(t('alertExportError')); }
+    return;
+  }
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=name;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
 
 // ─── 시작 ────────────────────────────────────────────────
 if (localStorage.getItem('cf_onboarding_complete') !== '1') {
